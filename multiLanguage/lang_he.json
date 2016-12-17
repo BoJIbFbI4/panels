@@ -1,0 +1,26 @@
+{
+  "welcome" :"ברוכים הבאים" ,
+  "password" :"פארול",
+  "loginToContinue": "נא להזין להמשיך",
+  "button" : "כניסה",
+  "adminHeader" :"דף מנהלן" ,
+  "managementList" : "ניהול",
+  "surveysList" : "משאלים",
+  "reportsList":"דוחות",
+  "EditSurveyUser" : "לערך משאל",
+  "CreateOrganization" : "לבנות אירגון",
+  "CreateProject":"לבנות תוכנית",
+  "EditOrganizationProject": "תוכנית / לערך אירגו",
+  "CreateSurvey": "לבנות משאל",
+  "EditSurvey": "לערך משאל",
+  "ViewSurvey":"להראות משאל",
+  "ViewReports":"להראות דות",
+  "ExportReports": "לייצא דות",
+  "projects" : "תוכניות",
+  "newCompany":"חברה חדשה",
+  "addNewCompany" : "להוסיף חברה חדשה",
+  "ShowSurveys":"להראות משאלים",
+  "NewProject" :"תוכנית חדשה",
+  "AddNewProject":"להוסיף תוכנית חדשה"
+
+}

@@ -2,10 +2,8 @@
  * Created by Gladkov Kirill on 12/12/2016.
  */
 angular.module('panelsApp')
-    .controller('ChartsCtrl', ['$scope','$rootScope', '$http', '$timeout','$state', function ($scope, $rootScope, $http, $timeout, $state) {
+    .controller('ChartsCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
-        $rootScope.headerTitle = "Charts";
-        $rootScope.layout = $state.current.data.layout;
         //charts
         var donutChart = c3.generate({
             bindto: '#chart_gauge',
@@ -17,9 +15,7 @@ angular.module('panelsApp')
                     ['GPA', 4.5]
                 ],
                 type: 'gauge',
-                onclick: function (d, i) {
-                    $state.go('projects')
-                },
+                onclick: function (d, i) { console.log("onclick", d, i); },
                 selection: {
                     draggable: true
                 }
