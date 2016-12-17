@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Panels</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="resources/c3/c3.min.css" type="text/css">
+    <link rel="stylesheet" href="resources/mdl/material.css">
+    <link rel="stylesheet" href="resources/mdl/mdl-date/mdl-date-textfield.min.css">
+    <link rel="stylesheet" href="assets/styles/paletteBlueGreyMD.css">
+    <link rel="stylesheet" href="assets/styles/auth.css">
+    <link rel="stylesheet" href="assets/styles/style.css">
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="resources/mdl/material.js"></script>
+    <script src="resources/mdl/mdl-date/mdl-date-textfield.min.js"></script>
+    <script src="./resources/translator.js"></script>
+    <!--diagrams-->
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="resources/c3/c3.min.js"></script>
+    <!--end diagrams-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+
+    <script src="app.js"></script>
+
+</head>
+<body ng-app="panelsApp" ng-controller="MainController" onload="onLoadFunc()">
+
+
+<!-- Always shows a header, even in smaller screens. -->
+<div id="menu" class="mdl-layout mdl-js-layout mdl-layout--fixed-header" ng-class="layout">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row dark-primary-color">
+            <!-- Title -->
+            <span class="mdl-layout-title">{{headerTitle}}</span>
+            <!-- Add spacer, to align navigation to the right -->
+            <div class="mdl-layout-spacer"></div>
+            <!-- Navigation. We hide it in small screens. -->
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" style="cursor: pointer" onclick="setCookie('EN')">ENG</a>
+                <a class="mdl-navigation__link" style="cursor: pointer" onclick="setCookie('HE')">עבר</a>
+            </nav>
+        </div>
+    </header>
+    <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Admin Page
+            <img src="https://s3.amazonaws.com/uifaces/faces/twitter/commadelimited/128.jpg"
+                 alt="" width="45" height="45" style="border-radius: 50%"></span>
+        <!--Admin Menu START here-->
+        <ul class="adminMenu">
+            <li><span><button id="managementList" class="mdl-button mdl-js-button">
+           <i class="material-icons">card_travel</i>    Management
+        </button></span></li>
+            <li><span><button id="surveysList" class="mdl-button mdl-js-button">
+           <i class="material-icons">done</i>   Surveys
+        </button></span></li>
+            <li><span><button id="reportsList" class="mdl-button mdl-js-button">
+            <i class="material-icons">backup</i>  Reports
+        </button></span></li>
+        </ul>
+
+
+        <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="managementList">
+            <li class="mdl-menu__item"><a href="#">Edit Survey User</a></li>
+            <li class="mdl-menu__item">Create Organization</li>
+            <li disabled class="mdl-menu__item">Create Project</li>
+            <li class="mdl-menu__item">Edit Organization/Project</li>
+        </ul>
+
+        <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="surveysList">
+            <li class="mdl-menu__item">Create Survey</li>
+            <li class="mdl-menu__item">Edit Survey</li>
+            <li disabled class="mdl-menu__item">View Survey</li>
+        </ul>
+
+        <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="reportsList">
+            <li class="mdl-menu__item">View Reports</li>
+            <li class="mdl-menu__item">Export Reports</li>
+        </ul>
+
+        <!--Admin Menu END here-->
+    </div>
+    <main class="mdl-layout__content">
+        <div class="page-content">
+            <div ui-view></div>
+        </div>
+    </main>
+</div>
+<!-- test-->
+
+<script src="routing.js"></script>
+<script src="./controllers/charts.controller.js"></script>
+<script src="./controllers/companies.controller.js"></script>
+<script src="./controllers/project.controller.js"></script>
+<script src="controllers/auth.controller.js"></script>
+
+</body>
+</html>

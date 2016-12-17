@@ -1,0 +1,44 @@
+<script>
+    $('#headerTitle').text("Create Project");
+    document.getElementById("uploadBtn").onchange = function () {
+        document.getElementById("uploadFile").value = this.files[0].name;
+    };
+
+    $('.mdl-layout__drawer-button').css({
+        'z-index': 1,
+        'background-color': "#607D8B"
+    });
+
+</script>
+
+<div class="mainView" ng-controller="ProjectCtrl">
+
+    <div class="mdl-grid">
+        <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+            <form action="">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="sample1">
+                    <label class="mdl-textfield__label" for="sample1">Project name</label>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="sample2">
+                    <label class="mdl-textfield__label" for="sample2">Project manager name</label>
+                </div>
+
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--file">
+                    <input class="mdl-textfield__input" placeholder="Attach project logo" type="text" id="uploadFile"
+                           readonly/>
+                    <div class="mdl-button mdl-button--colored mdl-button--icon mdl-button--file">
+                        <i class="material-icons">attach_file</i><input type="file" id="uploadBtn">
+                    </div>
+                </div>
+                <br>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                    Add project
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

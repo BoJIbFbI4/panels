@@ -1,0 +1,30 @@
+<script>
+    $('.mdl-layout__drawer-button').css('z-index', '-1');
+</script>
+<div ng-controller="AuthCtrl">
+    <div class="form-container">
+        <hgroup>
+            <h1><span class="lang" id="welcome">Welcome to</span> Panels inc.</h1>
+            <h3 class="lang" id="loginToContinue">Please log in to continue</h3>
+        </hgroup>
+        <form>
+            <div class="group">
+                <input ng-model="login" id="login" type="text" placeholder="login"><span class="highlight"></span><span
+                    class="bar"></span>
+            </div>
+            <div class="group">
+                <input ng-model="pass" id="pass" type="password" placeholder="password"><span
+                    class="highlight"></span><span
+                    class="bar"></span>
+            </div>
+
+            <button ng-click="getLogin()" id="button" type="button" class="button buttonBlue">LOGIN
+                <div class="ripples buttonRipples">
+                    <span class="ripplesCircle"></span>
+                </div>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script src="./resources/auth.js"></script>
