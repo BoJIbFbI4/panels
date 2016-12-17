@@ -1,28 +1,22 @@
-'use strict';
-angular.module('Route', ['ui.router',]);
+var app = angular.module('panelsApp', ['Route', 'ngResource']);
 
-var app = angular.module('panelsApp', ['Route','ngResource']);
-
-app.controller('MainController',  ['$scope', 'translationService', function ($scope, translationService) {
+app.controller('MainController', ['$scope', 'translationService', function ($scope, translationService) {
 
     //Выполняем перевод, если произошло событие смены языка
-    $scope.translate = function(){
+    $scope.translate = function () {
         translationService.getTranslation($scope, $scope.selectedLanguage);
     };
     // Инициализация
     if (!$scope.selectedLanguage) {
-    $scope.selectedLanguage = 'en';
-    $scope.translate();
+        $scope.selectedLanguage = 'en';
+        $scope.translate();
     }
-
-
-
 
 }]);
 
-app.service('translationService', function($resource) {
+app.service('translationService', function ($resource) {
 
-    this.getTranslation = function($scope, language) {
+    this.getTranslation = function ($scope, language) {
         var languageFilePath = 'multiLanguage/lang_' + language + '.json';
         console.log(languageFilePath);
         $resource(languageFilePath).get(function (data) {
@@ -30,9 +24,6 @@ app.service('translationService', function($resource) {
         });
     };
 });
-
-
-
 
 
 

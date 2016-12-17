@@ -21,6 +21,10 @@
   "addNewCompany" : "להוסיף חברה חדשה",
   "ShowSurveys":"להראות משאלים",
   "NewProject" :"תוכנית חדשה",
-  "AddNewProject":"להוסיף תוכנית חדשה"
-
+  "AddNewProject":"להוסיף תוכנית חדשה",
+  "ExportToExcel": "לייצא ל excel",
+  "ExportToPDF": "לייצא ל PDF",
+  "projectName": "שם תוכנית",
+  "projectManagerName": "שם מנהל תוכנית",
+  "addProject": "להוסיף תוכנית"
 }

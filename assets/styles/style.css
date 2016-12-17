@@ -1,19 +1,11 @@
-/* service classes */
-
-
-/* end service classes */
-.mdl-layout__container{
-    width: 240px !important;
-}
-
-.projects-card-square > .mdl-card__title{
+.projects-card-square > .mdl-card__title {
     color: #fff;
     background-color: #607D8B;
 }
 
 .tadiran-card-square > .mdl-card__title {
     color: #fff;
-    background: url('../img/Tadiran.png') bottom right no-repeat #CFD8DC ;
+    background: url('../img/Tadiran.png') bottom right no-repeat #CFD8DC;
     background-size: 25%;
 }
 
@@ -23,35 +15,35 @@
     background-size: 25%;
 }
 
-.mdl-card{
-    width:330px ;
+.mdl-card {
+    width: 330px;
     height: 270px;
 }
 
-.mdl-cell .btn{
+.mdl-cell .btn {
     margin-top: 10px;
 }
 
-.adminMenu{
+.adminMenu {
     list-style: none;
 }
 
-.adminMenu li{
+.adminMenu li {
     margin-bottom: 35px;
 }
 
-.projects-table-info{
+.projects-table-info {
     width: 100%;
     border-collapse: collapse;
 
 }
 
-.projects-table-info tr{
+.projects-table-info tr {
     border: 1px solid rgba(0, 0, 0, 0.12);
     cursor: pointer;
 }
 
-.projects-table-info td{
+.projects-table-info td {
     text-align: center;
     font-size: 13px;
     padding: 7px;
@@ -72,16 +64,18 @@
 .mdl-textfield--file.mdl-textfield__input {
     box-sizing: border-box;
 }
+
 .mdl-button--file {
     right: 0;
 }
+
 /*end add project form*/
 
-.mdl-card{
+.mdl-card {
     min-height: 110px;
 }
 
-.calendar-icon{
+.calendar-icon {
     float: right;
     text-align: right;
 }
@@ -93,10 +87,11 @@
 .answers-card.mdl-card {
     width: 300px;
     height: 50px;
-    background:url("../../assets/img/like.svg") top left no-repeat #90A4AE;
+    background: url("../../assets/img/like.svg") top left no-repeat #90A4AE;
     background-size: 150px 150px;
 
 }
+
 .answers-card > .mdl-card__actions {
     height: 100%;
     padding: 10px;
@@ -104,19 +99,21 @@
     text-align: right;
     font-size: 28px;
 }
+
 .answers-card {
     color: #fff;
     font-size: 14px;
     font-weight: 500;
 }
 
-@media screen and (min-width: 768px) {
-    .content{
-        padding-left: 240px;
-    }
+.mdl-date-textfield {
+    float: right;
+}
 
-    .header {
-        padding-left: 250px;
+@media screen and (min-width: 1025px) {
+
+    .mainView {
+        margin-left: 30px;
     }
 }
 

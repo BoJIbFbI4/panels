@@ -4,8 +4,8 @@
 <div ng-controller="AuthCtrl">
     <div class="form-container">
         <hgroup>
-            <h1><span class="lang" id="welcome">Welcome to</span> Panels inc.</h1>
-            <h3 class="lang" id="loginToContinue">Please log in to continue</h3>
+            <h1> {{translation.welcome}} Panels inc.</h1>
+            <h3>{{translation.loginToContinue}}</h3>
         </hgroup>
         <form>
             <div class="group">
@@ -17,8 +17,8 @@
                     class="highlight"></span><span
                     class="bar"></span>
             </div>
-
-            <button ng-click="getLogin()" id="button" type="button" class="button buttonBlue">LOGIN
+            <p ng-bind="alert" style="text-align: center; color: darkred">{{alert}}</p>
+            <button ng-click="getLogin()" id="button" type="button" class="button buttonBlue">{{translation.button}}
                 <div class="ripples buttonRipples">
                     <span class="ripplesCircle"></span>
                 </div>

@@ -1,4 +1,3 @@
-
 angular.module('Route', ['ui.router'])
     .config(function ($stateProvider, $urlRouterProvider) {
 
@@ -7,25 +6,37 @@ angular.module('Route', ['ui.router'])
         $stateProvider
             .state('auth', {
                 url: '/login',
-                templateUrl: 'views/authorization.html'
+                templateUrl: 'templates/authorization.html'
 
             })
             .state('companies', {
                 url: '/companies',
-                templateUrl: 'views/companies.html',
-                controller: 'CompaniesCtrl'
+                templateUrl: 'templates/companies.html',
+                controller: 'CompaniesCtrl',
+                data: {
+                    layout: "mdl-layout--fixed-drawer"
+                }
 
             })
             .state('projects', {
-                url: '/projects/:companyID',
-                templateUrl: 'views/projects.html'
+                url: '/projects/:companyID/:managerID',
+                templateUrl: 'templates/projects.html',
+                data: {
+                    layout: "mdl-layout--fixed-drawer"
+                }
             })
             .state('diagrams', {
                 url: '/diagrams',
-                templateUrl: 'views/diagrams.html'
+                templateUrl: 'templates/diagrams.html',
+                data: {
+                    layout: "mdl-layout--fixed-drawer"
+                }
             })
             .state('createproject', {
                 url: '/createProject',
-                templateUrl: 'views/createProject.html'
+                templateUrl: 'templates/createProject.html',
+                data: {
+                    layout: "mdl-layout--fixed-drawer"
+                }
             });
     });

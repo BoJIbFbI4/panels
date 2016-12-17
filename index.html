@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="assets/styles/auth.css">
     <link rel="stylesheet" href="assets/styles/style.css">
 
-
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="resources/mdl/material.js"></script>
     <script src="resources/mdl/mdl-date/mdl-date-textfield.min.js"></script>
@@ -24,69 +23,75 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.2/angular-resource.min.js"></script>
+
     <script src="app.js"></script>
 
 </head>
 <body ng-app="panelsApp" ng-controller="MainController">
 
-<div class="leftSideBar mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
-    <div class="mdl-layout__drawer primary-text-color">
-        <span id="adminHeader" class="mdl-layout-title">{{translation.adminHeader}}
+
+<!-- Always shows a header, even in smaller screens. -->
+<div id="menu" class="mdl-layout mdl-js-layout mdl-layout--fixed-header" ng-class="layout">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row dark-primary-color">
+            <!-- Title -->
+            <span class="mdl-layout-title">{{headerTitle}}</span>
+            <!-- Add spacer, to align navigation to the right -->
+            <div class="mdl-layout-spacer"></div>
+            <!-- Navigation. We hide it in small screens. -->
+            <nav class="mdl-navigation">
+                <select ng-change="translate()" ng-model="selectedLanguage">
+                    <option value="en">English</option>
+                    <option value="he">עברית</option>
+                </select>
+            </nav>
+        </div>
+    </header>
+    <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">{{translation.adminHeader}}
             <img src="https://s3.amazonaws.com/uifaces/faces/twitter/commadelimited/128.jpg"
-                 alt="" width="45" height="45" style="border-radius: 50%">
-        </span>
+                 alt="" width="45" height="45" style="border-radius: 50%"></span>
         <!--Admin Menu START here-->
         <ul class="adminMenu">
             <li><span><button id="managementList" class="mdl-button mdl-js-button">
-           <i class="material-icons">card_travel</i>{{translation.managementList}}
+           <i class="material-icons">card_travel</i>    {{translation.managementList}}
         </button></span></li>
             <li><span><button id="surveysList" class="mdl-button mdl-js-button">
-           <i class="material-icons">done</i>{{translation.surveysList}}
+           <i class="material-icons">done</i>   {{translation.surveysList}}
         </button></span></li>
             <li><span><button id="reportsList" class="mdl-button mdl-js-button">
-            <i class="material-icons">backup</i>{{translation.reportsList}}
+            <i class="material-icons">backup</i>  {{translation.reportsList}}
         </button></span></li>
         </ul>
 
 
         <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="managementList">
-            <li id="EditSurveyUser" class="mdl-menu__item">{{translation.EditSurveyUser}}</li>
-            <li id="CreateOrganization" class="mdl-menu__item">{{translation.CreateOrganization}}</li>
-            <li id="CreateProject" disabled class="mdl-menu__item">{{translation.CreateProject}}</li>
-            <li id="EditOrganizationProject" class="mdl-menu__item">{{translation.EditOrganizationProject}}</li>
+            <li class="mdl-menu__item"><a href="#">{{translation.EditSurveyUser}}</a></li>
+            <li class="mdl-menu__item">{{translation.CreateOrganization}}</li>
+            <li disabled class="mdl-menu__item">{{translation.CreateProject}}</li>
+            <li class="mdl-menu__item">{{translation.EditOrganizationProject}}</li>
         </ul>
 
         <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="surveysList">
-            <li id="CreateSurvey" class="mdl-menu__item">{{translation.CreateSurvey}}</li>
-            <li id="EditSurvey" class="mdl-menu__item">{{translation.EditSurvey}}</li>
-            <li id="ViewSurvey" disabled class="mdl-menu__item">{{translation.ViewSurvey}}</li>
+            <li class="mdl-menu__item">{{translation.CreateSurvey}}</li>
+            <li class="mdl-menu__item">{{translation.EditSurvey}}</li>
+            <li disabled class="mdl-menu__item">{{translation.ViewSurvey}}</li>
         </ul>
 
         <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="reportsList">
-            <li id="ViewReports" class="mdl-menu__item">{{translation.ViewReports}}</li>
-            <li id="ExportReports" class="mdl-menu__item">{{translation.ExportReports}}</li>
+            <li class="mdl-menu__item">{{translation.ViewReports}}</li>
+            <li class="mdl-menu__item">{{translation.ExportReports}}</li>
         </ul>
 
         <!--Admin Menu END here-->
     </div>
+    <main class="mdl-layout__content">
+        <div class="page-content">
+            <div ui-view></div>
+        </div>
+    </main>
 </div>
-
-
-<div class="header mdl-layout__header-row dark-primary-color">
-    <span id="headerTitle" class="mdl-layout-title text-primary-color ">Panels</span>
-    <div class="mdl-layout-spacer"></div>
-    <nav class="mdl-navigation">
-        <select ng-change="translate()" ng-model="selectedLanguage">
-            <option value="en">English</option>
-            <option value="he">עברית</option>
-        </select>
-    </nav>
-</div>
-
-<div class="content">
-    <div ui-view></div>
-</div>
-
+<!-- test-->
 
 <script src="routing.js"></script>
 <script src="./controllers/charts.controller.js"></script>

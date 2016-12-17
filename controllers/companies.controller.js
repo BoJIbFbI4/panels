@@ -2,10 +2,12 @@
  * Created by Gladkov Kirill on 12/11/2016.
  */
 angular.module('panelsApp')
-    .controller('CompaniesCtrl', ['$scope', '$http', 'CompaniesService', '$state',
-        function ($scope, $http, CompaniesService, $state) {
+    .controller('CompaniesCtrl', ['$rootScope','$scope', '$http', 'CompaniesService', '$state',
+        function ($rootScope, $scope, $http, CompaniesService, $state) {
 
+            $rootScope.headerTitle = "Companies";
             $scope.companies = [];
+            $rootScope.layout = $state.current.data.layout;
 
             CompaniesService.then(function (result) {
                 $scope.companies = result;
@@ -18,9 +20,9 @@ angular.module('panelsApp')
 
         }])
 
-    .service('CompaniesService', ['$http', function ($http) {
+    .service('CompaniesService', ['$rootScope','$http', function ($rootScope ,$http) {
         var url = "https://panel-repatriation.rhcloud.com/admin/";
-        var authorizationData = window.btoa("Admin:12345");
+        var authorizationData = $rootScope.authorizationData;
         var config = {
             headers: {
                 "Authorization": "Basic " + authorizationData

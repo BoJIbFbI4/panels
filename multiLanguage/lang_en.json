@@ -21,5 +21,11 @@
   "addNewCompany":"ADD NEW COMPANY",
   "ShowSurveys":"SHOW SURVEYS",
   "NewProject" : "New Project",
-  "AddNewProject":"ADD NEW PROJECT"
+  "AddNewProject":"ADD NEW PROJECT",
+  "ExportToExcel": "Export to excel",
+  "ExportToPDF": "Export to PDF",
+  "projectName": "Project Name",
+  "projectManagerName": "Project manager name",
+  "addProject": "Add project"
+
 }
