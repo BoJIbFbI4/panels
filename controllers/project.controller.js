@@ -17,10 +17,10 @@ angular.module('panelsApp')
 
         $scope.projects = [];
 
-
         var getProjects = function (companyID) {
             return $http.get(url + '/admin/getProjectsByIdCustomer/' + companyID, config).then(function (response) {
-                // console.log(response.data);
+                console.log(response.data);
+                $rootScope.createProjectDate = response.data[0].questionary.createDate;
                 $scope.projects = response.data;
             })
         };

@@ -5,7 +5,7 @@
 
 .tadiran-card-square > .mdl-card__title {
     color: #fff;
-    background: url('../img/Tadiran.png') bottom right no-repeat #CFD8DC;
+    /*background: url('../img/Tadiran.png') bottom right no-repeat #CFD8DC;*/
     background-size: 25%;
 }
 

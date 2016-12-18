@@ -20,14 +20,14 @@
         <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
             <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
                 <span class="calendar-icon">עד <i class="material-icons light-blue">date_range</i></span><br>
-                <input class="mdl-date-textfield__input" type="date" id="sample3">
+                <input class="mdl-date-textfield__input" type="date" value="{{userDay}}" id="sample3">
                 <span class="mdl-date-textfield__error">MM/DD/YYYY</span>
             </div>
         </div>
         <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
             <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
                 <span class="calendar-icon">מ <i class="material-icons light-blue">date_range</i></span><br>
-                <input class="mdl-date-textfield__input" type="date" id="sample4">
+                <input class="mdl-date-textfield__input" type="date" value="{{createDay}}" id="sample4">
                 <span class="mdl-date-textfield__error">MM/DD/YYYY</span>
             </div>
         </div>
@@ -56,5 +56,10 @@
     </div>
 
 </div>
-
+<embed
+        type="application/pdf"
+        src="./"
+        id="pdfDocument"
+        width="100%"
+        height="100%"></embed>
 

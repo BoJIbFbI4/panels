@@ -2,6 +2,8 @@ var app = angular.module('panelsApp', ['Route', 'ngResource']);
 
 app.controller('MainController', ['$scope', 'translationService', function ($scope, translationService) {
 
+    // $rootScope.createProjectDate = undefined;
+
     //Выполняем перевод, если произошло событие смены языка
     $scope.translate = function () {
         translationService.getTranslation($scope, $scope.selectedLanguage);

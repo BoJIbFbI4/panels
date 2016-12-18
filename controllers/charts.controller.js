@@ -2,7 +2,10 @@
  * Created by Gladkov Kirill on 12/12/2016.
  */
 angular.module('panelsApp')
-    .controller('ChartsCtrl', ['$scope','$rootScope', '$http', '$timeout','$state', function ($scope, $rootScope, $http, $timeout, $state) {
+    .controller('ChartsCtrl', ['$scope','$rootScope', '$http', '$timeout','$state', '$filter', function ($scope, $rootScope, $http, $timeout, $state, $filter) {
+
+        $scope.createDay = $filter("date")($rootScope.createProjectDate, 'yyyy-MM-dd');
+        $scope.userDay = $filter("date")(Date.now(), 'yyyy-MM-dd');
 
         $rootScope.headerTitle = "Charts";
         $rootScope.layout = $state.current.data.layout;
