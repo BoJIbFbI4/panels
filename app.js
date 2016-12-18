@@ -1,6 +1,6 @@
 var app = angular.module('panelsApp', ['Route', 'ngResource']);
 
-app.controller('MainController', ['$scope', 'translationService', function ($scope, translationService) {
+app.controller('MainController', ['$rootScope', '$scope', 'translationService', function ($rootScope, $scope, translationService) {
 
     // $rootScope.createProjectDate = undefined;
 
@@ -13,6 +13,15 @@ app.controller('MainController', ['$scope', 'translationService', function ($sco
         $scope.selectedLanguage = 'en';
         $scope.translate();
     }
+
+    $scope.isManager = function () {
+        return $rootScope.type == "MANAGER";
+    };
+
+    $scope.getAlerts = function () {
+        return $rootScope.alerts;
+    }
+
 
 }]);
 
