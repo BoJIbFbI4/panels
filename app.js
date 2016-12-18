@@ -2,7 +2,10 @@ var app = angular.module('panelsApp', ['Route', 'ngResource']);
 
 app.controller('MainController', ['$rootScope', '$scope', 'translationService', function ($rootScope, $scope, translationService) {
 
-    // $rootScope.createProjectDate = undefined;
+    if (!$rootScope.chengeMenu) {
+        $rootScope.panelUser = "Admin Page";
+        $rootScope.userFace = 'https://s3.amazonaws.com/uifaces/faces/twitter/commadelimited/128.jpg';
+    }
 
     //Выполняем перевод, если произошло событие смены языка
     $scope.translate = function () {

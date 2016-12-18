@@ -58,12 +58,11 @@
         </div>
     </header>
     <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">{{translation.adminHeader}}
-            <img src="https://s3.amazonaws.com/uifaces/faces/twitter/commadelimited/128.jpg"
-                 alt="" width="45" height="45" style="border-radius: 50%"></span>
+        <span class="mdl-layout-title">{{panelUser}}
+            <img ng-src="{{userFace}}" alt="" width="45" height="45" style="border-radius: 50%"></span>
         <!--Admin Menu START here-->
         <ul class="adminMenu">
-            <li><span><button id="managementList" class="mdl-button mdl-js-button">
+            <li ng-hide="chengeMenu"><span><button id="managementList" class="mdl-button mdl-js-button">
            <i class="material-icons">card_travel</i>    {{translation.managementList}}
         </button></span></li>
             <li><span><button id="surveysList" class="mdl-button mdl-js-button">
@@ -78,14 +77,14 @@
         <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="managementList">
             <li class="mdl-menu__item"><a href="#">{{translation.EditSurveyUser}}</a></li>
             <li class="mdl-menu__item">{{translation.CreateOrganization}}</li>
-            <li disabled class="mdl-menu__item">{{translation.CreateProject}}</li>
+            <li class="mdl-menu__item">{{translation.CreateProject}}</li>
             <li class="mdl-menu__item">{{translation.EditOrganizationProject}}</li>
         </ul>
 
         <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="surveysList">
-            <li class="mdl-menu__item">{{translation.CreateSurvey}}</li>
-            <li class="mdl-menu__item">{{translation.EditSurvey}}</li>
-            <li disabled class="mdl-menu__item">{{translation.ViewSurvey}}</li>
+            <li ng-hide="chengeMenu" class="mdl-menu__item">{{translation.CreateSurvey}}</li>
+            <li ng-hide="chengeMenu" class="mdl-menu__item">{{translation.EditSurvey}}</li>
+            <li class="mdl-menu__item">{{translation.ViewSurvey}}</li>
         </ul>
 
         <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="reportsList">
