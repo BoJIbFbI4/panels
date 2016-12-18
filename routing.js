@@ -32,6 +32,20 @@ angular.module('Route', ['ui.router'])
                     layout: "mdl-layout--fixed-drawer"
                 }
             })
+            .state('diagramsPage2', {
+                url: '/diagrams2',
+                templateUrl: 'templates/diagramsPage2.html',
+                data: {
+                    layout: "mdl-layout--fixed-drawer"
+                }
+            })
+            .state('diagramsPage2.diagramsPage3', {
+                url: '/diagrams3',
+                templateUrl: 'templates/diagramsPage3.html',
+                data: {
+                    layout: "mdl-layout--fixed-drawer"
+                }
+            })
             .state('createproject', {
                 url: '/createProject',
                 templateUrl: 'templates/createProject.html',
