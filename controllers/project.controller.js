@@ -19,7 +19,7 @@ angular.module('panelsApp')
 
         var getProjects = function (companyID) {
             return $http.get(url + '/admin/getProjectsByIdCustomer/' + companyID, config).then(function (response) {
-                console.log(response.data);
+                console.log(response);
                 $rootScope.createProjectDate = response.data[0].questionary.createDate;
                 $scope.projects = response.data;
             })
@@ -32,10 +32,12 @@ angular.module('panelsApp')
 
         var getManagerProjects = function (managerID) {
             return $http.get(url + '/managers/getProjectsByIdManager/' + managerID, config).then(function (response) {
-                // console.log(response.data);
                 $scope.projects = response.data;
+
             })
         };
+
+
 
         if ($stateParams.managerID){
 

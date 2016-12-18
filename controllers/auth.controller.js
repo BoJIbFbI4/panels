@@ -17,14 +17,19 @@ angular.module('panelsApp')
             $http.get(url, config).success(function (response) {
                 $scope.isLogin = true;
                 $scope.id = response.id;
-                $scope.type = response.type;
+                $rootScope.type = response.type;
+
+
 
                 if (response.type == "ADMIN") {
                     $state.go('companies')
                 }
                 if (response.type == "MANAGER") {
+                    $rootScope.alerts = response.supervisoryAlerts;
                     $state.go('projects', {managerID: $scope.id})
                 }
+
+                console.log(response)
 
             }).error(function (response) {
                 $scope.login = "";
