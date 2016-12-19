@@ -2,7 +2,17 @@
  * Created by Gladkov Kirill on 12/12/2016.
  */
 angular.module('panelsApp')
-    .controller('ChartsCtrl', ['$scope','$rootScope', '$http', '$timeout','$state', '$filter', function ($scope, $rootScope, $http, $timeout, $state, $filter) {
+    .controller('ChartsCtrl', ['$scope','$rootScope', '$http', '$timeout','$state', '$filter','fileUpload', function ($scope, $rootScope, $http, $timeout, $state, $filter, fileUpload) {
+
+        $scope.uploadFile = function(){
+            var file = $scope.myFile;
+            var uploadUrl = "http://panel-repatriation.rhcloud.com/test/uploadUsers/1"; /* <<<<hardcode here!!!!*/
+            console.log();
+            fileUpload.uploadFileToUrl(file, uploadUrl);
+        };
+
+
+
 
         $scope.createDay = $filter("date")($rootScope.createProjectDate, 'yyyy-MM-dd');
         $scope.userDay = $filter("date")(Date.now(), 'yyyy-MM-dd');
