@@ -1,5 +1,4 @@
 var app = angular.module('panelsApp', ['Route', 'ngResource']);
-
 app.controller('MainController', ['$rootScope', '$scope', 'translationService', function ($rootScope, $scope, translationService) {
 
     if (!$rootScope.chengeMenu) {
@@ -39,13 +38,15 @@ app.service('translationService', function ($resource) {
     };
 });
 
- app.service('fileUpload', ['$http', function ($http) {
+ app.service('fileUpload', ['$http', '$rootScope', function ($http, $rootScope) {
+     var authorizationData = $rootScope.authorizationData;
     this.uploadFileToUrl = function(file, uploadUrl){
         var fd = new FormData();
         fd.append('file', file);
         $http.post(uploadUrl, fd, {
             transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
+            headers: { 'Content-Type': undefined,
+                        'Authorization': 'Basic ' + authorizationData}
         })
             .success(function(resp){
                 console.log(resp)

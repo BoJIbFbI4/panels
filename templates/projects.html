@@ -23,18 +23,18 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>60,005</td>
+                        <td>{{project.questionary.statistics.usersIntroduced == null ? "אין זימונים שנשלחו" : project.questionary.statistics.usersIntroduced}}</td>
                         <td>מספר זימונים שנשלחו</td>
                     </tr>
                     <tr>
-                        <td>7,005</td>
+                        <td>{{project.questionary.statistics.usersRespondented == null ? "אין סקרים שנענו" : project.questionary.statistics.usersRespondented}}</td>
                         <td>מספר סקרים שנענו</td>
                     </tr>
                     </tbody>
                 </table>
                 <!--</div>-->
                 <div class="mdl-card__actions mdl-card--border">
-                    <a ui-sref="diagrams" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    <a ng-click="goToSurvey(project.id)" ng-hide="project.questionary.statistics.usersIntroduced == null" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
                         <b>{{translation.ShowSurveys}}</b>
                     </a>
                 </div>

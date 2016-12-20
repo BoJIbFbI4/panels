@@ -1,5 +1,5 @@
 angular.module('Route', ['ui.router'])
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
         $urlRouterProvider.otherwise('/login');
 
@@ -26,7 +26,7 @@ angular.module('Route', ['ui.router'])
                 }
             })
             .state('diagrams', {
-                url: '/diagrams',
+                url: '/diagrams/:projectID',
                 templateUrl: 'templates/diagrams.html',
                 data: {
                     layout: "mdl-layout--fixed-drawer"
