@@ -9,16 +9,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         $rootScope.headerTitle = "Charts";
         $rootScope.layout = $state.current.data.layout;
 
-        // $scope.uploadFile = function () {
-        //     var file = $scope.myFile;
-        //     var uploadUrl = "https://panel-repatriation.rhcloud.com/admin/uploadUsers/1";/* <<<<hardcode here!!!!*/
-        //     console.log();
-        //     fileUpload.uploadFileToUrl(file, uploadUrl);
-        // };
 
         if ($stateParams.projectID) {
             getChartData($stateParams.projectID).then(function (response) {
-                // console.log('getChartData response', response);
                 $scope.surveyData = response;
                 console.log('getChartData surveyData', $scope.surveyData);
                 $scope.createDay = $filter("date")($scope.surveyData.createDate, 'yyyy-MM-dd');
@@ -32,7 +25,6 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             })
         }
 
-        console.log('getChartData surveyData OUTSIDE', $scope.surveyData);
 
         $scope.userDay = $filter("date")(Date.now(), 'yyyy-MM-dd');
 

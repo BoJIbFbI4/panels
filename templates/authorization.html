@@ -9,16 +9,16 @@
         </hgroup>
         <form>
             <div class="group">
-                <input ng-model="login" id="login" type="text" placeholder="login"><span class="highlight"></span><span
+                <input ng-keyup="$event.keyCode == 13 && getLogin()" ng-model="login" id="login" type="text" placeholder="login"><span class="highlight"></span><span
                     class="bar"></span>
             </div>
             <div class="group">
-                <input ng-model="pass" id="pass" type="password" placeholder="password"><span
+                <input ng-keyup="$event.keyCode == 13 && getLogin()" ng-model="pass" id="pass" type="password" placeholder="password"><span
                     class="highlight"></span><span
                     class="bar"></span>
             </div>
             <p ng-bind="alert" style="text-align: center; color: darkred">{{alert}}</p>
-            <button ng-click="getLogin()" id="button" type="button" class="button buttonBlue">{{translation.button}}
+            <button ng-keyup="$event.keyCode == 13 && getLogin()" id="button" type="button" class="button buttonBlue">{{translation.button}}
                 <div class="ripples buttonRipples">
                     <span class="ripplesCircle"></span>
                 </div>
