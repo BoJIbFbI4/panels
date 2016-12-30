@@ -5,7 +5,7 @@
     });
 </script>
 
-<div class="mainView" class="projects" ng-controller="ProjectCtrl">
+<div class="mainView" class="projects" ng-hide="showLoader" ng-controller="ProjectCtrl">
 
     <div class="mdl-grid">
         <div class="mdl-cell mdl-cell--4-col mdl-cell mdl-cell--4-col-phone" ng-repeat="project in projects">
@@ -60,4 +60,25 @@
         </div>
     </div>
 
+</div>
+
+<div class="loader" ng-show="showLoader">
+    <div class="square square--main">
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+        <div class="square square--mini"></div>
+    </div>
 </div>

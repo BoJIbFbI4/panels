@@ -5,6 +5,8 @@ angular.module('panelsApp')
     .controller('CompaniesCtrl', ['$rootScope','$scope', '$http', 'CompaniesService', '$state',
         function ($rootScope, $scope, $http, CompaniesService, $state) {
 
+            $rootScope.showLoader = true;
+
             $rootScope.headerTitle = "Companies";
             $scope.companies = [];
             $rootScope.layout = $state.current.data.layout;
@@ -20,7 +22,7 @@ angular.module('panelsApp')
 
         }])
 
-    .service('CompaniesService', ['$rootScope','$http', function ($rootScope ,$http) {
+    .service('CompaniesService', ['$rootScope', '$http', function ($rootScope, $http) {
         var url = "https://panel-repatriation.rhcloud.com/admin/";
         var authorizationData = $rootScope.authorizationData;
         var config = {
@@ -30,6 +32,7 @@ angular.module('panelsApp')
         };
 
         return $http.get(url + 'getCustomers', config).then(function (result) {
+            $rootScope.showLoader = false;
             return result.data;
         })
 
