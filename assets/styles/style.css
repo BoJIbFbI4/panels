@@ -49,6 +49,11 @@
     padding: 7px;
 }
 
+.adminMenu .mdl-button{
+    width: 162px;
+    text-align: left;
+}
+
 /*add project form*/
 .mdl-button--file input {
     cursor: pointer;

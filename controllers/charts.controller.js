@@ -32,6 +32,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                     console.log('request with dates: ',response);
 
+                    //charts page1 -> block1
                     var donutChart = c3.generate({
                         bindto: '#chart_gauge',
                         title: {
@@ -72,7 +73,6 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             height: 180
                         }
                     });
-                    //charts page1 -> block1
                     var chart = c3.generate({
                         title: {
                             text: 'התפלגות שביעות רצון מהשירות'

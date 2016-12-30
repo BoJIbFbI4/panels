@@ -5,115 +5,138 @@
     });
 </script>
 
-<div class="mainView" ng-hide="showLoader" ng-controller="ChartsCtrl">
+<div class="WTF">
+    <div class="mainView" ng-controller="ChartsCtrl">
+        <div class="mdl-grid">
+            <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+                <div class="answers-card mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title mdl-card--expand"></div>
+                    <div class="mdl-card__actions">
+                        <span class="demo-card-image__filename">ענו לסקר</span><br>
+                        <span class="demo-card-image__filename">{{totalIntroduced}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+                <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
+                    <span class="calendar-icon">{{translation.ToDate}}
+                        <i class="material-icons light-blue">date_range</i></span><br>
+                    <input class="mdl-date-textfield__input" type="date" ng-model="dateEnd" value="{{userDate}}" id="sample3">
+                </div>
+            </div>
+            <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+                <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
+                    <span class="calendar-icon">{{translation.FromDate}}<i class="material-icons light-blue">date_range</i></span><br>
+                    <input class="mdl-date-textfield__input" type="date" value="{{createDate}}" id="sample4">
+                </div>
+            </div>
+        </div>
 
-    <div class="mdl-grid">
-        <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
-            <div class="answers-card mdl-card mdl-shadow--2dp">
-                <div class="mdl-card__title mdl-card--expand"></div>
-                <div class="mdl-card__actions">
-                    <span class="demo-card-image__filename">ענו לסקר</span><br>
-                    <span class="demo-card-image__filename">{{totalIntroduced}}</span>
+
+        <div class="mdl-grid">
+            <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--file">
+                    <input
+                            class="mdl-textfield__input"
+                            placeholder="choose new file for upload"
+                            type="text" id="uploadFile"
+                            readonly
+                    />
+
+                    <div class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
+                        <i class="material-icons">attach_file</i>
+                        <input type="file" id="uploadBtn" file-model="myFile">
+                    </div>
+
                 </div>
+
+                <span style="{{translation.FloatStyle}}">
+                    <button
+                            class="mdl-button mdl-js-button mdl-button--primary mdl-stat-btns"
+                            ng-click="uploadFile()"
+                    >
+                        <b >
+                            {{translation.LoadNewCustomers}}
+                        </b>
+                    </button>
+                </span>
             </div>
-        </div>
-        <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
-            <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
-                <span class="calendar-icon">עד <i class="material-icons light-blue">date_range</i></span><br>
-                <input class="mdl-date-textfield__input" type="date" ng-model="dateEnd" value="{{userDate}}" id="sample3">
-            </div>
-        </div>
-        <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
-            <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
-                <span class="calendar-icon">מ <i class="material-icons light-blue">date_range</i></span><br>
-                <input class="mdl-date-textfield__input" type="date" value="{{createDate}}" id="sample4">
-            </div>
-        </div>
-    </div>
-    <div class="mdl-grid">
-        <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--file">
-                <input class="mdl-textfield__input" placeholder="choose new file for upload" type="text" id="uploadFile" readonly/>
-                <div class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
-                    <i class="material-icons">attach_file</i><input type="file" id="uploadBtn" file-model="myFile">
-                </div>
-            </div>
-            <button class="mdl-button mdl-js-button mdl-button--primary" ng-click="uploadFile()">
-                <b>Load new costumers</b>
+
+
+            <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
+
+            <span>
+            <button class="mdl-button mdl-js-button mdl-button--primary">
+                <b>{{translation.ExportToExcel}}</b>
             </button>
+            </span>
 
-            <button class="mdl-button mdl-js-button mdl-button--primary"><b>{{translation.ExportToExcel}}</b></button>
-            <button class="mdl-button mdl-js-button mdl-button--primary"><b>{{translation.ExportToPDF}}</b></button>
-        </div>
-        <div class="mdl-cell--3-col">
-            <!-- empty cell, can use it -->
-        </div>
-        <div class="mdl-cell--5-col mdl-cell--8-col-tablet mdl-cell--8-col-phone">
-            <h5 style="float: right;">?באיזו מידה אתה מרוצה מהשירות שקיבלת</h5>
-        </div>
-    </div>
+            </div>
 
-    <!-- charts block 1 -->
-    <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
-            <div id="chart"></div>
-        </div>
-        <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
-            <div id="chart_gauge"></div>
-        </div>
-    </div>
-    <!-- END charts block 1 -->
+            <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
+                <button class="mdl-button mdl-js-button mdl-button--primary">
+                    <b>{{translation.ExportToPDF}}</b>
+                </button>
+            </div>
 
-    <!-- charts block 2 -->
-    <div class="mdl-grid">
-        <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone"><!-- empty cell, can use it --></div>
-        <div class="mdl-cell--3-col"><!-- empty cell, can use it --></div>
-        <div class="mdl-cell--5-col mdl-cell--8-col-tablet mdl-cell--8-col-phone">
-            <h5 style="float: right;">?באיזו מידה אתה מרוצה מזמן ההמתנה</h5>
+            <div class="mdl-cell--2-col mdl-cell--2-col-tablet mdl-cell--2-col-phone">
+                <button class="mdl-button mdl-js-button mdl-button--primary">
+                    <b>{{translation.Statistics}}</b>
+                </button>
+            </div>
         </div>
-    </div>
-    <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
-            <div id="chart2"></div>
-        </div>
-        <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
-            <div id="chart_gauge2"></div>
-        </div>
-    </div>
-    <!--END charts block 2 -->
 
-    <!-- charts block 3 -->
-    <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
-            <div id="chart3"></div>
+
+        <div class="mdl-grid">
+            <div class="mdl-cell--11-col mdl-cell--11-col-tablet mdl-cell--11-col-phone">
+                <h5 style="{{translation.FloatStyle}}">{{translation.WhatExtent}}</h5>
+            </div>
         </div>
-        <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
-            <div id="chart_gauge3"></div>
-        </div>
+
     </div>
-    <!-- END charts block 3 -->
 </div>
 
-<div class="loader" ng-show="showLoader">
-    <div class="square square--main">
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
-        <div class="square square--mini"></div>
+
+<!-- charts block 1 -->
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
+        <div id="chart"></div>
+    </div>
+    <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
+        <div id="chart_gauge"></div>
     </div>
 </div>
+<!-- END charts block 1 -->
+
+<!-- charts block 2 -->
+<div class="mdl-grid">
+    <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone"><!-- empty cell, can use it --></div>
+    <div class="mdl-cell--3-col"><!-- empty cell, can use it --></div>
+    <div class="mdl-cell--5-col mdl-cell--8-col-tablet mdl-cell--8-col-phone">
+        <h5 style="float: right;">{{translation.WaitTime}} </h5>
+    </div>
+</div>
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
+        <div id="chart2"></div>
+    </div>
+    <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
+        <div id="chart_gauge2"></div>
+    </div>
+</div>
+<!--END charts block 2 -->
+
+<!-- charts block 3 -->
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
+        <div id="chart3"></div>
+    </div>
+    <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
+        <div id="chart_gauge3"></div>
+    </div>
+</div>
+<!-- END charts block 3 -->
+<!--</div>-->
 
 <script>
     document.getElementById("uploadBtn").onchange = function () {

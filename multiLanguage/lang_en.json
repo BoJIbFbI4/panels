@@ -34,7 +34,7 @@
   "WhatExtent":"To what extent are you satisfied with the service you received ?",
   "ChooseFile":"choose new file for upload",
   "WaitTime": "How satisfied are you waiting time?",
-
+  "alertsBtn": "Alerts",
 
 
   "_comment"  : "Styles dependings from lang",
