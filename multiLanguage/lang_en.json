@@ -26,6 +26,20 @@
   "ExportToPDF": "Export to PDF",
   "projectName": "Project Name",
   "projectManagerName": "Project manager name",
-  "addProject": "Add project"
+  "addProject": "Add project",
+  "LoadNewCustomers":"Load new Customers",
+  "Statistics":"Statistics",
+  "FromDate":"From date",
+  "ToDate":"To date",
+  "WhatExtent":"To what extent are you satisfied with the service you received ?",
+  "ChooseFile":"choose new file for upload",
+  "WaitTime": "How satisfied are you waiting time?",
+
+
+
+  "_comment"  : "Styles dependings from lang",
+  "FloatStyle": "float:left"
+
+
 
 }

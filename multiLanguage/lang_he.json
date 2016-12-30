@@ -26,5 +26,19 @@
   "ExportToPDF": "לייצא ל PDF",
   "projectName": "שם תוכנית",
   "projectManagerName": "שם מנהל התוכנית",
-  "addProject": "להוסיף תוכנית"
+  "addProject": "להוסיף תוכנית",
+  "LoadNewCustomers":"טען לקוחות חדשים",
+
+  "Statistics":"סטָטִיסטִיקָה",
+  "FromDate":"מאותו תאריך",
+  "ToDate":"עד תאריך",
+  "WhatExtent":"?באיזו מידה אתה מרוצה מהשירות שקיבלת",
+  "ChooseFile":"לבחור קובץ חדש להעלאה",
+  "WaitTime": "?באיזו מידה אתה מרוצה מזמן ההמתנה",
+
+
+
+  "_comment"  : "Styles dependings from lang",
+  "FloatStyle": "float:right"
+
 }

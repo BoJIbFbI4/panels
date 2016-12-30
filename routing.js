@@ -33,7 +33,7 @@ angular.module('Route', ['ui.router'])
                 }
             })
             .state('diagramsPage2', {
-                url: '/diagrams2',
+                url: '/diagrams2/:projectID',
                 templateUrl: 'templates/diagramsPage2.html',
                 data: {
                     layout: "mdl-layout--fixed-drawer"
