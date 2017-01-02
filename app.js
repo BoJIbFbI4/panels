@@ -52,8 +52,7 @@ app.service('translationService', function ($resource) {
                 console.log(resp)
             })
             .error(function(){
-                console.log("error")
-
+                console.log("error");
             });
     }
 }]);
