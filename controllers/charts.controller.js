@@ -419,7 +419,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             },
             getAnalisys: function (questionaryID, userDate, createQuestionaryDate) {
                 console.log('enter to the analisys block');
-                //t
+                //t//
                 var params = $.param({
                     create: createQuestionaryDate,
                     userDate: userDate
