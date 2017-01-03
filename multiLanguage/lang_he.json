@@ -1,7 +1,11 @@
-﻿﻿{
+﻿{
   "welcome" :"ברוכים הבאים" ,
   "password" :"סיסמא",
   "companies": "חברות",
+  "panels": "פנלס",
+  "charts":"גרפיקים",
+  "loginPlace":"התחבר",
+  "passwordPlace":"סיסמה",
   "loginToContinue": "התחבר להמשך",
   "button" : "כניסה",
   "adminHeader" :"דף מנהל",
