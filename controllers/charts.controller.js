@@ -5,7 +5,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
     function ($scope, $rootScope, $http, $timeout, $state, $filter, fileUpload, $stateParams, getChartData) {
 
         $scope.surveyData = {};
-
+        //
         $rootScope.headerTitle = "Charts";
         $rootScope.layout = $state.current.data.layout;
         $rootScope.isUpload = false;
