@@ -6,52 +6,71 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
         $scope.surveyData = {};
 
-        $rootScope.headerTitle = "charts";
+        $rootScope.headerTitle = "Charts";
         $rootScope.layout = $state.current.data.layout;
         $rootScope.isUpload = false;
 
 
+        if ($stateParams.projectID) { // <-- take this projectID from project template and use it into request below
 
-        if ($stateParams.projectID) {
-            $scope.$watch('dateEnd', function (_data) {
-                console.log(_data);
+            $scope.$watch('dateEnd', function (_data) { //<-- watch input "to date". if it changed - send new req with a new date
+
                 getChartData.getQuestionary($stateParams.projectID).then(function (response) {
                     $scope.createDate = $filter("date")(response.createDate, 'yyyy-MM-dd');
-                    $scope.userDate = $filter("date")(Date.now(), 'yyyy-MM-dd');
+                    $scope.userDate = $filter("date")(_data, 'yyyy-MM-dd') || $filter("date")(Date.now(), 'yyyy-MM-dd');
                     $scope.totalIntroduced = response.statistics.usersIntroduced;
 
+                    // function for upload excel file with new users. Placed here because it use this questionary ID
                     $scope.uploadFile = function () {
                         var file = $scope.myFile;
-                        var uploadUrl = "https://panel-repatriation.rhcloud.com/admin/uploadUsers/" + response.id;
+                        var uploadUrl = $rootScope.url + "/admin/uploadUsers/" + response.id;
                         fileUpload.uploadFileToUrl(file, uploadUrl);
                         $rootScope.isUpload = true;
                     };
-                    // console.log(response);
+
                     return response;
 
                 }).then(function (response) {
-                    return getChartData.getAnalisys(response.id, $scope.userDate, $scope.createDate);
+                    return getChartData.getAnalisys(response.id, $scope.createDate, $scope.userDate);
                 }).then(function (response){
 
+                    // put put response data to the charts
+                    //TODO function --> get data for each chart using questionType as parameter
+
                     var rating = [''];
+                    var ratingTitles = ['x'];
                     var gpa = 0;
-                    var totalrespondet = 0;
+                    var satisfiedGPA = 0;
+                    var satisfiedRaiting = [''];
                     var questions = response.questionary.questions;
+                    var usersResponded = response.countUserByDate;
+
                     for (var i = 0; i < questions.length; i++){
+
                         if (questions[i].questionType == 1){
                             for (var j = 0; j < questions[i].answers.length; j++){
                                 // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
                                 gpa += questions[i].answers[j].usersRespondented * (j + 1);
-                                totalrespondet += questions[i].answers[j].usersRespondented;
-                                rating.push(Math.round((((questions[i].answers[j].usersRespondented * 100) / 476) / 100) * 100) / 100);
+                                rating.push(((questions[i].answers[j].usersRespondented * 100) / usersResponded) / 100);
+                                ratingTitles.push(questions[i].answers[j].title);
                             }
+                            //used Math.round to round up to 2 decimal
+                            gpa = Math.round((gpa / usersResponded) * 100) / 100;
                         }
+                        //------------------
+                        if (questions[i].questionType == 2){
+                            for (var x = 0; x < questions[i].answers.length; x++){
+                                // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
+                                satisfiedGPA += questions[i].answers[x].usersRespondented * (x + 1);
+                                satisfiedRaiting.push(((questions[i].answers[x].usersRespondented * 100) / usersResponded) / 100);
+                            }
+                            //used Math.round to round up to 2 decimal
+                            satisfiedGPA = Math.round((gpa / usersResponded) * 100) / 100;
+                        }
+
                     }
 
-                    //used Math.round to round up to 2 decimal
-                    gpa = Math.round((gpa / totalrespondet) * 100) / 100;
                     console.log('rating charts data: ' ,rating);
-
                     console.log('request with dates: ',response);
 
                     //charts page1 -> block1
@@ -92,7 +111,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             }
                         },
                         size: {
-                            height: 180
+                            height: 200
                         }
                     });
                     var chart = c3.generate({
@@ -102,14 +121,14 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         data: {
                             x: 'x',
                             columns: [
-                                ['x', 'כלל לא שבע/ת רצון', 'די לא שבע/ת רצון', 'שבע/ת רצון במידה בינונית', 'דישבע/ת רצון', 'שבע/ת רצון במידה רבה מאוד'],
+                                ratingTitles,
                                 rating
                             ],
                             type: 'bar',
                             labels: {
                                 format: function (v, id, i, j) {
 
-                                    return v * 100 + '%';
+                                    return (v * 100).toFixed(3) + '%';
                                 }
                             }
                         },
@@ -120,7 +139,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             y: {
                                 tick: {
                                     format: d3.format('%'),
-                                    values:[1]
+                                    values:[0.25,0.5,0.75,1]
                                 },
                                 max: 1,
                                 min: 0,
@@ -154,7 +173,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         },
                         data: {
                             columns: [
-                                ['GPA', 4.6]
+                                ['GPA', satisfiedGPA]
                             ],
                             type: 'gauge',
                             onclick: function (d, i) {
@@ -196,9 +215,15 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             x: 'x',
                             columns: [
                                 ['x', 'כלל לא שבע/ת רצון', 'די לא שבע/ת רצון', 'שבע/ת רצון במידה בינונית', 'דישבע/ת רצון', 'שבע/ת רצון במידה רבה מאוד'],
-                                ['שבע/ת רצון', 0.03, 0.02, 0.26, 0.86, 0.54]
+                                satisfiedRaiting
                             ],
-                            type: 'bar'
+                            type: 'bar',
+                            labels: {
+                                format: function (v, id, i, j) {
+
+                                    return (v * 100).toFixed(3) + '%';
+                                }
+                            }
                         },
                         axis: {
                             x: {
@@ -206,13 +231,13 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             },
                             y: {
                                 tick: {
-                                    format: d3.format('%')
-                                    // values:[0.25,0.5,0.75,0.1]
+                                    format: d3.format('%'),
+                                    values:[0.25,0.5,0.75,1]
                                 },
                                 max: 1,
                                 min: 0,
                                 padding: {
-                                    top: 10,
+                                    top: 0,
                                     bottom: 0
                                 }
                             }
@@ -227,6 +252,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         },
                         color: {
                             pattern: ['#3aaef2']
+                        },
+                        legend: {
+                            show: false
                         }
                     });
 
@@ -405,9 +433,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
     }])
     .service('getChartData', ['$http', '$rootScope', '$q', function ($http, $rootScope, $q) {
 
-        var url = "https://panel-repatriation.rhcloud.com";
+        var url = $rootScope.url;
         var authorizationData = $rootScope.authorizationData;
-        var config = {headers: {"Authorization": "Basic " + authorizationData}};
+        var config = { headers: {"Authorization": "Basic " + authorizationData} };
 
         var data = {};
 
@@ -417,26 +445,30 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     return response.data;
                 })
             },
-            getAnalisys: function (questionaryID, userDate, createQuestionaryDate) {
-                console.log('enter to the analisys block');
-                //t//
-                var params = $.param({
-                    create: createQuestionaryDate,
-                    userDate: userDate
-                });
+            getAnalisys: function (questionaryID, startDate,  endDate) {
 
                 if (data[questionaryID]) {
                     return $q(function (resolve) {
                         resolve(data[questionaryID]);
                     });
                 } else {
-                    return $http.post(url + '/common/getAnalysis/' + questionaryID, params, config)
-                        .then(function (response) {
-                            // success callback
-                            // console.log('analitycs response: ', response.data);
+                    // here useud ajax request because the angular $http.post do not work (takes null) with server
+                    return $.ajax({
+                        url: url + '/common/getAnalysis/' + questionaryID,
+                        type: 'post',
+                        data: {
+                            startDate: startDate,
+                            endDate: endDate
+                        },
+                        headers: {'Content-Type': undefined,
+                                  'Authorization': 'Basic ' + authorizationData},
+                        dataType: 'json',
+                        success: function (response) {
                             data[questionaryID] = response.data;
                             return response.data;
-                        })
+                        }
+                    });
+
                 }
             }
     }

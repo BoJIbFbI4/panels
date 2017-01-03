@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="assets/styles/style.css">
     <link rel="stylesheet" href="assets/styles/bootloader.css">
 
-    <script src="https://code.jqhuery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="resources/mdl/material.js"></script>
     <script src="resources/mdl/mdl-date/mdl-date-textfield.min.js"></script>
     <!--diagrams-->
@@ -27,8 +27,6 @@
 
     <script src="app.js"></script>
 
-
-
 </head>
 <body ng-app="panelsApp" ng-controller="MainController">
 
@@ -38,7 +36,6 @@
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row dark-primary-color">
             <!-- Title -->
-            <!--Заголовок -->
             <span class="mdl-layout-title">{{translation[headerTitle]}}</span>
             <!-- Add spacer, to align navigation to the right -->
             <div class="mdl-layout-spacer"></div>
@@ -61,14 +58,9 @@
             </nav>
         </div>
     </header>
-
     <div class="mdl-layout__drawer">
-        <!--<span class="mdl-layout-title"  ng-model="panelUserText">  {{panelUser}} <img ng-src="{{userFace}}" alt="" width="45" height="45" style="border-radius: 50%"></span>-->
-        <span class="mdl-layout-title"  ng-model="panelUserText">
-            {{headerLeft}}
-            <!--{{translation.managerHeader || translation.adminHeader}}-->
-            <img ng-src="{{userFace}}" alt="" width="45" height="45" style="border-radius: 50%">
-        </span>
+        <span class="mdl-layout-title">{{panelUser}}
+            <img ng-src="{{userFace}}" alt="" width="45" height="45" style="border-radius: 50%"></span>
         <!--Admin Menu START here-->
         <ul class="adminMenu">
             <li ng-hide="chengeMenu"><span><button id="managementList" class="mdl-button mdl-js-button">

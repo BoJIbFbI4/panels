@@ -7,12 +7,7 @@ angular.module('panelsApp')
 
             $rootScope.showLoader = true;
 
-            console.log(" === SETTING title === ");
-            console.log($scope.titleCompanies);
-
-            // $rootScope.headerTitle = $scope.titleCompanies;
-            $rootScope.headerTitle = "companies"; // Обращение к словарю!
-
+            $rootScope.headerTitle = "companies";
             $scope.companies = [];
             $rootScope.layout = $state.current.data.layout;
 
@@ -28,7 +23,7 @@ angular.module('panelsApp')
         }])
 
     .service('CompaniesService', ['$rootScope', '$http', function ($rootScope, $http) {
-        var url = "https://panel-repatriation.rhcloud.com/admin/";
+        var url = $rootScope.url + "/admin/";
         var authorizationData = $rootScope.authorizationData;
         var config = {
             headers: {

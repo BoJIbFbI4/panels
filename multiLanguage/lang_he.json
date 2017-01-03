@@ -1,15 +1,11 @@
-﻿{
-  "companies":"חברות",
-  "panels":"פנלס",
-  "charts":"גרפיקים",
-  "loginPlace":"התחבר",
-  "passwordPlace":"סיסמה",
+﻿﻿{
   "welcome" :"ברוכים הבאים" ,
   "password" :"סיסמא",
+  "companies": "חברות",
   "loginToContinue": "התחבר להמשך",
   "button" : "כניסה",
-  "adminHeader" :"דף מנהל" ,
-  "managerHeader" :"דף מנגר" ,
+  "adminHeader" :"דף מנהל",
+  "managerHeader" :"דף מנגר",
   "managementList" : "תפריט ניהול",
   "surveysList" : "רשימת סקרים",
   "reportsList":"רשימת דיווחים",
@@ -47,19 +43,5 @@
 
   "_comment"  : "Styles dependings from lang",
   "FloatStyle": "float:right"
-
-,
-
-
-
-  "he":{
-    "companies":"חברות"
-  },
-
-  "en":{
-    "companies":"Companies"
-  }
-
-
 
 }

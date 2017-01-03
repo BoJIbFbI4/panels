@@ -9,7 +9,7 @@ angular.module('panelsApp')
 
 
         $scope.getLogin = function () {
-            var url = "https://panel-repatriation.rhcloud.com/common/login";
+            var url = $rootScope.url + "/common/login";
             var authorizationData = btoa($scope.login + ":" + $scope.pass);
             $rootScope.authorizationData = authorizationData;
             var config = { headers: {"Authorization": "Basic " + authorizationData} };

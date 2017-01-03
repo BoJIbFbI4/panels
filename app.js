@@ -1,7 +1,11 @@
 var app = angular.module('panelsApp', ['Route', 'ngResource']);
 app.controller('MainController', ['$rootScope', '$scope', 'translationService', function ($rootScope, $scope, translationService) {
+
+    $rootScope.url = "https://panel-repatriation.rhcloud.com";
+    // $rootScope.url = "http://192.168.1.101:8080";
+
     if (!$rootScope.chengeMenu) {
-        //$rootScope.panelUser = $scope.translation.adminHeader;
+        $rootScope.panelUser = "Admin Page";
         $rootScope.userFace = 'https://s3.amazonaws.com/uifaces/faces/twitter/commadelimited/128.jpg';
     }
 
@@ -16,23 +20,7 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
     }
 
     $scope.isManager = function () {
-
-        // var lang = $scope.selectedLanguage;
-        // $scope.titleCompanies = $scope.translation.companies;
-        // console.log($scope.titleCompanies);
-
-        if ($rootScope.type == "MANAGER"){
-            $scope.headerLeft = $scope.translation.managerHeader;
-            return true
-        }
-        else{
-            $scope.headerLeft = $scope.translation.adminHeader;
-            return false
-        }
-
-
-
-
+        return $rootScope.type == "MANAGER";
     };
 
     $scope.getAlerts = function () {
@@ -43,16 +31,17 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
 }]);
 
 app.service('translationService', function ($resource) {
+
     this.getTranslation = function ($scope, language) {
         var languageFilePath = 'multiLanguage/lang_' + language + '.json';
-        console.log(languageFilePath);
+        console.log(language);
         $resource(languageFilePath).get(function (data) {
             $scope.translation = data;
         });
     };
 });
 
-app.service('fileUpload', ['$http', '$rootScope', function ($http, $rootScope) {
+ app.service('fileUpload', ['$http', '$rootScope', function ($http, $rootScope) {
      var authorizationData = $rootScope.authorizationData;
     this.uploadFileToUrl = function(file, uploadUrl){
         var fd = new FormData();
@@ -70,6 +59,7 @@ app.service('fileUpload', ['$http', '$rootScope', function ($http, $rootScope) {
             });
     }
 }]);
+
 
 app.directive('fileModel', ['$parse', function ($parse) {
     return {

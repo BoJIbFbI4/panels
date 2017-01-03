@@ -11,7 +11,7 @@ angular.module('panelsApp')
             $rootScope.headerTitle = "projects";
             $rootScope.layout = $state.current.data.layout;
 
-            var url = "https://panel-repatriation.rhcloud.com";
+            var url = $rootScope.url;
             var authorizationData = $rootScope.authorizationData;
             var config = {
                 headers: {
