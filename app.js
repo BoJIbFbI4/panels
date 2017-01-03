@@ -66,8 +66,7 @@ app.service('fileUpload', ['$http', '$rootScope', function ($http, $rootScope) {
                 console.log(resp)
             })
             .error(function(){
-                console.log("error")
-
+                console.log("error");
             });
     }
 }]);

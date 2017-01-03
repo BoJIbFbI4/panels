@@ -8,6 +8,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
         $rootScope.headerTitle = "charts";
         $rootScope.layout = $state.current.data.layout;
+        $rootScope.isUpload = false;
 
 
 
@@ -23,13 +24,33 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         var file = $scope.myFile;
                         var uploadUrl = "https://panel-repatriation.rhcloud.com/admin/uploadUsers/" + response.id;
                         fileUpload.uploadFileToUrl(file, uploadUrl);
+                        $rootScope.isUpload = true;
                     };
                     // console.log(response);
                     return response;
 
                 }).then(function (response) {
                     return getChartData.getAnalisys(response.id, $scope.userDate, $scope.createDate);
-                }).then(function (response) {
+                }).then(function (response){
+
+                    var rating = [''];
+                    var gpa = 0;
+                    var totalrespondet = 0;
+                    var questions = response.questionary.questions;
+                    for (var i = 0; i < questions.length; i++){
+                        if (questions[i].questionType == 1){
+                            for (var j = 0; j < questions[i].answers.length; j++){
+                                // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
+                                gpa += questions[i].answers[j].usersRespondented * (j + 1);
+                                totalrespondet += questions[i].answers[j].usersRespondented;
+                                rating.push(Math.round((((questions[i].answers[j].usersRespondented * 100) / 476) / 100) * 100) / 100);
+                            }
+                        }
+                    }
+
+                    //used Math.round to round up to 2 decimal
+                    gpa = Math.round((gpa / totalrespondet) * 100) / 100;
+                    console.log('rating charts data: ' ,rating);
 
                     console.log('request with dates: ',response);
 
@@ -41,7 +62,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         },
                         data: {
                             columns: [
-                                ['GPA', 4.7]
+                                ['GPA', gpa]
                             ],
                             type: 'gauge',
                             onclick: function (d, i) {
@@ -82,9 +103,15 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             x: 'x',
                             columns: [
                                 ['x', 'כלל לא שבע/ת רצון', 'די לא שבע/ת רצון', 'שבע/ת רצון במידה בינונית', 'דישבע/ת רצון', 'שבע/ת רצון במידה רבה מאוד'],
-                                ['שבע/ת רצון', 0.01, 0.01, 0.14, 0.43, 0.45]
+                                rating
                             ],
-                            type: 'bar'
+                            type: 'bar',
+                            labels: {
+                                format: function (v, id, i, j) {
+
+                                    return v * 100 + '%';
+                                }
+                            }
                         },
                         axis: {
                             x: {
@@ -92,13 +119,13 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             },
                             y: {
                                 tick: {
-                                    format: d3.format('%')
-                                    // values:[0.25,0.5,0.75,0.1]
+                                    format: d3.format('%'),
+                                    values:[1]
                                 },
                                 max: 1,
                                 min: 0,
                                 padding: {
-                                    top: 10,
+                                    top: 0,
                                     bottom: 0
                                 }
                             }
@@ -113,6 +140,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         },
                         color: {
                             pattern: ['#3aaef2']
+                        },
+                        legend: {
+                            show: false
                         }
                     });
 
@@ -147,7 +177,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 //    width: 39 // for adjusting arc thickness
                         },
                         color: {
-                            pattern: ['#FF0000', '#F97600', '#F6C600', '#3aaef2'], // the three color levels for the percentage values.
+                            pattern: ['#FF0000', '#F97600', '#F6C600', '#4FF239'], // the three color levels for the percentage values.
                             threshold: {
                                 max: 5, // 100 is default
                                 values: [30, 60, 90, 100]
@@ -373,7 +403,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         }
 
     }])
-    .service('getChartData', ['$http', '$rootScope', function ($http, $rootScope) {
+    .service('getChartData', ['$http', '$rootScope', '$q', function ($http, $rootScope, $q) {
 
         var url = "https://panel-repatriation.rhcloud.com";
         var authorizationData = $rootScope.authorizationData;
