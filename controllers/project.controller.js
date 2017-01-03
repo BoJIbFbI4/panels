@@ -8,7 +8,7 @@ angular.module('panelsApp')
             $rootScope.showLoader = true;
 
             $scope.projects = [];
-            $rootScope.headerTitle = "Projects";
+            $rootScope.headerTitle = "projects";
             $rootScope.layout = $state.current.data.layout;
 
             var url = "https://panel-repatriation.rhcloud.com";
@@ -41,6 +41,9 @@ angular.module('panelsApp')
                     $rootScope.chengeMenu = true;
                     $rootScope.userFace = 'https://s3.amazonaws.com/uifaces/faces/twitter/silvanmuhlemann/128.jpg';
                     $rootScope.panelUser = "Manager Page";
+
+                    $rootScope.panelUser = $scope.translation.managerHeader;
+
                     $scope.projects = response.data;
                     $rootScope.showLoader = false;
                 })

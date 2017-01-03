@@ -2,7 +2,7 @@ angular.module('panelsApp')
     .controller('AuthCtrl', ['$rootScope','$scope', '$http', '$state', function ($rootScope ,$scope, $http, $state) {
 
         $scope.isLogin = false;
-        $rootScope.headerTitle = "Panels";
+        $rootScope.headerTitle = "panels";
         $rootScope.authorizationData = "";
         $rootScope.layout = "";
 

@@ -9,11 +9,11 @@
         </hgroup>
         <form>
             <div class="group">
-                <input ng-keyup="$event.keyCode == 13 && getLogin()" ng-model="login" id="login" type="text" placeholder="login"><span class="highlight"></span><span
+                <input ng-keyup="$event.keyCode == 13 && getLogin()" ng-model="login" id="login" type="text" placeholder="{{translation.loginPlace}}"><span class="highlight"></span><span
                     class="bar"></span>
             </div>
             <div class="group">
-                <input ng-keyup="$event.keyCode == 13 && getLogin()" ng-model="pass" id="pass" type="password" placeholder="password"><span
+                <input ng-keyup="$event.keyCode == 13 && getLogin()" ng-model="pass" id="pass" type="password" placeholder="{{translation.passwordPlace}}"><span
                     class="highlight"></span><span
                     class="bar"></span>
             </div>

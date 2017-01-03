@@ -1,8 +1,7 @@
 var app = angular.module('panelsApp', ['Route', 'ngResource']);
 app.controller('MainController', ['$rootScope', '$scope', 'translationService', function ($rootScope, $scope, translationService) {
-
     if (!$rootScope.chengeMenu) {
-        $rootScope.panelUser = "Admin Page";
+        //$rootScope.panelUser = $scope.translation.adminHeader;
         $rootScope.userFace = 'https://s3.amazonaws.com/uifaces/faces/twitter/commadelimited/128.jpg';
     }
 
@@ -17,7 +16,23 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
     }
 
     $scope.isManager = function () {
-        return $rootScope.type == "MANAGER";
+
+        // var lang = $scope.selectedLanguage;
+        // $scope.titleCompanies = $scope.translation.companies;
+        // console.log($scope.titleCompanies);
+
+        if ($rootScope.type == "MANAGER"){
+            $scope.headerLeft = $scope.translation.managerHeader;
+            return true
+        }
+        else{
+            $scope.headerLeft = $scope.translation.adminHeader;
+            return false
+        }
+
+
+
+
     };
 
     $scope.getAlerts = function () {
@@ -28,7 +43,6 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
 }]);
 
 app.service('translationService', function ($resource) {
-
     this.getTranslation = function ($scope, language) {
         var languageFilePath = 'multiLanguage/lang_' + language + '.json';
         console.log(languageFilePath);
@@ -38,7 +52,7 @@ app.service('translationService', function ($resource) {
     };
 });
 
- app.service('fileUpload', ['$http', '$rootScope', function ($http, $rootScope) {
+app.service('fileUpload', ['$http', '$rootScope', function ($http, $rootScope) {
      var authorizationData = $rootScope.authorizationData;
     this.uploadFileToUrl = function(file, uploadUrl){
         var fd = new FormData();
@@ -57,7 +71,6 @@ app.service('translationService', function ($resource) {
             });
     }
 }]);
-
 
 app.directive('fileModel', ['$parse', function ($parse) {
     return {

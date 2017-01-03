@@ -7,7 +7,12 @@ angular.module('panelsApp')
 
             $rootScope.showLoader = true;
 
-            $rootScope.headerTitle = "Companies";
+            console.log(" === SETTING title === ");
+            console.log($scope.titleCompanies);
+
+            // $rootScope.headerTitle = $scope.titleCompanies;
+            $rootScope.headerTitle = "companies"; // Обращение к словарю!
+
             $scope.companies = [];
             $rootScope.layout = $state.current.data.layout;
 

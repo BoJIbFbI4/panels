@@ -1,9 +1,15 @@
 {
+  "companies":"Companies",
+  "charts":"Charts",
+  "panels":"Panels",
+  "loginPlace":"login",
+  "passwordPlace":"password",
   "welcome" : "Welcome to",
   "password" : "password",
   "loginToContinue": "Please log in to continue",
   "button":"LOGIN",
   "adminHeader":"Admin Page",
+  "managerHeader":"Manager Page",
   "managementList":"Management",
   "surveysList":"Surveys",
   "reportsList":"Reports",
@@ -38,7 +44,17 @@
 
 
   "_comment"  : "Styles dependings from lang",
-  "FloatStyle": "float:left"
+  "FloatStyle": "float:left",
+
+
+
+  "he":{
+    "companies":"חברות"
+  },
+
+  "en":{
+    "companies":"Companies"
+  }
 
 
 

@@ -6,8 +6,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
         $scope.surveyData = {};
 
-        $rootScope.headerTitle = "Charts";
+        $rootScope.headerTitle = "charts";
         $rootScope.layout = $state.current.data.layout;
+
 
 
         if ($stateParams.projectID) {
