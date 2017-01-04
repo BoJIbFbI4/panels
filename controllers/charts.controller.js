@@ -1,14 +1,29 @@
 /**
  * Created by Gladkov Kirill on 12/12/2016.
  */
-angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$state', '$filter', 'fileUpload', '$stateParams', 'getChartData',
-    function ($scope, $rootScope, $http, $timeout, $state, $filter, fileUpload, $stateParams, getChartData) {
+angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$state', '$filter', 'fileUpload', '$stateParams', 'getChartData','$mdDialog',
+    function ($scope, $rootScope, $http, $timeout, $state, $filter, fileUpload, $stateParams, getChartData, $mdDialog) {
 
         $scope.surveyData = {};
         //
         $rootScope.headerTitle = "charts";
         $rootScope.layout = $state.current.data.layout;
         $rootScope.isUpload = false;
+
+
+        function DialogController($scope, $mdDialog) {
+            $scope.hide = function() {
+                $mdDialog.hide();
+            };
+
+            $scope.cancel = function() {
+                $mdDialog.cancel();
+            };
+
+            $scope.answer = function(answer) {
+                $mdDialog.hide(answer);
+            };
+        }
 
 
         if ($stateParams.projectID) { // <-- take this projectID from project template and use it into request below
@@ -85,7 +100,20 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             ],
                             type: 'gauge',
                             onclick: function (d, i) {
-                                $state.go('diagramsPage2', {projectID: $stateParams.projectID})
+                              //  $state.go('diagramsPage2', {projectID: $stateParams.projectID})
+                              // TODO: Modal Charts Window
+
+                                $mdDialog.show({
+                                    controller: DialogController,
+                                    templateUrl: 'templates/diagramsPage2.html',
+                                    parent: angular.element(document.body),
+                                    targetEvent: d,
+                                    clickOutsideToClose:true,
+                                    fullscreen: false // Only for -xs, -sm breakpoints.
+                                })
+
+
+
                             },
                             selection: {
                                 draggable: true
@@ -343,7 +371,12 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             },
                             onclick: function (event) {
                                 // console.log(event.value);
-                                $state.go('diagramsPage2.diagramsPage3')
+                               // $state.go('diagramsPage2.diagramsPage3')
+
+
+
+
+
                             }
                         },
                         axis: {
@@ -471,6 +504,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                 }
             }
-    }
+    };
 
     }]);
+
+
