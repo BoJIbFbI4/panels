@@ -38,12 +38,16 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     //TODO function --> get data for each chart using questionType as parameter
 
                     var rating = [''];
+                    var satisfiedRaiting = [''];
+                    var diSatisfiedRaiting = [''];
                     var ratingTitles = ['x'];
+                    var satisfiedRaitingTitile = ['x'];
+                    var diSatisfiedRaitingTitle = ['x'];
                     var gpa = 0;
                     var satisfiedGPA = 0;
-                    var satisfiedRaiting = [''];
                     var questions = response.questionary.questions;
                     var usersResponded = response.countUserByDate;
+                    var columnColors = ['#9a4d6f', '#c76c47', '#f85115', '#d9b099', '#d4ba2f'];
 
                     for (var i = 0; i < questions.length; i++){
 
@@ -63,15 +67,32 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                 // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
                                 satisfiedGPA += questions[i].answers[x].usersRespondented * (x + 1);
                                 satisfiedRaiting.push(((questions[i].answers[x].usersRespondented * 100) / usersResponded) / 100);
+                                satisfiedRaitingTitile.push(questions[i].answers[x].title);
                             }
                             //used Math.round to round up to 2 decimal
                             satisfiedGPA = Math.round((gpa / usersResponded) * 100) / 100;
+                        }
+                        //------------------
+                        if (questions[i].questionType == 3){
+                            var pieColumns = [];
+                            var pieColumnsElement = [];
+                            for (var y = 0; y < questions[i].answers.length; y++){
+                                // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
+                                diSatisfiedRaiting.push(((questions[i].answers[y].usersRespondented * 100) / usersResponded) / 100);
+                                diSatisfiedRaitingTitle.push(questions[i].answers[y].title);
+                                pieColumnsElement.push(questions[i].answers[y].title);
+                                pieColumnsElement.push(((questions[i].answers[y].usersRespondented * 100) / usersResponded) / 100);
+                                pieColumns.push(pieColumnsElement);
+                                pieColumnsElement = [];
+                            }
                         }
 
                     }
 
                     console.log('rating charts data: ' ,rating);
                     console.log('request with dates: ',response);
+
+                    console.log('pie columns: ',pieColumns);
 
                     //charts page1 -> block1
                     var donutChart = c3.generate({
@@ -166,46 +187,46 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     });
 
                     //charts page1 -> block2
-                    var donutChart2 = c3.generate({
-                        bindto: '#chart_gauge2',
-                        title: {
-                            text: 'ממוצע שביעות רצון'
-                        },
-                        data: {
-                            columns: [
-                                ['GPA', satisfiedGPA]
-                            ],
-                            type: 'gauge',
-                            onclick: function (d, i) {
-                                // $state.go('projects')
-                            },
-                            selection: {
-                                draggable: true
-                            }
-                        },
-                        gauge: {
-                            label: {
-                                format: function (value, ratio) {
-                                    return value;
-                                },
-                                show: true // to turn off the min/max labels.
-                            },
-                            min: 1, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
-                            max: 5, // 100 is default
-                            units: ''
-//    width: 39 // for adjusting arc thickness
-                        },
-                        color: {
-                            pattern: ['#FF0000', '#F97600', '#F6C600', '#4FF239'], // the three color levels for the percentage values.
-                            threshold: {
-                                max: 5, // 100 is default
-                                values: [30, 60, 90, 100]
-                            }
-                        },
-                        size: {
-                            height: 180
-                        }
-                    });
+//                     var donutChart2 = c3.generate({
+//                         bindto: '#chart_gauge2',
+//                         title: {
+//                             text: 'ממוצע שביעות רצון'
+//                         },
+//                         data: {
+//                             columns: [
+//                                 ['GPA', satisfiedGPA]
+//                             ],
+//                             type: 'gauge',
+//                             onclick: function (d, i) {
+//                                 // $state.go('projects')
+//                             },
+//                             selection: {
+//                                 draggable: true
+//                             }
+//                         },
+//                         gauge: {
+//                             label: {
+//                                 format: function (value, ratio) {
+//                                     return value;
+//                                 },
+//                                 show: true // to turn off the min/max labels.
+//                             },
+//                             min: 1, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
+//                             max: 5, // 100 is default
+//                             units: ''
+// //    width: 39 // for adjusting arc thickness
+//                         },
+//                         color: {
+//                             pattern: ['#FF0000', '#F97600', '#F6C600', '#4FF239'], // the three color levels for the percentage values.
+//                             threshold: {
+//                                 max: 5, // 100 is default
+//                                 values: [30, 60, 90, 100]
+//                             }
+//                         },
+//                         size: {
+//                             height: 180
+//                         }
+//                     });
                     var chart2 = c3.generate({
                         bindto: '#chart2',
                         title: {
@@ -214,7 +235,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         data: {
                             x: 'x',
                             columns: [
-                                ['x', 'כלל לא שבע/ת רצון', 'די לא שבע/ת רצון', 'שבע/ת רצון במידה בינונית', 'דישבע/ת רצון', 'שבע/ת רצון במידה רבה מאוד'],
+                                satisfiedRaitingTitile,
                                 satisfiedRaiting
                             ],
                             type: 'bar',
@@ -267,10 +288,17 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         data: {
                             x: 'x',
                             columns: [
-                                ['x', 'מזמן הגעת הטכנאי לביתך', 'ממקצועיות הטכוני', 'מאדיבות ויחס הטכנו', 'אחר'],
-                                ['שבע/ת רצון', 0.54, 0.31, 0.15, 0.01]
+                                diSatisfiedRaitingTitle,
+                                diSatisfiedRaiting
                             ],
-                            type: 'bar'
+                            type: 'bar',
+                            labels: {
+                                format: function (v, id, i, j) {
+
+                                    return (v * 100).toFixed(3) + '%';
+                                }
+                            }
+
                         },
                         axis: {
                             x: {
@@ -278,8 +306,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             },
                             y: {
                                 tick: {
-                                    format: d3.format('%')
-                                    // values:[0.25,0.5,0.75,0.1]
+                                    format: d3.format('%'),
+                                    values:[0.25,0.5,0.75,0.1]
                                 },
                                 max: 1,
                                 min: 0,
@@ -297,8 +325,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         size: {
                             height: 215
                         },
-                        color: {
-                            pattern: ['#B887AD']
+                        legend: {
+                            show: false
                         }
                     });
                     var pieChart = c3.generate({
@@ -308,22 +336,21 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         bindto: '#chart_gauge3',
                         data: {
                             // iris data from R
-                            columns: [
-                                ['הסתיים', 65],
-                                ['לא הסתיים', 50]
-                            ],
+                            columns: pieColumns
+                            ,
                             type: 'pie'
                             // onclick: function (d, i) { console.log("onclick", d, i); },
                             // onmouseover: function (d, i) { console.log("onmouseover", d, i); },
                             // onmouseout: function (d, i) { console.log("onmouseout", d, i); }
                         },
                         color: {
-                            pattern: ['#01B8AA', '#FD625E']
+                            pattern: ['#01B8AA', '#FD625E', '#6E33B8']
                         },
                         size: {
-                            height: 230
+                            height: 250
                         }
                     });
+                    setColumnBarColors(columnColors, 'chart3');
 
                     //charts page2 -> block1
                     var chart4 = c3.generate({
@@ -427,6 +454,18 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         }
                     });
                 });
+            });
+        }
+
+        //setup colored chart
+        function setColumnBarColors(colors, chartContainer) {
+
+            $('#' + chartContainer + ' .c3-chart-bars .c3-shape').each(function(index) {
+                this.style.cssText += 'fill: ' + colors[index] + ' !important; stroke: ' + colors[index] + '; !important';
+            });
+
+            $('#' + chartContainer + ' .c3-chart-texts .c3-text').each(function(index) {
+                this.style.cssText += 'fill: ' + colors[index] + ' !important;';
             });
         }
 
