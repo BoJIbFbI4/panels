@@ -4,11 +4,114 @@
 angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$state', '$filter', 'fileUpload', '$stateParams', 'getChartData',
     function ($scope, $rootScope, $http, $timeout, $state, $filter, fileUpload, $stateParams, getChartData) {
 
+
         $scope.surveyData = {};
         //
         $rootScope.headerTitle = "charts";
         $rootScope.layout = $state.current.data.layout;
         $rootScope.isUpload = false;
+
+        var doc = new jsPDF();
+        var specialElementHandlers = {
+            '#editor': function (element, renderer) {
+                return true;
+            }
+        };
+
+        //TODO : MOVE THIS FUNCTION TO SERVICE
+        $scope.exportToPDF = function () {
+            console.log("TRYING TO EXPORT");
+            // window.open('', document.getElementById('toExportToPDF').toDataURL());
+
+
+            var mywindow = window.open('', 'PRINT', 'height=800,width=1000');
+            mywindow.id = "printMeToPDF";
+            mywindow.document.write('<html><head><title>' + document.title + '</title>');
+            mywindow.document.write('<style type="text/css">' + '.c3 svg{font:10px sans-serif;-webkit-tap-highlight-color:transparent}.c3 line,.c3 path{fill:none;stroke:#000}.c3 text{-webkit-user-select:none;-moz-user-select:none;user-select:none}.c3-bars path,.c3-event-rect,.c3-legend-item-tile,.c3-xgrid-focus,.c3-ygrid{shape-rendering:crispEdges}.c3-chart-arc path{stroke:#fff}.c3-chart-arc text{fill:#fff;font-size:13px}.c3-grid line{stroke:#aaa}.c3-grid text{fill:#aaa}.c3-xgrid,.c3-ygrid{stroke-dasharray:3 3}.c3-text.c3-empty{fill:gray;font-size:2em}.c3-line{stroke-width:1px}.c3-circle._expanded_{stroke-width:1px;stroke:#fff}.c3-selected-circle{fill:#fff;stroke-width:2px}.c3-bar{stroke-width:0}.c3-bar._expanded_{fill-opacity:.75}.c3-target.c3-focused{opacity:1}.c3-target.c3-focused path.c3-line,.c3-target.c3-focused path.c3-step{stroke-width:2px}.c3-target.c3-defocused{opacity:.3!important}.c3-region{fill:#4682b4;fill-opacity:.1}.c3-brush .extent{fill-opacity:.1}.c3-legend-item{font-size:12px}.c3-legend-item-hidden{opacity:.15}.c3-legend-background{opacity:.75;fill:#fff;stroke:#d3d3d3;stroke-width:1}.c3-title{font:14px sans-serif}.c3-tooltip-container{z-index:10}.c3-tooltip{border-collapse:collapse;border-spacing:0;background-color:#fff;empty-cells:show;-webkit-box-shadow:7px 7px 12px -9px #777;-moz-box-shadow:7px 7px 12px -9px #777;box-shadow:7px 7px 12px -9px #777;opacity:.9}.c3-tooltip tr{border:1px solid #CCC}.c3-tooltip th{background-color:#aaa;font-size:14px;padding:2px 5px;text-align:left;color:#FFF}.c3-tooltip td{font-size:13px;padding:3px 6px;background-color:#fff;border-left:1px dotted #999}.c3-tooltip td>span{display:inline-block;width:10px;height:10px;margin-right:6px}.c3-tooltip td.value{text-align:right}.c3-area{stroke-width:0;opacity:.2}.c3-chart-arcs-title{dominant-baseline:middle;font-size:1.3em}.c3-chart-arcs .c3-chart-arcs-background{fill:#e0e0e0;stroke:none}.c3-chart-arcs .c3-chart-arcs-gauge-unit{fill:#000;font-size:16px}.c3-chart-arcs .c3-chart-arcs-gauge-max,.c3-chart-arcs .c3-chart-arcs-gauge-min{fill:#777}.c3-chart-arc .c3-gauge-value{fill:#000}' + '</style>');
+            mywindow.document.write('</head><body >');
+            mywindow.document.write('<h1>' + document.title + '</h1>');
+
+            // this thing need to be exported
+            mywindow.document.write('<div id="pdfMe">');
+            var mdlGrids = $('#toExportToPDF').find('.mdl-grid');
+            // console.log(mdlGrids);
+
+
+            var i, j, max = 0, cnt;
+            var mdlGridsSubDiv;
+
+            for (i = 0; i < mdlGrids.length; i++) {
+
+                mdlGridsSubDiv = mdlGrids[i].childNodes;
+                cnt = 0;
+                for (j = 0; j < mdlGridsSubDiv.length; j++) {
+                    if (mdlGridsSubDiv[j].innerHTML) {
+                        cnt++;
+                    }
+                    max = max < cnt ? cnt : max;
+                }
+            }
+
+            for (i = 0; i < mdlGrids.length; i++) {
+                mywindow.document.write('<table>');
+
+                mywindow.document.write('<tr>');
+                mdlGridsSubDiv = mdlGrids[i].childNodes;
+                for (j = 0; j < mdlGridsSubDiv.length; j++) {
+
+                    if (mdlGridsSubDiv[j].innerHTML) {
+                        if (mdlGridsSubDiv[j].innerHTML.length < max) {
+                            mywindow.document.write('<td colspan="' + max + '">');
+                        } else {
+                            mywindow.document.write('<td>');
+                        }
+
+                        mywindow.document.write(mdlGridsSubDiv[j].innerHTML);
+                        mywindow.document.write('</td>');
+                    }
+                }
+                mywindow.document.write('</tr>');
+                mywindow.document.write('</table>');
+            }
+            mywindow.document.write('</div>');
+            // ==============================
+
+            mywindow.document.write('</body></html>');
+            mywindow.document.close(); // necessary for IE >= 10
+            console.log(mywindow.document);
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            //
+            // html2canvas(mywindow.getElementById("pdfMe"), {
+            //     allowTaint : true,
+            //     letterRendering : true,
+            //     taintTest: true,
+            //     onrendered : function (canvas) {
+            //         console.log(canvas);
+            //         var data = canvas.toDataURL();
+            //
+            //         var docDefinition = {
+            //             content: [{
+            //                 image: data,
+            //                 width: 500
+            //             }]
+            //         };
+            //         pdfMake.createPdf(docDefinition).download("Score_Details.pdf");
+            //         theCanvas = canvas;
+            //         theCanvas.toBlob(function(blob) {
+            //             saveAs(blob, "Dashboard.png");
+            //         });
+            //     }
+            // });
+
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+
+
+        };
 
 
         if ($stateParams.projectID) { // <-- take this projectID from project template and use it into request below
@@ -32,7 +135,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                 }).then(function (response) {
                     return getChartData.getAnalisys(response.id, $scope.createDate, $scope.userDate);
-                }).then(function (response){
+                }).then(function (response) {
 
                     // put put response data to the charts
                     //TODO function --> get data for each chart using questionType as parameter
@@ -45,10 +148,10 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     var questions = response.questionary.questions;
                     var usersResponded = response.countUserByDate;
 
-                    for (var i = 0; i < questions.length; i++){
+                    for (var i = 0; i < questions.length; i++) {
 
-                        if (questions[i].questionType == 1){
-                            for (var j = 0; j < questions[i].answers.length; j++){
+                        if (questions[i].questionType == 1) {
+                            for (var j = 0; j < questions[i].answers.length; j++) {
                                 // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
                                 gpa += questions[i].answers[j].usersRespondented * (j + 1);
                                 rating.push(((questions[i].answers[j].usersRespondented * 100) / usersResponded) / 100);
@@ -58,8 +161,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             gpa = Math.round((gpa / usersResponded) * 100) / 100;
                         }
                         //------------------
-                        if (questions[i].questionType == 2){
-                            for (var x = 0; x < questions[i].answers.length; x++){
+                        if (questions[i].questionType == 2) {
+                            for (var x = 0; x < questions[i].answers.length; x++) {
                                 // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
                                 satisfiedGPA += questions[i].answers[x].usersRespondented * (x + 1);
                                 satisfiedRaiting.push(((questions[i].answers[x].usersRespondented * 100) / usersResponded) / 100);
@@ -70,8 +173,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                     }
 
-                    console.log('rating charts data: ' ,rating);
-                    console.log('request with dates: ',response);
+                    console.log('rating charts data: ', rating);
+                    console.log('request with dates: ', response);
 
                     //charts page1 -> block1
                     var donutChart = c3.generate({
@@ -139,7 +242,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             y: {
                                 tick: {
                                     format: d3.format('%'),
-                                    values:[0.25,0.5,0.75,1]
+                                    values: [0.25, 0.5, 0.75, 1]
                                 },
                                 max: 1,
                                 min: 0,
@@ -232,7 +335,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             y: {
                                 tick: {
                                     format: d3.format('%'),
-                                    values:[0.25,0.5,0.75,1]
+                                    values: [0.25, 0.5, 0.75, 1]
                                 },
                                 max: 1,
                                 min: 0,
@@ -435,7 +538,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
         var url = $rootScope.url;
         var authorizationData = $rootScope.authorizationData;
-        var config = { headers: {"Authorization": "Basic " + authorizationData} };
+        var config = {headers: {"Authorization": "Basic " + authorizationData}};
 
         var data = {};
 
@@ -445,7 +548,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     return response.data;
                 })
             },
-            getAnalisys: function (questionaryID, startDate,  endDate) {
+            getAnalisys: function (questionaryID, startDate, endDate) {
 
                 if (data[questionaryID]) {
                     return $q(function (resolve) {
@@ -460,8 +563,10 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             startDate: startDate,
                             endDate: endDate
                         },
-                        headers: {'Content-Type': undefined,
-                                  'Authorization': 'Basic ' + authorizationData},
+                        headers: {
+                            'Content-Type': undefined,
+                            'Authorization': 'Basic ' + authorizationData
+                        },
                         dataType: 'json',
                         success: function (response) {
                             data[questionaryID] = response.data;
@@ -471,6 +576,6 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                 }
             }
-    }
+        }
 
     }]);

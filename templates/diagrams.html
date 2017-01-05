@@ -5,7 +5,7 @@
     });
 </script>
 
-<div class="WTF">
+<div class="WTF" >
     <div class="mainView" ng-controller="ChartsCtrl">
         <div class="mdl-grid">
             <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
@@ -21,12 +21,14 @@
                 <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
                     <span class="calendar-icon">{{translation.ToDate}}
                         <i class="material-icons light-blue">date_range</i></span><br>
-                    <input class="mdl-date-textfield__input" type="date" ng-model="dateEnd" value="{{userDate}}" id="sample3">
+                    <input class="mdl-date-textfield__input" type="date" ng-model="dateEnd" value="{{userDate}}"
+                           id="sample3">
                 </div>
             </div>
             <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
                 <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
-                    <span class="calendar-icon">{{translation.FromDate}}<i class="material-icons light-blue">date_range</i></span><br>
+                    <span class="calendar-icon">{{translation.FromDate}}<i
+                            class="material-icons light-blue">date_range</i></span><br>
                     <input class="mdl-date-textfield__input" type="date" value="{{createDate}}" id="sample4">
                 </div>
             </div>
@@ -55,13 +57,15 @@
                             class="mdl-button mdl-js-button mdl-button--primary mdl-stat-btns"
                             ng-click="uploadFile()"
                     >
-                        <b >
+                        <b>
                             {{translation.LoadNewCustomers}}
                         </b>
                     </button>
                     <!--here need to be a little loader-->
-                    <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                            <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                    <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66"
+                         xmlns="http://www.w3.org/2000/svg">
+                            <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33"
+                                    r="30"></circle>
                     </svg>
                 </span>
             </div>
@@ -78,8 +82,11 @@
             </div>
 
             <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
-                <button class="mdl-button mdl-js-button mdl-button--primary">
+                <button class="mdl-button mdl-js-button mdl-button--primary" id="buttonExportToPDF"
+                        ng-model="buttonExportToPDF" ng-click="exportToPDF()">
                     <b>{{translation.ExportToPDF}}</b>
+
+
                 </button>
             </div>
 
@@ -100,47 +107,51 @@
     </div>
 </div>
 
+<div id="toExportToPDF">
+    <!-- charts block 1 -->
+    <div  class="mdl-grid">
+        <div  class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
+            <div id="chart"></div>
+        </div>
 
-<!-- charts block 1 -->
-<div class="mdl-grid">
-    <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
-        <div id="chart"></div>
+        <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
+            <div id="chart_gauge"></div>
+        </div>
     </div>
-    <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
-        <div id="chart_gauge"></div>
-    </div>
-</div>
-<!-- END charts block 1 -->
+    <!-- END charts block 1 -->
 
-<!-- charts block 2 -->
-<div class="mdl-grid">
-    <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone"><!-- empty cell, can use it --></div>
-    <div class="mdl-cell--3-col"><!-- empty cell, can use it --></div>
-    <div class="mdl-cell--5-col mdl-cell--8-col-tablet mdl-cell--8-col-phone">
-        <h5 style="float: right;">{{translation.WaitTime}} </h5>
+    <!-- charts block 2 -->
+    <div class="mdl-grid">
+        <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone"><!-- empty cell, can use it --></div>
+        <div class="mdl-cell--3-col"><!-- empty cell, can use it --></div>
+        <div class="mdl-cell--5-col mdl-cell--8-col-tablet mdl-cell--8-col-phone">
+            <h5 style="float: right;">{{translation.WaitTime}} </h5>
+        </div>
     </div>
-</div>
-<div class="mdl-grid">
-    <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
-        <div id="chart2"></div>
-    </div>
-    <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
-        <div id="chart_gauge2"></div>
-    </div>
-</div>
-<!--END charts block 2 -->
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
+            <div id="chart2"></div>
+        </div>
 
-<!-- charts block 3 -->
-<div class="mdl-grid">
-    <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
-        <div id="chart3"></div>
+        <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
+            <div id="chart_gauge2"></div>
+        </div>
     </div>
-    <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
-        <div id="chart_gauge3"></div>
+    <!--END charts block 2 -->
+
+    <!-- charts block 3 -->
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
+            <div id="chart3"></div>
+        </div>
+
+
+        <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
+            <div id="chart_gauge3"></div>
+        </div>
     </div>
-</div>
-<!-- END charts block 3 -->
-<!--</div>-->
+    <!-- END charts block 3 -->
+</div><!--</div>-->
 
 <script>
     document.getElementById("uploadBtn").onchange = function () {

@@ -25,6 +25,15 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.2/angular-resource.min.js"></script>
 
+
+    <script src="./imports/html2canvas.js"></script>
+    <script src="./imports/pdfmake.min.js"></script>
+    <script src="./imports/vfs_fonts.js"></script>
+    <script src="./imports/FileSaver.js"></script>
+    <script src="./imports/jspdf.js"></script>
+
+
+
     <script src="app.js"></script>
 
 </head>
@@ -59,7 +68,7 @@
         </div>
     </header>
     <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">{{panelUser}}
+        <span class="mdl-layout-title">{{translation[panelUser]}}
             <img ng-src="{{userFace}}" alt="" width="45" height="45" style="border-radius: 50%"></span>
         <!--Admin Menu START here-->
         <ul class="adminMenu">
