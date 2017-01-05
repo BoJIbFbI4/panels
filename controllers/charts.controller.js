@@ -429,7 +429,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             }
                         },
                         size: {
-                            height: 215
+                            height: 300,
+                            width: 600
                         },
                         color: {
                             pattern: ['#61A0D7']
