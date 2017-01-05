@@ -1,4 +1,4 @@
-var app = angular.module('panelsApp', ['Route', 'ngResource']);
+var app = angular.module('panelsApp', ['Route', 'ngResource', 'ngMaterial']);
 app.controller('MainController', ['$rootScope', '$scope', 'translationService', function ($rootScope, $scope, translationService) {
 
     $rootScope.url = "https://panel-repatriation.rhcloud.com";
