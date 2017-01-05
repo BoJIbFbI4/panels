@@ -127,7 +127,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                 $mdDialog.hide(answer);
             };
         }
-
+//j
 
         if ($stateParams.projectID) { // <-- take this projectID from project template and use it into request below
 
