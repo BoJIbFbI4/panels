@@ -1,11 +1,11 @@
 var app = angular.module('panelsApp', ['Route', 'ngResource', 'ngMaterial']);
 app.controller('MainController', ['$rootScope', '$scope', 'translationService', function ($rootScope, $scope, translationService) {
 
-    $rootScope.url = "https://panel-repatriation.rhcloud.com";
+    $rootScope.url = "https://panel1-repatriation.rhcloud.com";
     // $rootScope.url = "http://192.168.1.101:8080";
 
     if (!$rootScope.chengeMenu) {
-        // $rootScope.headerTitle = "adminHeader";
+        $rootScope.panelUser = "adminHeader";
         $rootScope.userFace = 'https://s3.amazonaws.com/uifaces/faces/twitter/commadelimited/128.jpg';
     }
 
@@ -20,22 +20,13 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
     }
 
     $scope.isManager = function () {
-
-        if ($rootScope.type == "MANAGER"){
-            $rootScope.panelUser = "managerHeader";
-        }
-        else{
-            $rootScope.panelUser = "adminHeader";
-        }
-        console.log($rootScope.headerTitle);
+        $rootScope.type == "MANAGER" ? $rootScope.panelUser = "managerHeader" : $rootScope.panelUser = "adminHeader";
         return $rootScope.type == "MANAGER";
     };
 
     $scope.getAlerts = function () {
         return $rootScope.alerts;
-    }
-
-
+    };
 }]);
 
 app.service('translationService', function ($resource) {

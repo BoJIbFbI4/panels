@@ -19,8 +19,6 @@ angular.module('panelsApp')
                 $scope.id = response.id;
                 $rootScope.type = response.type;
 
-
-
                 if (response.type == "ADMIN") {
                     $state.go('companies')
                 }
@@ -36,8 +34,15 @@ angular.module('panelsApp')
                 $scope.pass = "";
                 $scope.alert = "wrong login or password"
             })
+        };
 
-
+        $rootScope.logout = function () {
+            $scope.login = "";
+            $scope.pass = "";
+            $scope.isLogin = false;
+            $rootScope.authorizationData = "";
+            $state.go('auth');
+            location.reload();
         }
 
 

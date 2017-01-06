@@ -42,10 +42,5 @@
   "ChooseFile":"לבחור קובץ חדש להעלאה",
   "WaitTime": "?באיזו מידה אתה מרוצה מזמן ההמתנה",
   "alertsBtn": "התראה",
-
-
-
-  "_comment"  : "Styles dependings from lang",
-  "FloatStyle": "float:right"
-
+  "quit": "יציאה"
 }

@@ -34,7 +34,6 @@
     <script src="./imports/jspdf.js"></script>
 
 
-
     <script src="app.js"></script>
     <!--angular material need this-->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
@@ -66,7 +65,8 @@
             </ul>
 
             <nav class="mdl-navigation">
-                <select style="outline: none" class="mdl-textfield__input mdl-color--black-100 mdl-color-text--black" ng-change="translate()" ng-model="selectedLanguage">
+                <select style="outline: none" class="mdl-textfield__input mdl-color--black-100 mdl-color-text--black"
+                        ng-change="translate()" ng-model="selectedLanguage">
                     <option value="en">English</option>
                     <option value="he">עברית</option>
                 </select>
@@ -89,6 +89,9 @@
         </button></span></li>
             <li><span><button id="alertsBtn" class="mdl-button mdl-js-button">
             <i class="material-icons">warning</i>  {{translation.alertsBtn}}
+        </button></span></li>
+            <li><span><button ng-click="logout()" id="quit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+            <i class="material-icons md-light">exit_to_app</i>  {{translation.quit}}
         </button></span></li>
         </ul>
 

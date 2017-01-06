@@ -54,6 +54,10 @@
     text-align: left;
 }
 
+.mdl-layout__drawer-button{
+    visibility: hidden;
+}
+
 /*add project form*/
 .mdl-button--file input {
     cursor: pointer;

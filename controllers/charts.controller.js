@@ -127,7 +127,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                 $mdDialog.hide(answer);
             };
         }
-//j
+
 
         if ($stateParams.projectID) { // <-- take this projectID from project template and use it into request below
 
@@ -145,6 +145,36 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         fileUpload.uploadFileToUrl(file, uploadUrl);
                         $rootScope.isUpload = true;
                     };
+
+                    //----------------------
+                    var authorizationData = $rootScope.authorizationData;
+                    $scope.exportToXLS = function () {
+                        // console.log(url);
+                        $http({
+                            url: $rootScope.url + '/common/getReport3/'+ response.id +'/xls',
+                            method: "POST",
+                            data: {
+                                startDate: $scope.createDate,
+                                endDate: $scope.userDate
+                            },
+                            responseType: 'arraybuffer',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Basic ' + authorizationData
+                            }
+                        }).success(function (data, status, headers, config) {
+                            console.log('excel DATA: -->: ',data);
+                            var blob = new Blob([data], {type: "application/json"});
+                            var objectUrl = URL.createObjectURL(blob);
+                            saveAs(blob, "Report.xls");
+                            window.open(objectUrl);
+                            window.close(objectUrl);
+                        }).error(function (data, status, headers, config) {
+                            //upload failed
+                        });
+                    };
+
+                    //----------------------
 
                     return response;
 
@@ -170,6 +200,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     for (var i = 0; i < questions.length; i++){
 
                         if (questions[i].questionType == 1){
+                            var questionID = questions[i].id;
                             for (var j = 0; j < questions[i].answers.length; j++){
                                 // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
                                 gpa += questions[i].answers[j].usersRespondented * (j + 1);
@@ -224,9 +255,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             ],
                             type: 'gauge',
                             onclick: function (d, i) {
-                              //  $state.go('diagramsPage2', {projectID: $stateParams.projectID})
                               // TODO: Modal Charts Window
-
                                 $mdDialog.show({
                                     controller: DialogController,
                                     templateUrl: 'templates/diagramsPage2.html',
@@ -234,10 +263,13 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                     targetEvent: d,
                                     clickOutsideToClose:true,
                                     fullscreen: false // Only for -xs, -sm breakpoints.
-                                })
+                                });
 
-
-
+                                return getChartData.getAnalisysByCities(questionID ,$scope.createDate, $scope.userDate).
+                                then(function (response) {
+                                    console.log(response.data);
+                                    return response.data
+                                });
                             },
                             selection: {
                                 draggable: true
@@ -558,7 +590,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             },
                             onclick: function (event) {
                                 // console.log(event.value);
-                                $state.go('diagramsPage2.diagramsPage3')
+                                //$state.go('diagramsPage2.diagramsPage3')
                             }
                         },
                         axis: {
@@ -611,9 +643,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
         var url = $rootScope.url;
         var authorizationData = $rootScope.authorizationData;
-        var config = {headers: {"Authorization": "Basic " + authorizationData}};
-
-        var data = {};
+        var config = { headers: {"Authorization": "Basic " + authorizationData} };
+        var analisysData = {};
 
         return {
             getQuestionary: function (projectID) {
@@ -621,11 +652,11 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     return response.data;
                 })
             },
-            getAnalisys: function (questionaryID, startDate, endDate) {
+            getAnalisys: function (questionaryID, startDate,  endDate) {
 
-                if (data[questionaryID]) {
+                if (analisysData[questionaryID]) {
                     return $q(function (resolve) {
-                        resolve(data[questionaryID]);
+                        resolve(analisysData[questionaryID]);
                     });
                 } else {
                     // here useud ajax request because the angular $http.post do not work (takes null) with server
@@ -642,12 +673,29 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         },
                         dataType: 'json',
                         success: function (response) {
-                            data[questionaryID] = response.data;
+                            analisysData[questionaryID] = response.data;
                             return response.data;
                         }
                     });
 
                 }
+            },
+            getAnalisysByCities: function (questionID, startDate,  endDate) {
+                return $.ajax({
+                    url: url + '/common/getAnalysisDrillDown/' + questionID,
+                    type: 'post',
+                    data: {
+                        startDate: startDate,
+                        endDate: endDate
+                    },
+                    headers: {'Content-Type': undefined,
+                        'Authorization': 'Basic ' + authorizationData},
+                    dataType: 'json',
+                    success: function (response) {
+                        // analisysData[questionaryID] = response.data;
+                        return response.data;
+                    }
+                });
             }
     };
 

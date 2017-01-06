@@ -1,11 +1,4 @@
-<script>
-    $('.mdl-layout__drawer-button').css({
-        'z-index': 1,
-        'background-color': "#607D8B"
-    });
-</script>
-
-<div class="WTF" >
+<div class="WTF">
     <div class="mainView" ng-controller="ChartsCtrl">
         <div class="mdl-grid">
             <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
@@ -21,8 +14,7 @@
                 <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
                     <span class="calendar-icon">{{translation.ToDate}}
                         <i class="material-icons light-blue">date_range</i></span><br>
-                    <input class="mdl-date-textfield__input" type="date" ng-model="dateEnd" value="{{userDate}}"
-                           id="sample3">
+                    <input class="mdl-date-textfield__input" type="date" ng-model="dateEnd" value="{{userDate}}" id="sample3">
                 </div>
             </div>
             <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
@@ -74,7 +66,7 @@
             <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
 
             <span>
-            <button class="mdl-button mdl-js-button mdl-button--primary">
+            <button class="mdl-button mdl-js-button mdl-button--primary" ng-click="exportToXLS()">
                 <b>{{translation.ExportToExcel}}</b>
             </button>
             </span>
@@ -100,7 +92,7 @@
 
         <div class="mdl-grid">
             <div class="mdl-cell--11-col mdl-cell--11-col-tablet mdl-cell--11-col-phone">
-                <h5 style="{{translation.FloatStyle}}">{{translation.WhatExtent}}</h5>
+                <h5 style="float:right">{{translation.WhatExtent}}</h5>
             </div>
         </div>
 
@@ -120,24 +112,21 @@
     </div>
     <!-- END charts block 1 -->
 
-    <!-- charts block 2 -->
-    <div class="mdl-grid">
-        <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone"><!-- empty cell, can use it --></div>
-        <div class="mdl-cell--3-col"><!-- empty cell, can use it --></div>
-        <div class="mdl-cell--5-col mdl-cell--8-col-tablet mdl-cell--8-col-phone">
-            <h5 style="float: right;">{{translation.WaitTime}} </h5>
-        </div>
+<!-- charts block 2 -->
+<div class="mdl-grid">
+    <div class="mdl-cell--11-col mdl-cell--11-col-tablet mdl-cell--11-col-phone">
+        <h5 style="float:right;">{{translation.WaitTime}} </h5>
     </div>
-    <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
-            <div id="chart2"></div>
-        </div>
-
-        <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
-            <div id="chart_gauge2"></div>
-        </div>
+</div>
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
+        <div id="chart2"></div>
     </div>
-    <!--END charts block 2 -->
+    <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
+        <div id="chart_gauge2"></div>
+    </div>
+</div>
+<!--END charts block 2 -->
 
     <!-- charts block 3 -->
     <div class="mdl-grid">

@@ -41,12 +41,5 @@
   "ChooseFile":"choose new file for upload",
   "WaitTime": "How satisfied are you waiting time?",
   "alertsBtn": "Alerts",
-
-
-
-  "_comment"  : "Styles dependings from lang",
-  "FloatStyle": "float:left"
-
-
-
+  "quit": "LOGOUT"
 }
