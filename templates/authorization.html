@@ -22,6 +22,17 @@
 </style>
 
 <div ng-controller="AuthCtrl">
+
+    <!-- login loader animation -->
+    <div ng-show="loginProcess" id="loader">
+        <div id="d1"></div>
+        <div id="d2"></div>
+        <div id="d3"></div>
+        <div id="d4"></div>
+        <div id="d5"></div>
+    </div>
+    <!-- end login loader animation -->
+
     <div class="form-container" ng-hide="loginProcess">
         <hgroup>
             <h1> {{translation.welcome}} Panels inc.</h1>
@@ -45,16 +56,6 @@
             </button>
         </form>
     </div>
-
-    <!-- login loader animation -->
-    <div ng-show="loginProcess" class="loginLoader">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-    </div>
-    <!-- end login loader animation -->
 </div>
 
 <script src="./resources/auth.js"></script>
