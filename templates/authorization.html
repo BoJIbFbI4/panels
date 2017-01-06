@@ -1,5 +1,28 @@
+<style>
+    /** Mobile **/
+    @media only screen and (max-width: 767px), only screen and (max-device-width: 767px) {
+        .mdl-layout__drawer-button{
+            visibility: hidden;
+        }
+    }
+
+    /** Tablet **/
+    @media only screen and (min-width : 768px) and (max-width : 1024px) {
+        .mdl-layout__drawer-button{
+            visibility: hidden;
+        }
+    }
+
+    /** Tablet (landscape) **/
+    @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+        .mdl-layout__drawer-button{
+            visibility: hidden;
+        }
+    }
+</style>
+
 <div ng-controller="AuthCtrl">
-    <div class="form-container">
+    <div class="form-container" ng-hide="loginProcess">
         <hgroup>
             <h1> {{translation.welcome}} Panels inc.</h1>
             <h3>{{translation.loginToContinue}}</h3>
@@ -22,6 +45,16 @@
             </button>
         </form>
     </div>
+
+    <!-- login loader animation -->
+    <div ng-show="loginProcess" class="loginLoader">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+    <!-- end login loader animation -->
 </div>
 
 <script src="./resources/auth.js"></script>

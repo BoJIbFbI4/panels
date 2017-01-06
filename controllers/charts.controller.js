@@ -10,6 +10,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         $rootScope.headerTitle = "charts";
         $rootScope.layout = $state.current.data.layout;
         $rootScope.isUpload = false;
+        $rootScope.sendExcel = false;
 
         var doc = new jsPDF();
         var specialElementHandlers = {
@@ -80,33 +81,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             mywindow.document.close(); // necessary for IE >= 10
             console.log(mywindow.document);
             mywindow.focus(); // necessary for IE >= 10*/
-
-            //
-            // html2canvas(mywindow.getElementById("pdfMe"), {
-            //     allowTaint : true,
-            //     letterRendering : true,
-            //     taintTest: true,
-            //     onrendered : function (canvas) {
-            //         console.log(canvas);
-            //         var data = canvas.toDataURL();
-            //
-            //         var docDefinition = {
-            //             content: [{
-            //                 image: data,
-            //                 width: 500
-            //             }]
-            //         };
-            //         pdfMake.createPdf(docDefinition).download("Score_Details.pdf");
-            //         theCanvas = canvas;
-            //         theCanvas.toBlob(function(blob) {
-            //             saveAs(blob, "Dashboard.png");
-            //         });
-            //     }
-            // });
-
-
             mywindow.print();
-            mywindow.close();
 
             return true;
 
@@ -134,22 +109,24 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             $scope.$watch('dateEnd', function (_data) { //<-- watch input "to date". if it changed - send new req with a new date
 
                 getChartData.getQuestionary($stateParams.projectID).then(function (response) {
+
                     $scope.createDate = $filter("date")(response.createDate, 'yyyy-MM-dd');
                     $scope.userDate = $filter("date")(_data, 'yyyy-MM-dd') || $filter("date")(Date.now(), 'yyyy-MM-dd');
+                    console.log('RESPONSE getQuestionary: ' ,response);
                     $scope.totalIntroduced = response.statistics.usersIntroduced;
 
                     // function for upload excel file with new users. Placed here because it use this questionary ID
                     $scope.uploadFile = function () {
+                        $rootScope.sendExcel = true;
                         var file = $scope.myFile;
                         var uploadUrl = $rootScope.url + "/admin/uploadUsers/" + response.id;
                         fileUpload.uploadFileToUrl(file, uploadUrl);
                         $rootScope.isUpload = true;
                     };
-
                     //----------------------
+
                     var authorizationData = $rootScope.authorizationData;
                     $scope.exportToXLS = function () {
-                        // console.log(url);
                         $http({
                             url: $rootScope.url + '/common/getReport3/'+ response.id +'/xls',
                             method: "POST",

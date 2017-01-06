@@ -56,6 +56,7 @@
 
 .mdl-layout__drawer-button{
     visibility: hidden;
+    background-color: #607D8B;
 }
 
 /*add project form*/
@@ -120,10 +121,37 @@
 }
 
 @media screen and (min-width: 1025px) {
-
     .mainView {
         margin-left: 30px;
     }
 }
+
+/** Mobile **/
+@media only screen and (max-width: 767px), only screen and (max-device-width: 767px) {
+    .mdl-layout__drawer-button{
+        visibility: visible;
+        z-index: 1;
+        background-color: #607D8B !important;
+    }
+}
+
+/** Tablet **/
+@media only screen and (min-width : 768px) and (max-width : 1024px) {
+    .mdl-layout__drawer-button{
+        visibility: visible;
+        z-index: 1;
+        background-color: #607D8B !important;
+    }
+}
+
+/** Tablet (landscape) **/
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+    .mdl-layout__drawer-button{
+        visibility: visible;
+        z-index: 1;
+        background-color: #607D8B !important;
+    }
+}
+
 
 

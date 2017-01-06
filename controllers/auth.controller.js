@@ -1,21 +1,21 @@
 angular.module('panelsApp')
-    .controller('AuthCtrl', ['$rootScope','$scope', '$http', '$state', function ($rootScope ,$scope, $http, $state) {
+    .controller('AuthCtrl', ['$rootScope', '$scope', '$http', '$state', '$timeout', function ($rootScope, $scope, $http, $state, $timeout) {
 
         $scope.isLogin = false;
+        $scope.loginProcess = false;
         $rootScope.headerTitle = "panels";
         $rootScope.authorizationData = "";
         $rootScope.layout = "";
 
 
-
         $scope.getLogin = function () {
+            $scope.loginProcess = true;
             var url = $rootScope.url + "/common/login";
             var authorizationData = btoa($scope.login + ":" + $scope.pass);
             $rootScope.authorizationData = authorizationData;
-            var config = { headers: {"Authorization": "Basic " + authorizationData} };
+            var config = {headers: {"Authorization": "Basic " + authorizationData}};
 
             $http.get(url, config).success(function (response) {
-                $scope.isLogin = true;
                 $scope.id = response.id;
                 $rootScope.type = response.type;
 
@@ -27,12 +27,14 @@ angular.module('panelsApp')
                     $state.go('projects', {managerID: $scope.id})
                 }
 
-                console.log(response)
+                $scope.isLogin = true;
+                $scope.loginProcess = false;
 
-            }).error(function (response) {
+            }).error(function (response){
+                if ($scope.loginProcess) $scope.loginProcess = false;
                 $scope.login = "";
                 $scope.pass = "";
-                $scope.alert = "wrong login or password"
+                $scope.alert = "wrong login or password";
             })
         };
 
