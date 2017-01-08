@@ -42,6 +42,9 @@ angular.module('panelsApp')
             $http.post(url, data, config).then(function (response) {
                 console.log(response)
             })
+
+            $scope.hide()
+
         }
 
     }]);
