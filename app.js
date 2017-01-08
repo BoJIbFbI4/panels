@@ -1,7 +1,7 @@
 var app = angular.module('panelsApp', ['Route', 'ngResource', 'ngMaterial']);
 app.controller('MainController', ['$rootScope', '$scope', 'translationService', function ($rootScope, $scope, translationService) {
 
-    $rootScope.url = "https://panel-repatriation.rhcloud.com";
+    $rootScope.url = "https://panel1-repatriation.rhcloud.com";
     // $rootScope.url = "http://192.168.1.101:8080";
 
     if (!$rootScope.chengeMenu) {
