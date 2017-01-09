@@ -71,7 +71,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             return chart;
         }
 
-        //setup colored chart
+        //setup colored chart v
         function setColumnBarColors(chartContainer) {
             var colors = ['#9a4d6f', '#c76c47', '#f85115', '#d9b099', '#d4ba2f'];
             $(chartContainer + ' .c3-chart-bars .c3-shape').each(function (index) {
