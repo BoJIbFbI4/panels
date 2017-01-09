@@ -41,5 +41,19 @@
   "ChooseFile":"choose new file for upload",
   "WaitTime": "How satisfied are you waiting time?",
   "alertsBtn": "Alerts",
-  "quit": "LOGOUT"
+  "quit": "LOGOUT",
+
+
+  "nameValue":"Value",
+  "nameParameter":"Parameter",
+
+
+  "usersIntroduced":"users Introduced",
+  "usersReceivedSms":"users Received Sms",
+  "usersRespondented":"users Respondented",
+  "usersDidnotAnswerAll":"users Did not Answer All",
+  "alertsStarted":"alerts Started",
+  "responseRate":"response Rate",
+
+  "FloatStyle":"float:left"
 }

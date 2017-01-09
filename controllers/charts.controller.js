@@ -20,6 +20,13 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             serviceButtons.exportToPDF();
         };
 
+        $scope.showStat = function () {
+
+
+
+            serviceButtons.showStat();
+        };
+
 
         //-----------draw charts function----------//
         $scope.chartsArray = [];
@@ -85,7 +92,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
         //-----------draw charts function----------//
 
-        function DialogController($scope, $mdDialog) {
+        function DialogController($scope, $mdDialog, translation) {
+            $scope.translation = translation;
+
             $scope.hide = function () {
                 $mdDialog.hide();
             };
@@ -125,7 +134,23 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         return serviceButtons.exportToXLS($scope.startDate, $scope.userDate, response.id)
                     };
 
-                    //----------------------
+                        // $scope.stats;
+
+                        $scope.showStat = function () {
+                            // console.log($scope.translation);
+                            $mdDialog.show({
+                                locals:{translation:$scope.translation},
+                                controller: DialogController,
+                                templateUrl: 'templates/diagramsPageStat.html',
+                                parent: angular.element(document.body),
+                                // targetEvent: d,
+                                clickOutsideToClose: true,
+                                fullscreen: false // Only for -xs, -sm breakpoints.
+
+                            });
+                        };
+
+                        //----------------------
 
                     return response;
 
@@ -189,33 +214,33 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                     }
 
-                    console.log('rating charts data: ', rating);
-                    console.log('request with dates: ', response);
+                        // console.log('rating charts data: ', rating);
+                        $scope.stats = response.questionary.statistics;
+                        // console.log('request with dates: ', response);
+                        // console.log('pie columns: ', pieColumns);
 
-                    console.log('pie columns: ', pieColumns);
-
-                    //charts page1 -> block1
-                    barChartDraw(ratingTitles, rating);
-                    var donutChart = c3.generate({
-                        bindto: '#chart_gauge',
-                        title: {
-                            text: 'ממוצע שביעות רצון'
-                        },
-                        data: {
-                            columns: [
-                                ['GPA', gpa]
-                            ],
-                            type: 'gauge',
-                            onclick: function (d, i) {
-                                // TODO: Modal Charts Window
-                                $mdDialog.show({
-                                    controller: DialogController,
-                                    templateUrl: 'templates/diagramsPage2.html',
-                                    parent: angular.element(document.body),
-                                    targetEvent: d,
-                                    clickOutsideToClose: true,
-                                    fullscreen: false // Only for -xs, -sm breakpoints.
-                                });
+                        //charts page1 -> block1
+                        var donutChart = c3.generate({
+                            bindto: '#chart_gauge',
+                            title: {
+                                text: 'ממוצע שביעות רצון'
+                            },
+                            data: {
+                                columns: [
+                                    ['GPA', gpa]
+                                ],
+                                type: 'gauge',
+                                onclick: function (d, i) {
+                                    // TODO: Modal Charts Window
+                                    console.log("d=", d);
+                                    $mdDialog.show({
+                                        controller: DialogController,
+                                        templateUrl: 'templates/diagramsPage2.html',
+                                        parent: angular.element(document.body),
+                                        targetEvent: d,
+                                        clickOutsideToClose: true,
+                                        fullscreen: false // Only for -xs, -sm breakpoints.
+                                    });
 
                                 getChartData.getAnalisysByCities(questionID, $scope.createDate, $scope.userDate).then(function (response) {
                                     // console.log('city analisys log: ',response);
@@ -451,11 +476,26 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         };
 
     }])
-    .service('serviceButtons', ['$rootScope', '$http', function ($rootScope, $http) {
+    .service('serviceButtons', ['$rootScope', '$http', '$mdDialog', function ($rootScope, $http, $mdDialog) {
 
         var url = $rootScope.url;
         var authorizationData = $rootScope.authorizationData;
         var config = {headers: {"Authorization": "Basic " + authorizationData}};
+
+        function DialogController($scope, $mdDialog) {
+            $scope.hide = function () {
+                $mdDialog.hide();
+            };
+
+            $scope.cancel = function () {
+                $mdDialog.cancel();
+            };
+
+            $scope.answer = function (answer) {
+                $mdDialog.hide(answer);
+            };
+        }
+
 
         return {
             exportToPDF: function () {
