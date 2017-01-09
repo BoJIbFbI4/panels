@@ -189,6 +189,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                     }
 
+                    //
                     console.log('rating charts data: ', rating);
                     console.log('request with dates: ', response);
 
