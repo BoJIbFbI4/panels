@@ -7,6 +7,7 @@ angular.module('panelsApp')
         $rootScope.layout = "";
         $scope.loginProcess = false;
 
+        //
 
         $scope.getLogin = function () {
             var url = $rootScope.url + "/common/login";

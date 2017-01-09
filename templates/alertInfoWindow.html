@@ -1,0 +1,41 @@
+<!--<div id="date">11-11-2016</div>-->
+<!--<div id="message">some massage</div>-->
+<!--<div id="user"><span id="number">0549832923</span>-->
+               <!--<span id="name">User#15</span>-->
+<!--</div>-->
+<!--<div id="responseManagerName">Manager1</div>-->
+<!--<input type="text">-->
+
+<div id="popupContainer"  ng-controller="AlertCtrl">
+    <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">{{getCurAlertDate().toDateString()}}</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+        <b>Message:</b> {{getCurAlert().message}}
+    </div>
+    <div class="mdl-card__supporting-text">
+        <b>Costumer telephone:</b> {{getCurAlert().user.number}}
+    </div>
+    <div class="mdl-card__supporting-text">
+        <b>Responsible Manager:</b> {{getCurAlert().responsibleManager.name}}
+    </div>
+
+    <div ng-if="getCurAlert().responsibleManager.id == id" class="mdl-card__actions mdl-card--border">
+        <a ng-click="closeAlert()" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+            Close Alert
+        </a>
+    </div>
+
+    <div ng-if="getCurAlert().responsibleManager.id != id" class="mdl-card__actions mdl-card--border">
+        <input id="inputText" type="text">{{getCurAlert().text}}
+        <a ng-click="setText()" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+            setText
+        </a>
+    </div>
+
+    <div id="closeBtn" class="mdl-card__menu">
+        <button ng-click="hide()" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+            <i class="material-icons">clear</i>
+        </button>
+    </div>
+</div>

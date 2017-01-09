@@ -20,6 +20,13 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             serviceButtons.exportToPDF();
         };
 
+        $scope.showStat = function () {
+
+
+
+            serviceButtons.showStat();
+        };
+
 
         //-----------draw charts function----------//
         $scope.chartsArray = [];
@@ -85,7 +92,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
         //-----------draw charts function----------//
 
-        function DialogController($scope, $mdDialog) {
+        function DialogController($scope, $mdDialog, translation) {
+            $scope.translation = translation;
+
             $scope.hide = function () {
                 $mdDialog.hide();
             };
@@ -125,7 +134,23 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         return serviceButtons.exportToXLS($scope.startDate, $scope.userDate, response.id)
                     };
 
-                    //----------------------
+                        // $scope.stats;
+
+                        $scope.showStat = function () {
+                            // console.log($scope.translation);
+                            $mdDialog.show({
+                                locals:{translation:$scope.translation},
+                                controller: DialogController,
+                                templateUrl: 'templates/diagramsPageStat.html',
+                                parent: angular.element(document.body),
+                                // targetEvent: d,
+                                clickOutsideToClose: true,
+                                fullscreen: false // Only for -xs, -sm breakpoints.
+
+                            });
+                        };
+
+                        //----------------------
 
                     return response;
 
@@ -189,11 +214,10 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                     }
 
-                    //
-                    console.log('rating charts data: ', rating);
-                    console.log('request with dates: ', response);
-
-                    console.log('pie columns: ', pieColumns);
+                        // console.log('rating charts data: ', rating);
+                        $scope.stats = response.questionary.statistics;
+                        // console.log('request with dates: ', response);
+                        // console.log('pie columns: ', pieColumns);
 
                     //charts page1 -> block1
                     barChartDraw(ratingTitles, rating);
@@ -452,11 +476,26 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         };
 
     }])
-    .service('serviceButtons', ['$rootScope', '$http', function ($rootScope, $http) {
+    .service('serviceButtons', ['$rootScope', '$http', '$mdDialog', function ($rootScope, $http, $mdDialog) {
 
         var url = $rootScope.url;
         var authorizationData = $rootScope.authorizationData;
         var config = {headers: {"Authorization": "Basic " + authorizationData}};
+
+        function DialogController($scope, $mdDialog) {
+            $scope.hide = function () {
+                $mdDialog.hide();
+            };
+
+            $scope.cancel = function () {
+                $mdDialog.cancel();
+            };
+
+            $scope.answer = function (answer) {
+                $mdDialog.hide(answer);
+            };
+        }
+
 
         return {
             exportToPDF: function () {

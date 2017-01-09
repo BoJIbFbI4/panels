@@ -42,5 +42,22 @@
   "ChooseFile":"לבחור קובץ חדש להעלאה",
   "WaitTime": "?באיזו מידה אתה מרוצה מזמן ההמתנה",
   "alertsBtn": "התראה",
+
+
+  "usersIntroduced":"משתמשים הציגו",
+  "usersReceivedSms":"משתמשים קבלו SMS",
+  "usersRespondented":"משתמשים Respondented",
+  "usersDidnotAnswerAll":"משתמשים לא ענו על כל",
+  "alertsStarted":"התראות עבודה",
+  "responseRate":"שיעור תגובה",
+
+  "nameValue":"ערך",
+  "nameParameter":"פָּרָמֶטֶר",
+
   "quit": "יציאה"
+
+
+
+,
+  "FloatStyle":"float:right"
 }

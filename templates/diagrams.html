@@ -14,7 +14,8 @@
                 <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
                     <span class="calendar-icon">{{translation.ToDate}}
                         <i class="material-icons light-blue">date_range</i></span><br>
-                    <input class="mdl-date-textfield__input" type="date" ng-model="dateEnd" value="{{userDate}}" id="sample3">
+                    <input class="mdl-date-textfield__input" type="date" ng-model="dateEnd" value="{{userDate}}"
+                           id="sample3">
                 </div>
             </div>
             <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
@@ -77,27 +78,28 @@
             </div>
 
             <div class="mdl-cell--2-col mdl-cell--2-col-tablet mdl-cell--2-col-phone">
-                <button class="mdl-button mdl-js-button mdl-button--primary">
+                <button class="mdl-button mdl-js-button mdl-button--primary" ng-click="showStat()">
                     <b>{{translation.Statistics}}</b>
                 </button>
             </div>
         </div>
 
 
-        <div class="mdl-grid">
-            <div class="mdl-cell--11-col mdl-cell--11-col-tablet mdl-cell--11-col-phone">
-                <h5 style="float:right">{{translation.WhatExtent}}</h5>
-            </div>
-        </div>
-
     </div>
 </div>
 
 <div id="toExportToPDF">
     <!-- charts block 1 -->
-    <div  class="mdl-grid">
-        <div  class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
-            <div id="chart0"></div> <!-- HERE WAS ID CHART -->
+
+    <div class="mdl-grid">
+        <div class="mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+            <h5 style="{{translation.FloatStyle}}">{{translation.WhatExtent}}</h5>
+        </div>
+    </div>
+
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
+            <div id="chart"></div>
         </div>
 
         <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
@@ -106,21 +108,23 @@
     </div>
     <!-- END charts block 1 -->
 
-<!-- charts block 2 -->
-<div class="mdl-grid">
-    <div class="mdl-cell--11-col mdl-cell--11-col-tablet mdl-cell--11-col-phone">
-        <h5 style="float:right;">{{translation.WaitTime}} </h5>
+    <!-- charts block 2 -->
+    <div class="mdl-grid">
+        <div class="mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+            <div>
+                <h5 style="{{translation.FloatStyle}}">{{translation.WaitTime}}</h5>
+            </div>
+        </div>
     </div>
-</div>
-<div class="mdl-grid">
-    <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
-        <div id="chart1"></div> <!-- HERE WAS ID CHART2 -->
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
+            <div id="chart2"></div>
+        </div>
+        <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
+            <div id="chart_gauge2"></div>
+        </div>
     </div>
-    <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
-        <div id="chart_gauge2"></div>
-    </div>
-</div>
-<!--END charts block 2 -->
+    <!--END charts block 2 -->
 
     <!-- charts block 3 -->
     <div class="mdl-grid">
