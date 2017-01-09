@@ -18,7 +18,7 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
         $scope.selectedLanguage = 'en';
         $scope.translate();
     }
-
+//
     $scope.isManager = function () {
         $rootScope.type == "MANAGER" ? $rootScope.panelUser = "managerHeader" : $rootScope.panelUser = "adminHeader";
         return $rootScope.type == "MANAGER";
