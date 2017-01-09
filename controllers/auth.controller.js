@@ -32,19 +32,15 @@ angular.module('panelsApp')
 
                     $scope.isLogin = true;
                     $scope.loginProcess = false;
-                    console.log('loginProcess в конце success гет запроса: ',$scope.loginProcess);
                 })
                 .error(function(data, status) {
                     $scope.login = "";
                     $scope.pass = "";
                     $scope.alert = "wrong login or password";
                     $scope.loginProcess = false;
-                    console.log('loginProcess в конце error гет запроса: ',$scope.loginProcess);
                 })
                 .finally(function() {
                     $scope.loginProcess = false;
-                    console.log("finally finished repos");
-                    console.log('loginProcess в конце finaly гет запроса: ',$scope.loginProcess);
                 });
         };
 

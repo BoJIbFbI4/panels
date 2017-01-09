@@ -21,9 +21,6 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         };
 
         $scope.showStat = function () {
-
-
-
             serviceButtons.showStat();
         };
 
@@ -214,10 +211,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                     }
 
-                        // console.log('rating charts data: ', rating);
-                        $scope.stats = response.questionary.statistics;
-                        // console.log('request with dates: ', response);
-                        // console.log('pie columns: ', pieColumns);
+
+
 
                     //charts page1 -> block1
                     barChartDraw(ratingTitles, rating);

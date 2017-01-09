@@ -1,7 +1,7 @@
 var app = angular.module('panelsApp', ['Route', 'ngResource', 'ngMaterial']);
 app.controller('MainController', ['$rootScope', '$scope', 'translationService','$mdDialog', function ($rootScope, $scope, translationService, $mdDialog) {
 
-    $rootScope.url = "https://panel-repatriation.rhcloud.com";
+    $rootScope.url = "https://panel1-repatriation.rhcloud.com";
     // $rootScope.url = "http://192.168.1.101:8080";
 
 
@@ -58,6 +58,7 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService','
     }
 //
     $scope.isManager = function () {
+        $rootScope.type == "MANAGER" ? $rootScope.panelUser = "managerHeader" : $rootScope.panelUser = "adminHeader";
         return $rootScope.type == "MANAGER";
     };
 
