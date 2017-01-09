@@ -8,7 +8,7 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService','
 
       $scope.alertInfo = function (alert){
 
-          $rootScope.curAlert = alert
+          $rootScope.curAlert = alert;
 
           console.log($scope.curAlert);
 
@@ -91,10 +91,12 @@ app.service('translationService', function ($resource) {
                         'Authorization': 'Basic ' + authorizationData}
         })
             .success(function(resp){
-                console.log(resp)
+                console.log(resp);
+                $rootScope.sendExcel = false;
             })
             .error(function(){
                 console.log("error");
+                $rootScope.sendExcel = false;
             });
     }
 }]);

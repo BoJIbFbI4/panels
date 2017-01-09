@@ -40,7 +40,6 @@ angular.module('panelsApp')
                 return $http.get(url + '/managers/getProjectsByIdManager/' + managerID, config).then(function (response) {
                     $rootScope.chengeMenu = true;
                     $rootScope.userFace = 'https://s3.amazonaws.com/uifaces/faces/twitter/silvanmuhlemann/128.jpg';
-                    $rootScope.headerTitle = "managerHeader";
                     $scope.projects = response.data;
                     $rootScope.showLoader = false;
                 })
