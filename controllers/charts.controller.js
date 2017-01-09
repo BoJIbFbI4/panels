@@ -12,7 +12,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         $rootScope.sendExcel = false;
 
         var stats = {};
-
+//
 
         if ($stateParams.projectID) { // <-- take this projectID from project template and use it into request below
 
