@@ -115,9 +115,13 @@
     }
 
 </style>
+
+
 <div ng-controller="ChartsCtrl">
 
-    <div>{{translation.statistics}}</div>
+    <!--<div>{{translation.statistics}}</div>-->
+    <!--<div>{{translation}}</div>-->
+    <!--<div>{{stats}}</div>-->
 
     <table class="simple-little-table">
         <tr>
@@ -125,7 +129,7 @@
             <th>{{translation.nameValue}}</th>
         </tr>
         <tr ng-repeat="(k, v) in stats">
-            <!--<td>{{k}}</td>-->
+
             <td>{{translation[k]}}</td>
             <td>{{v}}</td>
         </tr>

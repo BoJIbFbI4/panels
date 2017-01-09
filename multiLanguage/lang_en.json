@@ -47,6 +47,8 @@
   "nameValue":"Value",
   "nameParameter":"Parameter",
 
+  "statistics":"Statistics",
+
 
   "usersIntroduced":"users Introduced",
   "usersReceivedSms":"users Received Sms",

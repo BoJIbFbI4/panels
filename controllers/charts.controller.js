@@ -20,14 +20,16 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             serviceButtons.exportToPDF();
         };
 
+
         $scope.showStat = function () {
-            serviceButtons.showStat();
+
+            serviceButtons.showStat({translation:$scope.translation,stats:$scope.stats});
         };
 
 
         //-----------draw charts function----------//
         $scope.chartsArray = [];
-        function chartDraw (questionaryType) {
+        function chartDraw(questionaryType) {
 
         }
 
@@ -45,7 +47,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             obj.data.x = 'x';
             obj.data.columns = [namesArr, dataArr];
             obj.data.type = 'bar';
-            obj.data.labels.format = function (v, id, i, j) {return (v * 100).toFixed(3) + '%'};
+            obj.data.labels.format = function (v, id, i, j) {
+                return (v * 100).toFixed(3) + '%'
+            };
             obj.axis.x.type = 'category';
             obj.axis.y.tick.format = d3.format('%');
             obj.axis.y.tick.values = [0.25, 0.5, 0.75, 1];
@@ -89,9 +93,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
         //-----------draw charts function----------//
 
-        function DialogController($scope, $mdDialog, translation) {
-            $scope.translation = translation;
-
+        function DialogController($scope, $mdDialog) {
             $scope.hide = function () {
                 $mdDialog.hide();
             };
@@ -116,7 +118,6 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     $scope.userDate = $filter("date")(_data, 'yyyy-MM-dd') || $filter("date")(Date.now(), 'yyyy-MM-dd');
                     console.log('RESPONSE getQuestionary: ', response);
                     $scope.totalIntroduced = response.statistics.usersIntroduced;
-
                     // function for upload excel file with new users. Placed here because it use this questionary ID
                     $scope.uploadFile = function () {
                         $rootScope.sendExcel = true;
@@ -131,23 +132,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         return serviceButtons.exportToXLS($scope.startDate, $scope.userDate, response.id)
                     };
 
-                        // $scope.stats;
-
-                        $scope.showStat = function () {
-                            // console.log($scope.translation);
-                            $mdDialog.show({
-                                locals:{translation:$scope.translation},
-                                controller: DialogController,
-                                templateUrl: 'templates/diagramsPageStat.html',
-                                parent: angular.element(document.body),
-                                // targetEvent: d,
-                                clickOutsideToClose: true,
-                                fullscreen: false // Only for -xs, -sm breakpoints.
-
-                            });
-                        };
-
-                        //----------------------
+                    //----------------------
 
                     return response;
 
@@ -211,6 +196,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                     }
 
+                    $scope.stats=response.questionary.statistics;
 
 
 
@@ -240,7 +226,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                 getChartData.getAnalisysByCities(questionID, $scope.createDate, $scope.userDate).then(function (response) {
                                     // console.log('city analisys log: ',response);
                                     var sitiesNames = ['x'];
-                                    for (var city in response){
+                                    for (var city in response) {
                                         sitiesNames.push(city)
                                     }
                                 })
@@ -477,20 +463,45 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         var authorizationData = $rootScope.authorizationData;
         var config = {headers: {"Authorization": "Basic " + authorizationData}};
 
-        function DialogController($scope, $mdDialog) {
+        // function DialogController($scope, $mdDialog) {
+        //     $scope.hide = function () {
+        //         $mdDialog.hide();
+        //     };
+        //
+        //     $scope.cancel = function () {
+        //         $mdDialog.cancel();
+        //     };
+        //
+        //     $scope.answer = function (answer) {
+        //         $mdDialog.hide(answer);
+        //     };
+        // }
+
+        function StatDialogController($scope, $mdDialog, stats, translation) {
+
+            $scope.translation = translation;
+            $scope.stats = stats;
+
+            console.log('\n--------------------');
+            console.log(stats);
+            console.log('-------------------\n');
+
+            console.log('\n--------------------');
+            console.log(translation);
+            console.log('-------------------\n');
+
+
+
             $scope.hide = function () {
                 $mdDialog.hide();
             };
-
             $scope.cancel = function () {
                 $mdDialog.cancel();
             };
-
             $scope.answer = function (answer) {
                 $mdDialog.hide(answer);
             };
         }
-
 
         return {
             exportToPDF: function () {
@@ -583,7 +594,23 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                 }).error(function (data, status, headers, config) {
                     //upload failed
                 });
-            }
+            },
+            showStat : function (innerData) {
+
+                console.log(innerData);
+
+            $mdDialog.show({
+                translation:innerData.translation,
+                stats:innerData.stats,
+                controller: StatDialogController,
+                templateUrl: 'templates/diagramsPageStat.html',
+                parent: angular.element(document.body),
+                clickOutsideToClose: true,
+                fullscreen: false // Only for -xs, -sm breakpoints.
+
+            });
         }
+
+    }
 
     }]);
