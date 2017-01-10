@@ -270,16 +270,12 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             });
         }
 
-
         $scope.exportToPDF = function () {
             serviceButtons.exportToPDF();
         };
-
         $scope.showStat = function () {
             $scope.showDialog('templates/diagramsPageStat.html');
         };
-
-
         $scope.showDialog = function (tamplateUrl) {
             $mdDialog.show({
                 locals: {translation: $scope.translation},
