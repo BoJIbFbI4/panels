@@ -20,14 +20,14 @@
         <b>Responsible Manager:</b> {{getCurAlert().responsibleManager.name}}
     </div>
 
-    <div ng-if="getCurAlert().responsibleManager.id == id" class="mdl-card__actions mdl-card--border">
+    <div ng-show="getCurAlert().supervisoryManager.id == id" class="mdl-card__actions mdl-card--border">
         <a ng-click="closeAlert()" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
             Close Alert
         </a>
     </div>
 
-    <div ng-if="getCurAlert().responsibleManager.id != id" class="mdl-card__actions mdl-card--border">
-        <input id="inputText" type="text">{{getCurAlert().text}}
+    <div ng-show="getCurAlert().responsibleManager.id == id" class="mdl-card__actions mdl-card--border">
+        <input value="{{getCurAlert().text}}"  id="inputText" type="text">
         <a ng-click="setText()" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
             setText
         </a>

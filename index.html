@@ -46,6 +46,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
 
 
+
 </head>
 <body ng-app="panelsApp" ng-controller="MainController">
 <!-- Always shows a header, even in smaller screens. -->
@@ -90,7 +91,7 @@
             <li><span><button id="reportsList" class="mdl-button mdl-js-button">
             <i class="material-icons">backup</i>  {{translation.reportsList}}
         </button></span></li>
-            <li><span><button id="alertsBtn" class="mdl-button mdl-js-button">
+            <li><span><button ng-click="isManager() ? alertTable() : createAlert()" id="alertsBtn" class="mdl-button mdl-js-button">
             <i class="material-icons">warning</i>  {{translation.alertsBtn}}
         </button></span></li>
             <li><span><button ng-click="logout()" id="quit"

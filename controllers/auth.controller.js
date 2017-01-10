@@ -26,7 +26,10 @@ angular.module('panelsApp')
                         $state.go('companies')
                     }
                     if (response.type == "MANAGER") {
+                        console.log(response)
                         $rootScope.alerts = response.supervisoryAlerts;
+                        $rootScope.alerts =  $rootScope.alerts.concat(response.responsibleAlerts)
+
                         $state.go('projects', {managerID: $scope.id})
                     }
 

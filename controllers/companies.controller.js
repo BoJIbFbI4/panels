@@ -13,6 +13,7 @@ angular.module('panelsApp')
 
             CompaniesService.then(function (result) {
                 $scope.companies = result;
+                $rootScope.companies = result;
                 // console.log($scope.companies);
             });
 

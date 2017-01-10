@@ -1,0 +1,35 @@
+ <div ng-controller="AlertCtrl">
+
+    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+        <thead>
+
+        <tr id="searchRow">
+            <th>
+                <i class="material-icons">search</i>
+            </th>
+            <th >
+                <input type="text" ng-model="search">
+            </th>
+        </tr>
+
+        <tr>
+            <th ng-click="sortType = 'humanDate'; sortReverse = !sortReverse"
+                ng-class="sortReverse && sortType==='humanDate' ? 'mdl-data-table__header--sorted-ascending' : 'mdl-data-table__header--sorted-descending' ">Date</th>
+            <th ng-click="sortType = 'responsibleManager.name'; sortReverse = !sortReverse "
+                ng-class="sortReverse && sortType==='responsibleManager.name' ? 'mdl-data-table__header--sorted-ascending' : 'mdl-data-table__header--sorted-descending' ">resp manager</th>
+            <th ng-click="sortType = 'status'; sortReverse = !sortReverse "
+                ng-class="sortReverse && sortType==='status' ? 'mdl-data-table__header--sorted-ascending' : 'mdl-data-table__header--sorted-descending' ">Status</th>
+        </tr>
+        </thead>
+
+
+
+        <tbody>
+        <tr ng-repeat="x in getAlerts() | filter: search | orderBy : sortType : sortReverse ">
+            <td class="mdl-data-table__cell--non-numeric">{{x.humanDate}}</td>
+            <td>{{x.responsibleManager.name}}</td>
+            <td>{{x.status}}</td>
+        </tr>
+        </tbody>
+    </table>
+ </div>
