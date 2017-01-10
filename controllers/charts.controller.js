@@ -10,44 +10,30 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         $rootScope.layout = $state.current.data.layout; //-> show left side menu
         $rootScope.isUpload = false;
         $rootScope.sendExcel = false;
-
         var stats = {};
-//
-
         if ($stateParams.projectID) { // <-- take this projectID from project template and use it into request below
-
             $scope.$watch('dateEnd', function (_data) { //<-- watch input "to date". if it changed - send new req with a new date
-
                 getChartData.getQuestionary($stateParams.projectID)
-
                     .then(function (response) {
-
                         $scope.createDate = $filter("date")(response.createDate, 'yyyy-MM-dd');
                         $scope.userDate = $filter("date")(_data, 'yyyy-MM-dd') || $filter("date")(Date.now(), 'yyyy-MM-dd');
                         console.log('RESPONSE getQuestionary: ', response);
-
                         // function for upload excel file with new users. Placed here because it use this questionary ID
                         $scope.uploadFile = function () {
                             return serviceButtons.uploadFile($scope.myFile, response.id);
                         };
-
                         $scope.exportToXLS = function () {
                             return serviceButtons.exportToXLS($scope.startDate, $scope.userDate, response.id)
                         };
-
                         return response;
                     })
-
                     .then(function (response) {
                         return getChartData.getAnalisys(response.id, $scope.createDate, $scope.userDate);
                     })
-
                     .then(function (response) {
                         $scope.totalIntroduced = response.questionary.statistics.usersIntroduced;
                         stats = response.questionary.statistics;
-
                         //TODO function --> get data for each chart using questionType as parameter
-
                         var rating = [''];
                         var satisfiedRaiting = [''];
                         var diSatisfiedRaiting = [''];
@@ -58,10 +44,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         var satisfiedGPA = 0;
                         var questions = response.questionary.questions;
                         var usersResponded = response.countUserByDate;
-
-
                         for (var i = 0; i < questions.length; i++) {
-
                             if (questions[i].questionType == 1) {
                                 var questionID = questions[i].id;
                                 for (var j = 0; j < questions[i].answers.length; j++) {
@@ -98,9 +81,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                     pieColumnsElement = [];
                                 }
                             }
-
                         }
-
                         //charts page1 -> block1
                         barChartDraw(ratingTitles, rating);
                         var donutChart = c3.generate({
