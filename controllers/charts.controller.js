@@ -1,6 +1,18 @@
 /**
  * Created by Gladkov Kirill on 12/12/2016.
  */
+
+Date.prototype.yyyymmdd = function () {
+    var mm = this.getMonth() + 1; // getMonth() is zero-based
+    var dd = this.getDate();
+
+    return [this.getFullYear(),
+        '-', (mm > 9 ? '' : '0') + mm,
+        '-', (dd > 9 ? '' : '0') + dd
+    ].join('');
+};
+
+
 angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$http', '$state', '$filter', 'fileUpload', '$stateParams', 'getChartData', '$mdDialog', 'serviceButtons',
     function ($scope, $rootScope, $http, $state, $filter, fileUpload, $stateParams, getChartData, $mdDialog, serviceButtons) {
 
@@ -15,9 +27,39 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             $scope.$watch('dateEnd', function (_data) { //<-- watch input "to date". if it changed - send new req with a new date
                 getChartData.getQuestionary($stateParams.projectID)
                     .then(function (response) {
-                        $scope.createDate = $filter("date")(response.createDate, 'yyyy-MM-dd');
-                        $scope.userDate = $filter("date")(_data, 'yyyy-MM-dd') || $filter("date")(Date.now(), 'yyyy-MM-dd');
-                        console.log('RESPONSE getQuestionary: ', response);
+                        $scope.createDate =
+                            $filter("date")(response.createDate, 'yyyy-MM-dd');
+                        $scope.userDate =
+                            $filter("date")(_data, 'yyyy-MM-dd') || $filter("date")(Date.now(), 'yyyy-MM-dd');
+                        console.log('RESPONSE from getQuestionary: \n', response,'\n');
+
+                        // $scope.minToDate =
+                        //     response.createDate ?
+                        //         new Date(response.createDate).yyyymmdd() :
+                        //         new Date().yyyymmdd();
+
+                        $scope.minToDate = $scope.createDate;   // from dateFromController
+
+                        $scope.maxToDate =
+                            response.endDate ?
+                                new Date(response.endDate).yyyymmdd() :
+                                new Date().yyyymmdd();
+
+                        $scope.minFromDate =
+                            response.createDate ?
+                                new Date(response.createDate).yyyymmdd() :
+                                new Date().yyyymmdd();
+
+                        // $scope.maxFromDate =
+                        //     response.endDate ?
+                        //         new Date(response.endDate).yyyymmdd() :
+                        //         new Date().yyyymmdd();
+
+                        $scope.maxFromDate = $scope.userDate; // from dateEndController
+
+
+
+
                         // function for upload excel file with new users. Placed here because it use this questionary ID
                         $scope.uploadFile = function () {
                             return serviceButtons.uploadFile($scope.myFile, response.id);
