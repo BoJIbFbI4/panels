@@ -5,6 +5,9 @@ angular.module('panelsApp')
         $scope.sortReverse  = false;
         $scope.id = $rootScope.id;
 
+        $scope.isCurrentSuperviser = function () {
+            return $rootScope.curAlert.supervisoryManager.id == $rootScope.id
+        }
 
         $scope.getCompanies = function () {
             return $rootScope.companies

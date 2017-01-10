@@ -19,6 +19,8 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService','
           $rootScope.curAlert = alert;
 
           console.log($scope.curAlert);
+          console.log("Supervisory Id in alert = " + $rootScope.curAlert.supervisoryManager.id)
+          console.log("Login Id = " + $rootScope.id)
 
         $mdDialog.show({
             controller: AlertInfoController,

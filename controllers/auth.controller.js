@@ -20,6 +20,7 @@ angular.module('panelsApp')
             return $http.get(url, config)
                 .success(function(response) {
                     $scope.id = response.id;
+                    $rootScope.id = response.id;
                     $rootScope.type = response.type;
 
                     if (response.type == "ADMIN") {
