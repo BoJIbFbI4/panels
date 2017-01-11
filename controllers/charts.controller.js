@@ -24,43 +24,58 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         $rootScope.sendExcel = false;
         var stats = {};
         if ($stateParams.projectID) { // <-- take this projectID from project template and use it into request below
-            $scope.$watch('dateEnd', function (_data) { //<-- watch input "to date". if it changed - send new req with a new date
+
+            // $scope.$watch('dateEnd', function (_data) { //<-- watch input "to date". if it changed - send new req with a new date
+            // });
+
+            $scope.$watchGroup(['dateStart', 'dateEnd'], function (_dataNew, _dataOld) {
+
+
                 getChartData.getQuestionary($stateParams.projectID)
                     .then(function (response) {
-                        $scope.createDate =
-                            $filter("date")(response.createDate, 'yyyy-MM-dd');
-                        $scope.userDate =
-                            $filter("date")(_data, 'yyyy-MM-dd') || $filter("date")(Date.now(), 'yyyy-MM-dd');
-                        console.log('RESPONSE from getQuestionary: \n', response,'\n');
 
-                        // $scope.minToDate =
-                        //     response.createDate ?
-                        //         new Date(response.createDate).yyyymmdd() :
-                        //         new Date().yyyymmdd();
+                        console.log("!    -------------------------------------------");
 
-                        $scope.minToDate = $scope.createDate;   // from dateFromController
+                        if (_dataNew[0]) {
+                            console.log("Data from picker");
+                            $scope.createDate = _dataNew[0].yyyymmdd();
+                        } else if (response.createDate) {
+                            console.log("Data from response");
+                            $scope.createDate = new Date(response.createDate).yyyymmdd();
+                            $scope.minFromDate = $scope.createDate;
+                        }else {
+                            console.log("Data from today");
+                            $scope.createDate = new Date().yyyymmdd();
+                            $scope.minFromDate = $scope.createDate;
+                        }
 
-                        $scope.maxToDate =
-                            response.endDate ?
-                                new Date(response.endDate).yyyymmdd() :
-                                new Date().yyyymmdd();
+                        console.log($scope.createDate);
 
-                        $scope.minFromDate =
-                            response.createDate ?
-                                new Date(response.createDate).yyyymmdd() :
-                                new Date().yyyymmdd();
+                        if (_dataNew[1]) {
+                            console.log("Data from picker");
+                            $scope.userDate = _dataNew[1].yyyymmdd();
+                        } else if (response.endDate) {
+                            console.log("Data from response");
+                            $scope.userDate = new Date(response.endDate).yyyymmdd();
+                            $scope.maxToDate = $scope.userDate;
+                        } else {
+                            console.log("Data from today");
+                            $scope.userDate = new Date().yyyymmdd();
+                            $scope.maxToDate = $scope.userDate;
+                        }
 
-                        // $scope.maxFromDate =
-                        //     response.endDate ?
-                        //         new Date(response.endDate).yyyymmdd() :
-                        //         new Date().yyyymmdd();
+                        console.log($scope.userDate);
 
-                        $scope.maxFromDate = $scope.userDate; // from dateEndController
+                        $scope.minToDate = $scope.createDate;
+                        $scope.maxFromDate = $scope.userDate;
 
-
+                        console.log("!    -------------------------------------------");
 
 
+                        console.log('RESPONSE from getQuestionary: \n', response, '\n');
                         // function for upload excel file with new users. Placed here because it use this questionary ID
+
+
                         $scope.uploadFile = function () {
                             return serviceButtons.uploadFile($scope.myFile, response.id);
                         };
@@ -309,8 +324,13 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                         $scope.chartsArray = [];
                     });
-            });
+
+
+            })
+
+
         }
+
 
         $scope.exportToPDF = function () {
             serviceButtons.exportToPDF();
