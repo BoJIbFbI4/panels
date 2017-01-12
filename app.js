@@ -1,16 +1,26 @@
 var app = angular.module('panelsApp', ['Route', 'ngResource', 'ngMaterial']);
-app.controller('MainController', ['$rootScope', '$scope', 'translationService','$mdDialog', function ($rootScope, $scope, translationService, $mdDialog) {
+app.controller('MainController', ['$rootScope', '$scope', 'translationService','$mdDialog','$state', function ($rootScope, $scope, translationService, $mdDialog, $state) {
 
-    $rootScope.url = "https://panel1-repatriation.rhcloud.com";
+    // $rootScope.url = "https://panel-repatriation.rhcloud.com";
+       $rootScope.url = "https://panel1-repatriation.rhcloud.com/";
     // $rootScope.url = "http://192.168.1.101:8080";
 
 
+      $scope.alertTable = function () {
+          $state.go('alerts')
+      };
+
+      $scope.createAlert = function(){
+          $state.go('createAlert')
+      }
 
       $scope.alertInfo = function (alert){
 
           $rootScope.curAlert = alert;
 
           console.log($scope.curAlert);
+          console.log("Supervisory Id in alert = " + $rootScope.curAlert.supervisoryManager.id)
+          console.log("Login Id = " + $rootScope.id)
 
         $mdDialog.show({
             controller: AlertInfoController,
@@ -56,13 +66,26 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService','
         $scope.selectedLanguage = 'en';
         $scope.translate();
     }
-//
+
     $scope.isManager = function () {
         $rootScope.type == "MANAGER" ? $rootScope.panelUser = "managerHeader" : $rootScope.panelUser = "adminHeader";
         return $rootScope.type == "MANAGER";
     };
 
+
     $scope.getAlerts = function () {
+
+        if ($scope.isManager()==true) {
+
+            $rootScope.alerts.forEach(function (item, i, arr) {
+                item.humanDate = (new Date(item.createDate)).toDateString();
+                item.status = item.closeDate == undefined ? "Open" : "Closed";
+                //If u want some custom props, please create them here to avoid making calculations in view
+
+
+            })
+        }
+
         return $rootScope.alerts;
     }
 

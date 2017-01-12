@@ -20,13 +20,17 @@ angular.module('panelsApp')
             return $http.get(url, config)
                 .success(function(response) {
                     $scope.id = response.id;
+                    $rootScope.id = response.id;
                     $rootScope.type = response.type;
 
                     if (response.type == "ADMIN") {
                         $state.go('companies')
                     }
                     if (response.type == "MANAGER") {
+                        console.log(response)
                         $rootScope.alerts = response.supervisoryAlerts;
+                        $rootScope.alerts =  $rootScope.alerts.concat(response.responsibleAlerts)
+
                         $state.go('projects', {managerID: $scope.id})
                     }
 

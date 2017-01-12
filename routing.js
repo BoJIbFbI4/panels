@@ -9,6 +9,16 @@ angular.module('Route', ['ui.router'])
                 templateUrl: 'templates/authorization.html'
 
             })
+            .state('createAlert',{
+                url: '/createAlert',
+                templateUrl:'templates/createAlert.html',
+                controller:'AlertCtrl'
+            })
+            .state('alerts', {
+                url: '/alerts',
+                templateUrl: 'templates/alerts.html',
+                controller: 'AlertCtrl',
+            })
             .state('companies', {
                 url: '/companies',
                 templateUrl: 'templates/companies.html',
