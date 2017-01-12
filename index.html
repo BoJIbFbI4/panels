@@ -53,6 +53,11 @@
 <div id="menu" class="mdl-layout mdl-js-layout mdl-layout--fixed-header" ng-class="layout">
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row dark-primary-color">
+
+            <button ng-click="home()" class="mdl-button mdl-js-button mdl-button--icon">
+                <i class="material-icons">home</i>
+            </button>
+
             <!-- Title -->
             <span class="mdl-layout-title">{{translation[headerTitle]}}</span>
             <!-- Add spacer, to align navigation to the right -->
@@ -77,6 +82,7 @@
             </nav>
         </div>
     </header>
+
     <div class="mdl-layout__drawer">
         <span class="mdl-layout-title">{{translation[panelUser]}}
             <img ng-src="{{userFace}}" alt="" width="45" height="45" style="border-radius: 50%"></span>

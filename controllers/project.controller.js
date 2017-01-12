@@ -5,7 +5,7 @@ angular.module('panelsApp')
     .controller('ProjectCtrl', ['$rootScope', '$scope', '$stateParams', '$http', '$state',
         function ($rootScope, $scope, $stateParams, $http, $state) {
 
-            $rootScope.showLoader = true;
+            //$rootScope.showLoader = true;
 
             $scope.projects = [];
             $rootScope.headerTitle = "projects";

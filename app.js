@@ -6,6 +6,18 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService','
     // $rootScope.url = "http://192.168.1.101:8080";
 
 
+      $scope.home = function () {
+
+           if  ($rootScope.type == "MANAGER") {
+               $state.go('projects', {managerID: $scope.id} )
+           }else{
+               console.log('Login process is :' + $scope.loginProcess);
+               $state.go('companies')
+           }
+      }
+
+
+
       $scope.alertTable = function () {
           $state.go('alerts')
       };
@@ -33,7 +45,9 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService','
             .then(function (alert) {
                 $scope.curAlert = alert
             }, function () {
-                $scope.curAlert = alert
+                console.log('Login process is :' + $scope.loginProcess);
+                $scope.curAlert = alert;
+
             })
     };
 
@@ -67,7 +81,7 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService','
         $scope.translate();
     }
 
-    $scope.isManager = function () {
+    $scope.isManager = function () {  // test this
         $rootScope.type == "MANAGER" ? $rootScope.panelUser = "managerHeader" : $rootScope.panelUser = "adminHeader";
         return $rootScope.type == "MANAGER";
     };

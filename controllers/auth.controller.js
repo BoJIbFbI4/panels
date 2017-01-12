@@ -12,6 +12,8 @@ angular.module('panelsApp')
         $scope.getLogin = function () {
             var url = $rootScope.url + "/common/login";
             var authorizationData = btoa($scope.login + ":" + $scope.pass);
+            //var authorizationData = btoa("ManagerClalitProject0City1Group1" + ":" + "ManagerClalitProject0City1Group1"); // mock manger
+            //var authorizationData = btoa("Admin" + ":" + "12345"); // mock admin
             $rootScope.authorizationData = authorizationData;
             var config = {headers: {"Authorization": "Basic " + authorizationData}};
 
@@ -43,9 +45,6 @@ angular.module('panelsApp')
                     $scope.alert = "wrong login or password";
                     $scope.loginProcess = false;
                 })
-                .finally(function() {
-                    $scope.loginProcess = false;
-                });
         };
 
         $rootScope.logout = function () {
