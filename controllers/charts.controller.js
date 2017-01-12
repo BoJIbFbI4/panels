@@ -12,293 +12,294 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         $rootScope.sendExcel = false;
 
         var stats = {};
-//
+        if ($stateParams.projectID) { var projectId = $stateParams.projectID }// <-- take this projectID from project template and use it into request below
 
-        if ($stateParams.projectID) { // <-- take this projectID from project template and use it into request below
+        $scope.$watchGroup(['dateStart', 'dateEnd'], function (newValues, oldValues) { //<-- watch input "to date". if it changed - send new req with a new date
 
-            $scope.$watch('dateEnd', function (_data) { //<-- watch input "to date". if it changed - send new req with a new date
+            getChartData.getQuestionary(projectId)
+                .then(function (response) {
 
-                getChartData.getQuestionary($stateParams.projectID)
-
-                    .then(function (response) {
-
-                        $scope.createDate = $filter("date")(response.createDate, 'yyyy-MM-dd');
-                        $scope.userDate = $filter("date")(_data, 'yyyy-MM-dd') || $filter("date")(Date.now(), 'yyyy-MM-dd');
-                        console.log('RESPONSE getQuestionary: ', response);
-
-                        // function for upload excel file with new users. Placed here because it use this questionary ID
-                        $scope.uploadFile = function () {
-                            return serviceButtons.uploadFile($scope.myFile, response.id);
-                        };
-
-                        $scope.exportToXLS = function () {
-                            return serviceButtons.exportToXLS($scope.startDate, $scope.userDate, response.id)
-                        };
-
-                        return response;
-                    })
-
-                    .then(function (response) {
-                        return getChartData.getAnalisys(response.id, $scope.createDate, $scope.userDate);
-                    })
-
-                    .then(function (response) {
-                        $scope.totalIntroduced = response.questionary.statistics.usersIntroduced;
-                        stats = response.questionary.statistics;
-
-                        //TODO function --> get data for each chart using questionType as parameter
-
-                        var rating = [''];
-                        var satisfiedRaiting = [''];
-                        var diSatisfiedRaiting = [''];
-                        var ratingTitles = ['x'];
-                        var satisfiedRaitingTitile = ['x'];
-                        var diSatisfiedRaitingTitle = ['x'];
-                        var gpa = 0;
-                        var satisfiedGPA = 0;
-                        var questions = response.questionary.questions;
-                        var usersResponded = response.countUserByDate;
+                    $scope.createDate = $filter("date")(newValues[0] || response.createDate, 'yyyy-MM-dd');
+                    $scope.userDate = $filter("date")(newValues[1] || Date.now(), 'yyyy-MM-dd');
 
 
-                        for (var i = 0; i < questions.length; i++) {
+                    $scope.minFromDate = $filter("date")(response.createDate, 'yyyy-MM-dd');
+                    $scope.maxFromDate = $scope.userDate;
+                    $scope.minToDate = $scope.createDate;
+                    $scope.maxToDate = $filter("date")(response.endDate || Date.now(), 'yyyy-MM-dd');
 
-                            if (questions[i].questionType == 1) {
-                                var questionID = questions[i].id;
-                                for (var j = 0; j < questions[i].answers.length; j++) {
-                                    // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
-                                    gpa += questions[i].answers[j].usersRespondented * (j + 1);
-                                    rating.push(((questions[i].answers[j].usersRespondented * 100) / usersResponded) / 100);
-                                    ratingTitles.push(questions[i].answers[j].title);
-                                }
-                                //used Math.round to round up to 2 decimal
-                                gpa = Math.round((gpa / usersResponded) * 100) / 100;
+                    console.log('RESPONSE getQuestionary: ', response);
+
+                    // function for upload excel file with new users. Placed here because it use this questionary ID
+                    $scope.uploadFile = function () {
+                        return serviceButtons.uploadFile($scope.myFile, response.id);
+                    };
+
+                    $scope.exportToXLS = function () {
+                        return serviceButtons.exportToXLS($scope.startDate, $scope.userDate, response.id)
+                    };
+
+                    return response;
+                })
+
+                .then(function (response) {
+                    return getChartData.getAnalisys(response.id, $scope.createDate, $scope.userDate);
+                })
+
+                .then(function (response) {
+                    $scope.totalIntroduced = response.questionary.statistics.usersRespondented;
+                    stats = response.questionary.statistics;
+                    var questions = response.questionary.questions;
+                    var usersResponded = response.countUserByDate;
+
+                    console.log('get ANALISYS RESPONSE DATA: ', response);
+                    console.log('count users by Date: ', usersResponded);
+
+                    for (var i = 0; i < questions.length; i++) {
+
+                        if (questions[i].questionType == 1) {
+                            var rating = [''];
+                            var ratingTitles = ['x'];
+                            var gpa = 0;
+                            var questionID = questions[i].id;
+
+                            for (var j = 0; j < questions[i].answers.length; j++) {
+                                // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
+                                gpa += questions[i].answers[j].usersRespondented * (j + 1);
+                                rating.push(((questions[i].answers[j].usersRespondented * 100) / usersResponded) / 100);
+                                ratingTitles.push(questions[i].answers[j].title);
                             }
-                            //------------------
-                            if (questions[i].questionType == 2) {
-                                for (var x = 0; x < questions[i].answers.length; x++) {
-                                    // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
-                                    satisfiedGPA += questions[i].answers[x].usersRespondented * (x + 1);
-                                    satisfiedRaiting.push(((questions[i].answers[x].usersRespondented * 100) / usersResponded) / 100);
-                                    satisfiedRaitingTitile.push(questions[i].answers[x].title);
-                                }
-                                //used Math.round to round up to 2 decimal
-                                satisfiedGPA = Math.round((gpa / usersResponded) * 100) / 100;
-                            }
-                            //------------------
-                            if (questions[i].questionType == 3) {
-                                var pieColumns = [];
-                                var pieColumnsElement = [];
-                                for (var y = 0; y < questions[i].answers.length; y++) {
-                                    // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
-                                    diSatisfiedRaiting.push(((questions[i].answers[y].usersRespondented * 100) / usersResponded) / 100);
-                                    diSatisfiedRaitingTitle.push(questions[i].answers[y].title);
-                                    pieColumnsElement.push(questions[i].answers[y].title);
-                                    pieColumnsElement.push(((questions[i].answers[y].usersRespondented * 100) / usersResponded) / 100);
-                                    pieColumns.push(pieColumnsElement);
-                                    pieColumnsElement = [];
-                                }
-                            }
+                            //used Math.round to round up to 2 decimal
+                            gpa = Math.round((gpa / usersResponded) * 100) / 100;
+                        }
+                        //------------------
+                        if (questions[i].questionType == 2) {
+                            var satisfiedRaiting = [''];
+                            var satisfiedRaitingTitile = ['x'];
+                            var satisfiedGPA = 0;
 
+                            for (var x = 0; x < questions[i].answers.length; x++) {
+                                // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
+                                satisfiedGPA += questions[i].answers[x].usersRespondented * (x + 1);
+                                satisfiedRaiting.push(((questions[i].answers[x].usersRespondented * 100) / usersResponded) / 100);
+                                satisfiedRaitingTitile.push(questions[i].answers[x].title);
+                            }
+                            //used Math.round to round up to 2 decimal
+                            satisfiedGPA = Math.round((gpa / usersResponded) * 100) / 100;
+                        }
+                        //------------------
+                        if (questions[i].questionType == 3) {
+                            var diSatisfiedRaiting = [''];
+                            var diSatisfiedRaitingTitle = ['x'];
+                            var pieColumns = [];
+                            var pieColumnsElement = [];
+
+                            for (var y = 0; y < questions[i].answers.length; y++) {
+                                // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
+                                diSatisfiedRaiting.push(((questions[i].answers[y].usersRespondented * 100) / usersResponded) / 100);
+                                diSatisfiedRaitingTitle.push(questions[i].answers[y].title);
+                                pieColumnsElement.push(questions[i].answers[y].title);
+                                pieColumnsElement.push(((questions[i].answers[y].usersRespondented * 100) / usersResponded) / 100);
+                                pieColumns.push(pieColumnsElement);
+                                pieColumnsElement = [];
+                            }
                         }
 
-                        //charts page1 -> block1
-                        barChartDraw(ratingTitles, rating);
-                        var donutChart = c3.generate({
-                            bindto: '#chart_gauge',
-                            title: {
-                                text: 'ממוצע שביעות רצון'
-                            },
-                            data: {
-                                columns: [
-                                    ['GPA', gpa]
-                                ],
-                                type: 'gauge',
-                                onclick: function (d, i) {
-                                    // TODO: Modal Charts Window
-                                    $scope.showDialog('templates/diagramsPage2.html');
+                    }
 
-                                    getChartData.getAnalisysByCities(questionID, $scope.createDate, $scope.userDate).then(function (response) {
-                                        // console.log('city analisys log: ',response);
-                                        var sitiesNames = ['x'];
-                                        for (var city in response) {
-                                            console.log('city analisys', city);
-                                            sitiesNames.push(city)
-                                        }
-                                    })
-                                }
-                            },
-                            gauge: {
-                                label: {
-                                    format: function (value, ratio) {
-                                        return value;
-                                    },
-                                    show: true // to turn off the min/max labels.
+                    //charts page1 -> block1
+                    barChartDraw(ratingTitles, rating);
+                    var donutChart = c3.generate({
+                        bindto: '#chart_gauge',
+                        title: {
+                            text: 'ממוצע שביעות רצון'
+                        },
+                        data: {
+                            columns: [
+                                ['GPA', gpa]
+                            ],
+                            type: 'gauge',
+                            onclick: function (d, i) {
+                                // TODO: Modal Charts Window
+                                $scope.showDialog('templates/diagramsPage2.html');
+
+                                getChartData.getAnalisysByCities(questionID, $scope.createDate, $scope.userDate).then(function (response) {
+                                    // console.log('city analisys log: ',response);
+                                    var sitiesNames = ['x'];
+                                    for (var city in response) {
+                                        console.log('city analisys', city);
+                                        sitiesNames.push(city)
+                                    }
+                                })
+                            }
+                        },
+                        gauge: {
+                            label: {
+                                format: function (value, ratio) {
+                                    return value;
                                 },
-                                min: 1, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
-                                max: 5, // 100 is default
-                                units: ''
+                                show: true // to turn off the min/max labels.
+                            },
+                            min: 1, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
+                            max: 5, // 100 is default
+                            units: ''
 //    width: 39 // for adjusting arc thickness
-                            },
-                            color: {
-                                pattern: ['#FF0000', '#F97600', '#F6C600', '#4FF239'], // the three color levels for the percentage values.
-                                threshold: {
-                                    max: 5, // 100 is default
-                                    values: [30, 60, 90, 100]
-                                }
-                            },
-                            size: {
-                                height: 200
+                        },
+                        color: {
+                            pattern: ['#FF0000', '#F97600', '#F6C600', '#4FF239'], // the three color levels for the percentage values.
+                            threshold: {
+                                max: 5, // 100 is default
+                                values: [30, 60, 90, 100]
                             }
-                        });
-
-                        //charts page1 -> block2
-                        barChartDraw(satisfiedRaitingTitile, satisfiedRaiting);
-
-                        //charts page1 -> block3
-                        barChartDraw(diSatisfiedRaitingTitle, diSatisfiedRaiting, 3);
-                        var pieChart = c3.generate({
-                            title: {
-                                text: "אחוז סיום טיפול בפניות"
-                            },
-                            bindto: '#chart_gauge3',
-                            data: {
-                                // iris data from R
-                                columns: pieColumns
-                                ,
-                                type: 'pie'
-                                // onclick: function (d, i) { console.log("onclick", d, i); },
-                                // onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-                                // onmouseout: function (d, i) { console.log("onmouseout", d, i); }
-                            },
-                            color: {
-                                pattern: ['#01B8AA', '#FD625E', '#6E33B8']
-                            },
-                            size: {
-                                height: 250
-                            }
-                        });
-
-                        //charts page2 -> block1
-                        var chart4 = c3.generate({
-                            bindto: '#chart2_1',
-                            title: {
-                                text: 'שביעות רצון ממוצעת - מוקדים'
-                            },
-                            data: {
-                                x: 'x',
-                                columns: [
-                                    ['x', 'שלוחת ק.שמונה', 'שלוחת חיפה', 'שלוחת אילת', 'מוקד ת"ב'],
-                                    ['שבע/ת רצון', 4.6, 2.9, 3.8, 4.2]
-                                ],
-                                type: 'bar',
-                                selection: {
-                                    enabled: true
-                                },
-                                onclick: function (event) {
-                                    // console.log(event.value);
-                                    // $state.go('diagramsPage2.diagramsPage3')
-
-
-                                }
-                            },
-                            axis: {
-                                x: {
-                                    type: 'category'
-                                },
-                                y: {
-                                    tick: {
-                                        // format: d3.format('%')
-                                        // values:[0.25,0.5,0.75,0.1]
-                                    },
-                                    max: 5,
-                                    min: 1,
-                                    padding: {
-                                        top: 10,
-                                        bottom: 0
-                                    }
-                                }
-                            },
-                            bar: {
-                                width: {
-                                    ratio: 0.3
-                                }
-                            },
-                            size: {
-                                height: 300,
-                                width: 600
-                            },
-                            color: {
-                                pattern: ['#61A0D7']
-                            }
-                        });
-
-                        //charts page2 -> block2
-                        var chart5 = c3.generate({
-                            bindto: '#chart2_2',
-                            title: {
-                                text: 'שביעות רצון ממוצעת - צוותים'
-                            },
-                            data: {
-                                x: 'x',
-                                columns: [
-                                    ['x', 'צוות חיים', 'צוות יואל', 'צוות איריס', 'צוות אלי'],
-                                    ['שבע/ת רצון', 2.6, 3.7, 4.5, 4.6]
-                                ],
-                                type: 'bar',
-                                selection: {
-                                    enabled: true
-                                },
-                                onclick: function (event) {
-                                    // console.log(event.value);
-                                    //$state.go('diagramsPage2.diagramsPage3')
-                                }
-                            },
-                            axis: {
-                                x: {
-                                    type: 'category'
-                                },
-                                y: {
-                                    tick: {
-                                        // format: d3.format('%')
-                                        // values:[0.25,0.5,0.75,0.1]
-                                    },
-                                    max: 5,
-                                    min: 1,
-                                    padding: {
-                                        top: 10,
-                                        bottom: 0
-                                    }
-                                }
-                            },
-                            bar: {
-                                width: {
-                                    ratio: 0.3
-                                }
-                            },
-                            size: {
-                                height: 215
-                            },
-                            color: {
-                                pattern: ['#B887AD']
-                            }
-                        });
-
-
-                        $scope.chartsArray = [];
+                        },
+                        size: {
+                            height: 200
+                        }
                     });
-            });
-        }
 
+                    //charts page1 -> block2
+                    barChartDraw(satisfiedRaitingTitile, satisfiedRaiting);
+
+                    //charts page1 -> block3
+                    barChartDraw(diSatisfiedRaitingTitle, diSatisfiedRaiting, 3);
+                    var pieChart = c3.generate({
+                        title: {
+                            text: "אחוז סיום טיפול בפניות"
+                        },
+                        bindto: '#chart_gauge3',
+                        data: {
+                            // iris data from R
+                            columns: pieColumns
+                            ,
+                            type: 'pie'
+                            // onclick: function (d, i) { console.log("onclick", d, i); },
+                            // onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+                            // onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+                        },
+                        color: {
+                            pattern: ['#01B8AA', '#FD625E', '#6E33B8']
+                        },
+                        size: {
+                            height: 250
+                        }
+                    });
+
+                    //charts page2 -> block1
+                    var chart4 = c3.generate({
+                        bindto: '#chart2_1',
+                        title: {
+                            text: 'שביעות רצון ממוצעת - מוקדים'
+                        },
+                        data: {
+                            x: 'x',
+                            columns: [
+                                ['x', 'שלוחת ק.שמונה', 'שלוחת חיפה', 'שלוחת אילת', 'מוקד ת"ב'],
+                                ['שבע/ת רצון', 4.6, 2.9, 3.8, 4.2]
+                            ],
+                            type: 'bar',
+                            selection: {
+                                enabled: true
+                            },
+                            onclick: function (event) {
+                                // console.log(event.value);
+                                // $state.go('diagramsPage2.diagramsPage3')
+
+
+                            }
+                        },
+                        axis: {
+                            x: {
+                                type: 'category'
+                            },
+                            y: {
+                                tick: {
+                                    // format: d3.format('%')
+                                    // values:[0.25,0.5,0.75,0.1]
+                                },
+                                max: 5,
+                                min: 1,
+                                padding: {
+                                    top: 10,
+                                    bottom: 0
+                                }
+                            }
+                        },
+                        bar: {
+                            width: {
+                                ratio: 0.3
+                            }
+                        },
+                        size: {
+                            height: 300,
+                            width: 600
+                        },
+                        color: {
+                            pattern: ['#61A0D7']
+                        }
+                    });
+
+                    //charts page2 -> block2
+                    var chart5 = c3.generate({
+                        bindto: '#chart2_2',
+                        title: {
+                            text: 'שביעות רצון ממוצעת - צוותים'
+                        },
+                        data: {
+                            x: 'x',
+                            columns: [
+                                ['x', 'צוות חיים', 'צוות יואל', 'צוות איריס', 'צוות אלי'],
+                                ['שבע/ת רצון', 2.6, 3.7, 4.5, 4.6]
+                            ],
+                            type: 'bar',
+                            selection: {
+                                enabled: true
+                            },
+                            onclick: function (event) {
+                                // console.log(event.value);
+                                //$state.go('diagramsPage2.diagramsPage3')
+                            }
+                        },
+                        axis: {
+                            x: {
+                                type: 'category'
+                            },
+                            y: {
+                                tick: {
+                                    // format: d3.format('%')
+                                    // values:[0.25,0.5,0.75,0.1]
+                                },
+                                max: 5,
+                                min: 1,
+                                padding: {
+                                    top: 10,
+                                    bottom: 0
+                                }
+                            }
+                        },
+                        bar: {
+                            width: {
+                                ratio: 0.3
+                            }
+                        },
+                        size: {
+                            height: 215
+                        },
+                        color: {
+                            pattern: ['#B887AD']
+                        }
+                    });
+
+
+                    $scope.chartsArray = [];
+                });
+        });
 
         $scope.exportToPDF = function () {
             serviceButtons.exportToPDF();
         };
-
         $scope.showStat = function () {
             $scope.showDialog('templates/diagramsPageStat.html');
         };
-
-
         $scope.showDialog = function (tamplateUrl) {
             $mdDialog.show({
                 locals: {translation: $scope.translation},
@@ -372,8 +373,6 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         }
 
         //-----------draw charts function----------//
-
-
         function DialogController($scope, $mdDialog, translation) {
             $scope.translation = translation;
             $scope.stats = stats;

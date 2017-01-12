@@ -25,7 +25,7 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService','
             }, function () {
                 $scope.curAlert = alert
             })
-    }
+    };
 
     function AlertInfoController($scope, $mdDialog) {
 

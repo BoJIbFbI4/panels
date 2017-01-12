@@ -28,20 +28,20 @@ angular.module('panelsApp')
         }
 
         $scope.setText = function () {
-            var url = $rootScope.url + "/managers/setTextInAlert/" + $rootScope.curAlert.id
+            var url = $rootScope.url + "/managers/setTextInAlert/" + $rootScope.curAlert.id;
 
-            var data= $('#inputText').val()
+            var data= $('#inputText').val();
 
             var config = { headers:
                 {"Authorization": "Basic " + $rootScope.authorizationData},
                 params: {"text" : data}
             };
 
-            console.log("this is data!!! : " + data)
+            console.log("this is data!!! : " + data);
 
             $http.post(url, data, config).then(function (response) {
                 console.log(response)
-            })
+            });
 
             $scope.hide()
 

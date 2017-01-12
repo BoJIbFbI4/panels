@@ -5,7 +5,7 @@ angular.module('panelsApp')
     .controller('CompaniesCtrl', ['$rootScope','$scope', '$http', 'CompaniesService', '$state',
         function ($rootScope, $scope, $http, CompaniesService, $state) {
 
-            $rootScope.showLoader = true;
+            // $rootScope.showLoader = true;
 
             $rootScope.headerTitle = "companies";
             $scope.companies = [];

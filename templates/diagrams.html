@@ -14,7 +14,12 @@
                 <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
                     <span class="calendar-icon">{{translation.ToDate}}
                         <i class="material-icons light-blue">date_range</i></span><br>
-                    <input class="mdl-date-textfield__input" type="date" ng-model="dateEnd" value="{{userDate}}"
+                    <input class="mdl-date-textfield__input"
+                           type="date"
+                           ng-model="dateEnd"
+                           value="{{userDate}}"
+                           min="{{minToDate}}"
+                           max="{{maxToDate}}"
                            id="sample3">
                 </div>
             </div>
@@ -22,7 +27,13 @@
                 <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
                     <span class="calendar-icon">{{translation.FromDate}}<i
                             class="material-icons light-blue">date_range</i></span><br>
-                    <input class="mdl-date-textfield__input" type="date" value="{{createDate}}" id="sample4">
+                    <input class="mdl-date-textfield__input"
+                           min="{{minFromDate}}"
+                           max="{{maxFromDate}}"
+                           type="date"
+                           ng-model="dateStart"
+                           value="{{createDate}}"
+                           id="sample4">
                 </div>
             </div>
         </div>
