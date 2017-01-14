@@ -86,6 +86,10 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService','
         return $rootScope.type == "MANAGER";
     };
 
+    $scope.isLogin = function () {
+        return $rootScope.isLogin
+    }
+
 
     $scope.getAlerts = function () {
 

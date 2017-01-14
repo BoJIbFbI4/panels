@@ -37,6 +37,7 @@ angular.module('panelsApp')
                     }
 
                     $scope.isLogin = true;
+                    $rootScope.isLogin = true;
                     $scope.loginProcess = false;
                 })
                 .error(function(data, status) {
