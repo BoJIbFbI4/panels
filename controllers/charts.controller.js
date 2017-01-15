@@ -533,7 +533,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             },
             exportToXLS: function (startDate, endDate, questionaryID) {
                 return $http({
-                    url: url + '/common/getReport2/' + questionaryID + '/xls',
+                    url: url + '/common/getReport3/' + questionaryID + '/xls',
                     method: "POST",
                     data: {
                         startDate: startDate,
