@@ -36,7 +36,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     };
 
                     $scope.exportToXLS = function () {
-                        return serviceButtons.exportToXLS($scope.startDate, $scope.userDate, response.id)
+                        return serviceButtons.exportToXLS($scope.createDate, $scope.userDate, response.id)
                     };
 
                     return response;
@@ -126,9 +126,12 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                 getChartData.getAnalisysByCities(questionID, $scope.createDate, $scope.userDate).then(function (response) {
                                     // console.log('city analisys log: ',response);
                                     var sitiesNames = ['x'];
+                                    var sitiesValues = [''];
                                     for (var city in response) {
                                         console.log('city analisys', city);
-                                        sitiesNames.push(city)
+                                        console.log('city values: ' ,response[city]);
+                                        sitiesNames.push(city);
+                                        sitiesValues.push(response[city])
                                     }
                                 })
                             }
@@ -203,8 +206,6 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             onclick: function (event) {
                                 // console.log(event.value);
                                 // $state.go('diagramsPage2.diagramsPage3')
-
-
                             }
                         },
                         axis: {
@@ -219,7 +220,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                 max: 5,
                                 min: 1,
                                 padding: {
-                                    top: 10,
+                                    top: 0,
                                     bottom: 0
                                 }
                             }
@@ -236,7 +237,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         color: {
                             pattern: ['#61A0D7']
                         }
-                    });
+                    })
 
                     //charts page2 -> block2
                     var chart5 = c3.generate({
@@ -532,7 +533,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             },
             exportToXLS: function (startDate, endDate, questionaryID) {
                 return $http({
-                    url: url + '/common/getReport3/' + questionaryID + '/xls',
+                    url: url + '/common/getReport2/' + questionaryID + '/xls',
                     method: "POST",
                     data: {
                         startDate: startDate,
@@ -549,7 +550,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     var objectUrl = URL.createObjectURL(blob);
                     saveAs(blob, "Report.xls");
                     window.open(objectUrl);
-                    window.close(objectUrl);
+                    window.close();
                 }).error(function (data, status, headers, config) {
                     //upload failed
                 });

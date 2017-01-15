@@ -7,8 +7,6 @@ angular.module('panelsApp')
         $rootScope.layout = "";
         $scope.loginProcess = false;
 
-        //
-
         $scope.getLogin = function () {
             var url = $rootScope.url + "/common/login";
             var authorizationData = btoa($scope.login + ":" + $scope.pass);
@@ -31,7 +29,7 @@ angular.module('panelsApp')
                     if (response.type == "MANAGER") {
                         console.log(response)
                         $rootScope.alerts = response.supervisoryAlerts;
-                        $rootScope.alerts =  $rootScope.alerts.concat(response.responsibleAlerts)
+                        $rootScope.alerts =  $rootScope.alerts.concat(response.responsibleAlerts);
 
                         $state.go('projects', {managerID: $scope.id})
                     }

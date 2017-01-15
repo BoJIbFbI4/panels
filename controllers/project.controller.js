@@ -5,8 +5,6 @@ angular.module('panelsApp')
     .controller('ProjectCtrl', ['$rootScope', '$scope', '$stateParams', '$http', '$state',
         function ($rootScope, $scope, $stateParams, $http, $state) {
 
-            //$rootScope.showLoader = true;
-
             $scope.projects = [];
             $rootScope.headerTitle = "projects";
             $rootScope.layout = $state.current.data.layout;
@@ -24,6 +22,7 @@ angular.module('panelsApp')
             };
 
             var getProjects = function (companyID) {
+                $rootScope.showLoader = true;
                 return $http.get(url + '/admin/getProjectsByIdCustomer/' + companyID, config).then(function (response) {
                     console.log("project response: " ,response);
                     $scope.projects = response.data;
@@ -37,6 +36,7 @@ angular.module('panelsApp')
 
 
             var getManagerProjects = function (managerID) {
+                $rootScope.showLoader = true;
                 return $http.get(url + '/managers/getProjectsByIdManager/' + managerID, config).then(function (response) {
                     $rootScope.chengeMenu = true;
                     $rootScope.userFace = 'https://s3.amazonaws.com/uifaces/faces/twitter/silvanmuhlemann/128.jpg';

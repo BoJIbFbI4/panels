@@ -5,8 +5,6 @@ angular.module('panelsApp')
     .controller('CompaniesCtrl', ['$rootScope','$scope', '$http', 'CompaniesService', '$state',
         function ($rootScope, $scope, $http, CompaniesService, $state) {
 
-           // $rootScope.showLoader = true;
-
             $rootScope.headerTitle = "companies";
             $scope.companies = [];
             $rootScope.layout = $state.current.data.layout;
@@ -24,6 +22,7 @@ angular.module('panelsApp')
         }])
 
     .service('CompaniesService', ['$rootScope', '$http', function ($rootScope, $http) {
+        $rootScope.showLoader = true;
         var url = $rootScope.url + "/admin/";
         var authorizationData = $rootScope.authorizationData;
         var config = {
