@@ -12,7 +12,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         $rootScope.sendExcel = false;
 
         var stats = {};
-        if ($stateParams.projectID) { var projectId = $stateParams.projectID }// <-- take this projectID from project template and use it into request below
+        if ($stateParams.projectID) {
+            var projectId = $stateParams.projectID
+        }// <-- take this projectID from project template and use it into request below
 
         $scope.$watchGroup(['dateStart', 'dateEnd'], function (newValues, oldValues) { //<-- watch input "to date". if it changed - send new req with a new date
 
@@ -129,7 +131,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                     var sitiesValues = [''];
                                     for (var city in response) {
                                         console.log('city analisys', city);
-                                        console.log('city values: ' ,response[city]);
+                                        console.log('city values: ', response[city]);
                                         sitiesNames.push(city);
                                         sitiesValues.push(response[city])
                                     }
@@ -299,6 +301,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             serviceButtons.exportToPDF();
         };
         $scope.showStat = function () {
+            $("td:last-child").append("<span>%</span>");
             $scope.showDialog('templates/diagramsPageStat.html');
         };
         $scope.showDialog = function (tamplateUrl) {
@@ -460,8 +463,6 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
         var url = $rootScope.url;
         var authorizationData = $rootScope.authorizationData;
-        var config = {headers: {"Authorization": "Basic " + authorizationData}};
-
 
         return {
             exportToPDF: function () {
@@ -532,28 +533,27 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
             },
             exportToXLS: function (startDate, endDate, questionaryID) {
-                return $http({
+
+                var dates = $.param({startDate: startDate, endDate: endDate});
+
+                $http({
                     url: url + '/common/getReport3/' + questionaryID + '/xls',
                     method: "POST",
-                    data: {
-                        startDate: startDate,
-                        endDate: endDate
-                    },
-                    responseType: 'arraybuffer',
+                    data: dates, //this is your json data string
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Basic ' + authorizationData
-                    }
-                }).success(function (data, status, headers, config) {
-                    console.log('excel DATA: -->: ', data);
-                    var blob = new Blob([data], {type: "application/json"});
-                    var objectUrl = URL.createObjectURL(blob);
-                    saveAs(blob, "Report.xls");
-                    window.open(objectUrl);
-                    window.close();
-                }).error(function (data, status, headers, config) {
-                    //upload failed
-                });
+                        "Authorization": "Basic " + authorizationData,
+                        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8;"
+                    },
+                    responseType: 'arraybuffer'
+                })
+                    .then(function (resolve) {
+                        console.log('excel DATA: -->:', resolve.data);
+                        var blob = new Blob([resolve.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+                        saveAs(blob, "Report.xls");
+                        window.close();
+                    }, function (reject) {
+                        console.log('excel error DATA: -->:', reject)
+                    })
             },
             uploadFile: function (myFile, projectID) {
                 $rootScope.sendExcel = true;
