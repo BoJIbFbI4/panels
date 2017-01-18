@@ -62,5 +62,9 @@
 
 
 ,
-  "FloatStyle":"float:right"
+  "FloatStyle":"float:right",
+
+
+  "choose":"Choose File please"
+
 }

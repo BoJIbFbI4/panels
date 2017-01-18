@@ -3,6 +3,8 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService','
 
     // $rootScope.url = "https://panel-repatriation.rhcloud.com";
        $rootScope.url = "https://panel1-repatriation.rhcloud.com";
+       $rootScope.hideLoader = [];
+       $rootScope.fileState = [];
     // $rootScope.url = "http://192.168.1.101:8080";
 
 
@@ -24,7 +26,7 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService','
 
       $scope.createAlert = function(){
           $state.go('createAlert')
-      }
+      };
 
       $scope.alertInfo = function (alert){
 
@@ -123,7 +125,7 @@ app.service('translationService', function ($resource) {
 
  app.service('fileUpload', ['$http', '$rootScope', function ($http, $rootScope) {
      var authorizationData = $rootScope.authorizationData;
-    this.uploadFileToUrl = function(file, uploadUrl){
+    this.uploadFileToUrl = function(file, uploadUrl, index){
         var fd = new FormData();
         fd.append('file', file);
         $http.post(uploadUrl, fd, {
@@ -133,11 +135,17 @@ app.service('translationService', function ($resource) {
         })
             .success(function(resp){
                 console.log(resp);
-                $rootScope.sendExcel = false;
+                $rootScope.hideLoader[index]=false;
+                $rootScope.fileState[index]='File Uploaded: ' + resp
+
+
             })
-            .error(function(){
-                console.log("error");
-                $rootScope.sendExcel = false;
+            .error(function(error){
+                console.log(error);
+                $rootScope.hideLoader[index]=false;
+                $rootScope.fileState[index]='Not loaded - Error'
+
+
             });
     }
 }]);

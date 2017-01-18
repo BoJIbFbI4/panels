@@ -9,41 +9,37 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         $rootScope.headerTitle = "charts";
         $rootScope.layout = $state.current.data.layout; //-> show left side menu
         $rootScope.isUpload = false;
-        $rootScope.sendExcel = false;
 
         var stats = {};
         if ($stateParams.projectID) {
             var projectId = $stateParams.projectID
         }// <-- take this projectID from project template and use it into request below
 
-        $scope.$watchGroup(['dateStart', 'dateEnd'], function (newValues, oldValues) { //<-- watch input "to date". if it changed - send new req with a new date
+        if ($stateParams.projectName) {
+            $scope.$parent.$parent.projectName = $stateParams.projectName;
+        }// <-- if add this to root scope will be problems
 
+        $scope.$on("$destroy", function () {
+            $scope.$parent.$parent.projectName = "";
+            console.log("EXITING");
+        });
+
+
+        $scope.$watchGroup(['dateStart', 'dateEnd'], function (newValues, oldValues) { //<-- watch input "to date". if it changed - send new req with a new date
             getChartData.getQuestionary(projectId)
                 .then(function (response) {
-
                     $scope.createDate = $filter("date")(newValues[0] || response.createDate, 'yyyy-MM-dd');
                     $scope.userDate = $filter("date")(newValues[1] || Date.now(), 'yyyy-MM-dd');
-
-
                     $scope.minFromDate = $filter("date")(response.createDate, 'yyyy-MM-dd');
                     $scope.maxFromDate = $scope.userDate;
                     $scope.minToDate = $scope.createDate;
                     $scope.maxToDate = $filter("date")(response.endDate || Date.now(), 'yyyy-MM-dd');
-
                     console.log('RESPONSE getQuestionary: ', response);
-
-                    // function for upload excel file with new users. Placed here because it use this questionary ID
-                    $scope.uploadFile = function () {
-                        return serviceButtons.uploadFile($scope.myFile, response.id);
-                    };
-
                     $scope.exportToXLS = function () {
                         return serviceButtons.exportToXLS($scope.createDate, $scope.userDate, response.id)
                     };
-
                     return response;
                 })
-
                 .then(function (response) {
                     return getChartData.getAnalisys(response.id, $scope.createDate, $scope.userDate);
                 })
@@ -56,9 +52,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                     console.log('get ANALISYS RESPONSE DATA: ', response);
                     console.log('count users by Date: ', usersResponded);
-
                     for (var i = 0; i < questions.length; i++) {
-
                         if (questions[i].questionType == 1) {
                             var rating = [''];
                             var ratingTitles = ['x'];
@@ -106,7 +100,6 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                 pieColumnsElement = [];
                             }
                         }
-
                     }
 
                     //charts page1 -> block1
@@ -161,10 +154,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             height: 200
                         }
                     });
-
                     //charts page1 -> block2
                     barChartDraw(satisfiedRaitingTitile, satisfiedRaiting);
-
                     //charts page1 -> block3
                     barChartDraw(diSatisfiedRaitingTitle, diSatisfiedRaiting, 3);
                     var pieChart = c3.generate({
@@ -174,8 +165,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         bindto: '#chart_gauge3',
                         data: {
                             // iris data from R
-                            columns: pieColumns
-                            ,
+                            columns: pieColumns,
                             type: 'pie'
                             // onclick: function (d, i) { console.log("onclick", d, i); },
                             // onmouseover: function (d, i) { console.log("onmouseover", d, i); },
@@ -188,7 +178,6 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             height: 250
                         }
                     });
-
                     //charts page2 -> block1
                     var chart4 = c3.generate({
                         bindto: '#chart2_1',
@@ -239,8 +228,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         color: {
                             pattern: ['#61A0D7']
                         }
-                    })
-
+                    });
                     //charts page2 -> block2
                     var chart5 = c3.generate({
                         bindto: '#chart2_2',
@@ -291,12 +279,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             pattern: ['#B887AD']
                         }
                     });
-
-
                     $scope.chartsArray = [];
                 });
         });
-
         $scope.exportToPDF = function () {
             serviceButtons.exportToPDF();
         };
@@ -397,12 +382,10 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
     }])
     .service('getChartData', ['$http', '$rootScope', '$q', function ($http, $rootScope, $q) {
-
         var url = $rootScope.url;
         var authorizationData = $rootScope.authorizationData;
         var config = {headers: {"Authorization": "Basic " + authorizationData}};
         var analisysData = {};
-
         return {
             getQuestionary: function (projectID) {
                 return $http.get(url + '/common/getQuestionary/' + projectID, config).then(function (response) {
@@ -457,13 +440,10 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                 });
             }
         };
-
     }])
     .service('serviceButtons', ['$rootScope', '$http', 'fileUpload', function ($rootScope, $http, fileUpload) {
-
         var url = $rootScope.url;
         var authorizationData = $rootScope.authorizationData;
-
         return {
             exportToPDF: function () {
                 console.log("TRYING TO EXPORT");
@@ -555,11 +535,10 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         console.log('excel error DATA: -->:', reject)
                     })
             },
-            uploadFile: function (myFile, projectID) {
-                $rootScope.sendExcel = true;
+            uploadFile: function (myFile, projectID, index) {
                 var file = myFile;
                 var uploadUrl = $rootScope.url + "/admin/uploadUsers/" + projectID;
-                fileUpload.uploadFileToUrl(file, uploadUrl);
+                fileUpload.uploadFileToUrl(file, uploadUrl, index);
                 $rootScope.isUpload = true;
             }
         }

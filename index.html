@@ -60,6 +60,8 @@
 
             <!-- Title -->
             <span class="mdl-layout-title">{{translation[headerTitle]}}</span>
+            <div class="mdl-layout-spacer"></div>
+            <span class="mdl-layout-title">{{projectName}}</span>
             <!-- Add spacer, to align navigation to the right -->
             <div class="mdl-layout-spacer"></div>
             <!-- Navigation. We hide it in small screens. -->
@@ -72,6 +74,7 @@
                 for="alerts">
                 <li ng-click="alertInfo(x)" ng-repeat="x in getAlerts()" class="mdl-menu__item">{{x.message}}</li>
             </ul>
+
 
             <nav class="mdl-navigation">
                 <select style="outline: none" class="mdl-textfield__input mdl-color--black-100 mdl-color-text--black"

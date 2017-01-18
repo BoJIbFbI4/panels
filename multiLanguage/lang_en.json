@@ -57,5 +57,7 @@
   "alertsStarted":"alerts Started",
   "responseRate":"response Rate",
 
-  "FloatStyle":"float:left"
+  "FloatStyle":"float:left",
+
+  "choose":"Choose File please"
 }
