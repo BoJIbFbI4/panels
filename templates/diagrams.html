@@ -47,40 +47,9 @@
 
 
         <div class="mdl-grid">
+
+
             <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--file">
-                    <input
-                            class="mdl-textfield__input"
-                            placeholder="choose new file for upload"
-                            type="text" id="uploadFile"
-                            readonly/>
-
-                    <div class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
-                        <i class="material-icons">attach_file</i>
-                       <input type="file" id="uploadBtn" file-model="myFile">
-                    </div>
-
-                </div>
-
-
-                <span style="float:left">
-                    <button
-                            class="mdl-button mdl-js-button mdl-button--primary mdl-stat-btn"
-                            ng-click="uploadFile()">
-                        <b>
-                            {{translation.LoadNewCustomers}}
-                        </b>
-                    </button>
-                    <!-- attach excel file loader animation -->
-                <svg ng-show="sendExcel" style="margin-right: 10px;"  class="spinner" width="25px" height="25px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                    <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-                </svg>
-                    <!-- END attach excel file loader animation -->
-                </span>
-            </div>
-
-
-            <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
                 <span>
                     <button class="mdl-button mdl-js-button mdl-button--primary" ng-click="exportToXLS()">
                         <b>{{translation.ExportToExcel}}</b>
@@ -89,13 +58,17 @@
 
             </div>
 
-            <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
-                <button class="mdl-button mdl-js-button mdl-button--primary" id="buttonExportToPDF" ng-model="buttonExportToPDF" ng-click="exportToPDF()">
+            <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+                <button
+                        class="mdl-button mdl-js-button mdl-button--primary"
+                        id="buttonExportToPDF"
+                        ng-model="buttonExportToPDF"
+                        ng-click="exportToPDF()">
                     <b>{{translation.ExportToPDF}}</b>
                 </button>
             </div>
 
-            <div class="mdl-cell--2-col mdl-cell--2-col-tablet mdl-cell--2-col-phone">
+            <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
                 <button class="mdl-button mdl-js-button mdl-button--primary" ng-click="showStat()">
                     <b>{{translation.Statistics}}</b>
                 </button>
