@@ -9,10 +9,15 @@ angular.module('panelsApp')
             $scope.projects = [];
             $rootScope.headerTitle = "projects";
             $rootScope.layout = $state.current.data.layout;
-            // console.log("$index);
-            // console.log($index);
-            console.log("this");
-            console.log(this);
+
+            $rootScope.setFileState = function (index, data) {
+                console.log(' - - - - data - - - - ');
+                console.log(data);
+                $rootScope.fileState[index] = data;
+              return null
+            };
+
+
 
 
             var url = $rootScope.url;

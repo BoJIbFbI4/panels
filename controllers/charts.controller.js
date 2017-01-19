@@ -194,8 +194,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             selection: {
                                 enabled: true
                             },
-                            onclick: function (event) {
-                                // console.log(event.value);
+                            onclick: function () {
+                                console.log(arguments[0]);
+
                                 // $state.go('diagramsPage2.diagramsPage3')
                             }
                         },
