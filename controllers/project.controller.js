@@ -9,6 +9,10 @@ angular.module('panelsApp')
             $scope.projects = [];
             $rootScope.headerTitle = "projects";
             $rootScope.layout = $state.current.data.layout;
+            // console.log("$index);
+            // console.log($index);
+            console.log("this");
+            console.log(this);
 
 
             var url = $rootScope.url;
@@ -37,14 +41,39 @@ angular.module('panelsApp')
             }
 
 
-            // function for upload excel file with new users. Placed here because it use this questionary ID
+            $scope.$watch('selectedFile',function (data) {
+               console.log(data)
+            });
+
+            $scope.fileNameChanged = function(me) {
+                console.log(me.parentElement);
+                var file = me.value.replace('C:\\fakepath\\',"");
+                var index = me.getAttribute('indexOfMyFile');
+                $rootScope.fileState[index] = file;
+
+                // for (i in me){
+                //     console.log(i);
+                // }
+
+
+            };
+
+                // function for upload excel file with new users. Placed here because it use this questionary ID
             $scope.uploadFile = function (projectID, myFile, index) {
                 // console.log(projectID);
                 // console.log(myFile);
                 console.log(index);
                 $rootScope.hideLoader[index]=true;
-                console.log("$rootScope.hideLoader");
+                console.log("$rootScope.hideLoade");
                 console.log($rootScope.hideLoader);
+
+                console.log("$scope.selectedFile");
+                console.log($scope.selectedFile);
+
+
+                console.log("myFile");
+                console.log(myFile);
+
 
                 return serviceButtons.uploadFile(myFile, projectID, index);
             };

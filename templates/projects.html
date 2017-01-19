@@ -1,4 +1,4 @@
-<div class="mainView" class="projects"  ng-controller="ProjectCtrl">
+<div class="mainView" class="projects" ng-controller="ProjectCtrl">
 
     <div class="mdl-grid">
         <div
@@ -21,16 +21,16 @@
                     <tbody>
                     <tr>
                         <td>{{
-                                project.questionary.statistics.usersIntroduced == null ? "אין זימונים שנשלחו" :
-                                project.questionary.statistics.usersIntroduced
+                            project.questionary.statistics.usersIntroduced == null ? "אין זימונים שנשלחו" :
+                            project.questionary.statistics.usersIntroduced
                             }}
                         </td>
                         <td>מספר זימונים שנשלחו</td>
                     </tr>
                     <tr>
                         <td>{{
-                                project.questionary.statistics.usersRespondented == null ? "אין סקרים שנענו" :
-                                project.questionary.statistics.usersRespondented
+                            project.questionary.statistics.usersRespondented == null ? "אין סקרים שנענו" :
+                            project.questionary.statistics.usersRespondented
                             }}
                         </td>
                         <td>מספר סקרים שנענו</td>
@@ -56,10 +56,10 @@
 
                         <div class="mdl-cell--6-col">
                             <!--__________________________________-->
-                            <span ng-model="fileStateInfo" class="mdl-button mdl-button--disabled">
-                                {{myFileChecked}}
+                            <span class="mdl-card__supporting-text">
+                                <!--{{myFileChecked}}-->
                                 {{fileState[$index]}}
-                                {{translation.choose}}
+                                <!--{{translation.choose}}-->
                             </span>
                         </div>
                         <div class="mdl-cell--2-col">
@@ -83,25 +83,24 @@
                                         r="30"
                                 ></circle>
                             </svg>
+
                         </div>
                         <div class="mdl-cell--2-col">
                             <div class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
                                 <i class="material-icons">attach_file</i>
                                 <input
-                                        ng-model="myFileCheckedModel"
-                                        ng-bind="myFileCheckedBind"
-
+                                        onchange="angular.element(this).scope().fileNameChanged(this)"
+                                        ng-model="selectedFile"
                                         type="file"
-                                        id="uploadBtn"
+                                        id={{"uploadBtn"+$index}}
+                                        indexOfMyFile="{{$index}}"
                                         file-model="myFile">
                             </div>
                         </div>
                         <div class="mdl-cell--2-col">
-
-
                             <button
                                     ng-click="uploadFile(project.id,myFile,$index)"
-                                    class="mdl-button mdl-js-button mdl-button--primary mdl-stat-btn">
+                                    class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
                                 <i class="material-icons">send</i>
                             </button>
                         </div>
@@ -139,12 +138,3 @@
     </div>
 </div>
 
-
-
-
-<script>
-    document.getElementById("uploadBtn").onchange = function () {
-        document.getElementById("uploadFile").value = this.files[0].name;
-    };
-
-</script>

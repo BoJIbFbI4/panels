@@ -365,6 +365,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         function DialogController($scope, $mdDialog, translation) {
             $scope.translation = translation;
             $scope.stats = stats;
+            $scope.stats["responseRate"] = $scope.stats["responseRate"] + '%';
+
+
 
             $scope.hide = function () {
                 $mdDialog.hide();
