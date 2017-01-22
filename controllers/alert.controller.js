@@ -15,8 +15,8 @@ angular.module('panelsApp')
 
         $scope.sendCustomAlert = function () {
 
-            var url = $rootScope.url + "/admin/sendTextToGeneralOfProject/" + $scope.company
-            var data= $scope.textAlert
+            var url = $rootScope.url + "/admin/sendTextToGeneralOfProject/" + $scope.company;
+            var data= $scope.textAlert;
 
             var config = { headers:
                 {"Authorization": "Basic " + $rootScope.authorizationData},

@@ -9,6 +9,7 @@ angular.module('panelsApp')
             $scope.projects = [];
             $rootScope.headerTitle = "projects";
             $rootScope.layout = $state.current.data.layout;
+            $scope.selectedProject = '';
 
             $rootScope.setFileState = function (index, data) {
                 console.log(' - - - - data - - - - ');

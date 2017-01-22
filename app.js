@@ -8,6 +8,7 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
     // $rootScope.url = "http://192.168.1.101:8080";
     // $rootScope.url = "http://172.20.10.4:8080";
     // $rootScope.url = "http://192.168.1.101:8080";
+    // $rootScope.url = "http://10.0.0.17:8080";
 
 
     $scope.home = function () {
@@ -18,7 +19,7 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
             console.log('Login process is :' + $scope.loginProcess);
             $state.go('companies')
         }
-    }
+    };
 
 
     $scope.alertTable = function () {
@@ -109,8 +110,6 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
 
         return $rootScope.alerts;
     }
-
-    ;
 }]);
 
 app.service('translationService', function ($resource) {

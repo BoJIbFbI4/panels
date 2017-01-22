@@ -7459,7 +7459,8 @@ input.mdl-button[type="submit"] {
   .mdl-layout__drawer > .mdl-layout__title,
   .mdl-layout__drawer > .mdl-layout-title {
     line-height: 64px;
-    padding-left: 40px; }
+    padding-left: 0; /* <-------------------------value was here 40-----------------------------------*/
+  }
     @media screen and (max-width: 1024px) {
       .mdl-layout__drawer > .mdl-layout__title,
       .mdl-layout__drawer > .mdl-layout-title {

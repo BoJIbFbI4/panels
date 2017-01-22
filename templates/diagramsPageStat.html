@@ -8,11 +8,7 @@
         </tr>
         <tr ng-repeat="(k, v) in stats">
             <td>{{translation[k]}}</td>
-            <td>{{v}} <span class="percent"></span></td>
+            <td>{{v}}</td>
         </tr>
     </table>
 </div>
-
-<script>
-    $(".percent:last").innerText = " %"
-</script>

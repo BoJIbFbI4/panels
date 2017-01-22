@@ -9,6 +9,12 @@
 
     <div class="mdl-grid">
         <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+            <h2>Create Project</h2>
+
+            <select name="" id="" style="width: 70%; height: 30px; margin-bottom: 20px">
+                <option value="" ng-repeat="companie in companies" ng-model="selectedProject">{{companie.name}}</option>
+            </select>
+
             <form action="">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="sample1">
@@ -22,7 +28,7 @@
 
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--file">
-                    <input class="mdl-textfield__input" placeholder="Attach project logo" type="text" id="uploadFile"
+                    <input class="mdl-textfield__input" placeholder="{{translation.attachLogo}}" type="text" id="uploadFile"
                            readonly/>
                     <div class="mdl-button mdl-button--colored mdl-button--icon mdl-button--file">
                         <i class="material-icons">attach_file</i><input type="file" id="uploadBtn">

@@ -59,8 +59,17 @@ angular.module('Route', ['ui.router'])
             .state('createproject', {
                 url: '/createProject',
                 templateUrl: 'templates/createProject.html',
+                controller: 'ProjectCtrl',
                 data: {
                     layout: "mdl-layout--fixed-drawer"
                 }
-            });
+            })
+            .state('createcompany', {
+                url: '/createCompany',
+                templateUrl: 'templates/createCompany.html',
+                controller: 'CompaniesCtrl',
+                data: {
+                    layout: "mdl-layout--fixed-drawer"
+                }
+            })
     });
