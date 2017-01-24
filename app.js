@@ -22,6 +22,7 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
     };
 
 
+    // ALERT PAGE MANAGER
     $scope.alertTable = function () {
         $state.go('alerts')
     };
@@ -30,30 +31,29 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
         $state.go('createAlert')
     };
 
-    $scope.alertInfo = function (alert) {
 
-        $rootScope.curAlert = alert;
 
-        console.log($scope.curAlert);
-        console.log("Supervisory Id in alert = " + $rootScope.curAlert.supervisoryManager.id)
-        console.log("Login Id = " + $rootScope.id)
-
-        $mdDialog.show({
-            controller: AlertInfoController,
-            templateUrl: 'templates/alertInfoWindow.html',
-            parent: angular.element(document.body),
-            targetEvent: alert,
-            clickOutsideToClose: true,
-            fullscreen: false // Only for -xs, -sm breakpoints.
-        })
-            .then(function (alert) {
-                $scope.curAlert = alert
-            }, function () {
-                console.log('Login process is :' + $scope.loginProcess);
-                $scope.curAlert = alert;
-
+        $rootScope.alertInfo = function (alert) {
+            $rootScope.curAlert = alert;
+            console.log($scope.curAlert);
+            console.log("Supervisory Id in alert = " + $rootScope.curAlert.supervisoryManager.id);
+            console.log("Login Id = " + $rootScope.id);
+            $mdDialog.show({
+                controller: AlertInfoController,
+                templateUrl: 'templates/alertInfoWindow.html',
+                parent: angular.element(document.body),
+                targetEvent: alert,
+                clickOutsideToClose: true,
+                fullscreen: false // Only for -xs, -sm breakpoints.
             })
-    };
+                .then(function (alert) {
+                    $scope.curAlert = alert
+                }, function () {
+                    console.log('Login process is :' + $scope.loginProcess);
+                    $scope.curAlert = alert;
+
+                })
+        };
 
     function AlertInfoController($scope, $mdDialog) {
 
@@ -92,24 +92,25 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
 
     $scope.isLogin = function () {
         return $rootScope.isLogin
-    }
+    };
 
 
     $scope.getAlerts = function () {
-
         if ($scope.isManager() == true) {
+            $rootScope.openAlertCount = 0;
 
             $rootScope.alerts.forEach(function (item, i, arr) {
-                item.humanDate = (new Date(item.createDate)).toDateString();
-                item.status = item.closeDate == undefined ? "Open" : "Closed";
+                // item.humanDate = (new Date(item.createDate)).toDateString();
+                // item.status = item.closeDate == undefined ? "Open" : "Closed";
+                $rootScope.openAlertCount = item.closeDate ? $rootScope.openAlertCount : $rootScope.openAlertCount + 1;
+                $rootScope.alerts[i].statusBool = item.closeDate == undefined;
                 //If u want some custom props, please create them here to avoid making calculations in view
-
-
             })
         }
-
         return $rootScope.alerts;
     }
+
+
 }]);
 
 app.service('translationService', function ($resource) {

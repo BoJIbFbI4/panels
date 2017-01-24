@@ -23,13 +23,13 @@ angular.module('panelsApp')
                 params: {"text" : data}
             };
 
-            console.log("this is value!! : " + $scope.company)
+            console.log("this is value!! : " + $scope.company);
 
             $http.post(url, data, config).then(function (response) {
                 console.log(response)
             })
 
-        }
+        };
 
         $scope.getCurAlert = function () {
             return $rootScope.curAlert
@@ -40,7 +40,7 @@ angular.module('panelsApp')
             return dateHuman
         }
 
-        $scope.id = $rootScope.id
+        $scope.id = $rootScope.id;
 
         $scope.getCurAlertDate = function () {
 

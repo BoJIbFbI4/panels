@@ -64,13 +64,16 @@
             <!-- Add spacer, to align navigation to the right -->
             <div class="mdl-layout-spacer"></div>
             <!-- Navigation. We hide it in small screens. -->
+
+
             <div id="alerts" class="alerts" ng-show="isManager()">   <!--ALERTS FOR MANAGERS-->
-                <div class="mdl-badge" data-badge={{getAlerts().length}}>{{translation.alerts}}</div>
+                <div class="mdl-badge" data-badge={{openAlertCount}}></div>
 
             </div>
 
-            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                for="alerts">
+
+            <!--DropDown List Of Alerts            -->
+            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="alerts">
                 <li ng-click="alertInfo(x)" ng-repeat="x in getAlerts()" class="mdl-menu__item">{{x.message}}</li>
             </ul>
 
@@ -82,6 +85,8 @@
                     <option value="he">עברית</option>
                 </select>
             </nav>
+
+
         </div>
     </header>
 
@@ -106,11 +111,21 @@
                     <i class="material-icons">backup</i> {{translation.reportsList}}
                 </button>
             </li>
+
+
+
             <li>
-                <button id="alertsBtn" ng-click="isManager() ? alertTable() : createAlert()" class="mdl-button mdl-js-button">
+                <button
+                        id="alertsBtn"
+                        ng-click="isManager() ? alertTable() : createAlert()"
+                        class="mdl-button mdl-js-button">
+
                     <i class="material-icons">warning</i> {{translation.alertsBtn}}
                 </button>
             </li>
+
+
+
             <li>
                 <button ng-click="logout()" id="quit"
                         class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">

@@ -4,12 +4,8 @@
         <thead>
 
         <tr id="searchRow">
-            <th>
-                <i class="material-icons">search</i>
-            </th>
-            <th >
-                <input type="text" ng-model="search">
-            </th>
+            <th><i class="material-icons">search</i></th>
+            <th ><input type="text" ng-model="search"></th>
         </tr>
 
         <tr>
@@ -25,7 +21,11 @@
 
 
         <tbody>
-        <tr ng-repeat="x in getAlerts() | filter: search | orderBy : sortType : sortReverse ">
+        <!--table data-->
+        <tr ng-repeat="x in getAlerts() | filter: search | orderBy : sortType : sortReverse"
+            ng-click="alertInfo(x)"
+            ng-show="x.statusBool">
+
             <td class="mdl-data-table__cell--non-numeric">{{x.humanDate}}</td>
             <td>{{x.responsibleManager.name}}</td>
             <td>{{x.status}}</td>
