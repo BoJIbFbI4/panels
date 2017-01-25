@@ -33,8 +33,9 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
 
 
 
-        $rootScope.alertInfo = function (alert) {
+        $rootScope.alertInfo = function (alert,index) {
             $rootScope.curAlert = alert;
+            $rootScope.curAlert.index = index;
             console.log($scope.curAlert);
             console.log("Supervisory Id in alert = " + $rootScope.curAlert.supervisoryManager.id);
             console.log("Login Id = " + $rootScope.id);

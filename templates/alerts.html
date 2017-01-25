@@ -23,9 +23,10 @@
         <tbody>
         <!--table data-->
         <tr ng-repeat="x in getAlerts() | filter: search | orderBy : sortType : sortReverse"
-            ng-click="alertInfo(x)"
+            ng-click="alertInfo(x,$index)"
             ng-show="x.statusBool">
 
+            <td class="mdl-data-table__cell--non-numeric">{{$index}}</td>
             <td class="mdl-data-table__cell--non-numeric">{{x.humanDate}}</td>
             <td>{{x.responsibleManager.name}}</td>
             <td>{{x.status}}</td>
