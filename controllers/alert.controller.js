@@ -58,7 +58,7 @@ angular.module('panelsApp')
             };
             $http.get(url, config).then(function (response) {
                 console.log(response);
-                $rootScope.alerts.splice($rootScope.curAlert.index,1);
+                $rootScope.openAlerts.splice($rootScope.curAlert.index,1);
                 $rootScope.openAlertCount--;
                 $scope.hide();
             });

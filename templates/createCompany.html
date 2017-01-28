@@ -6,18 +6,22 @@
 
             <form action="">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="sample1">
-                    <label class="mdl-textfield__label" for="sample1">{{translation.companyName}}</label>
+                    <input
+                            class="mdl-textfield__input"
+                            type="text"
+                            id="sample1"
+                            ng-keypress="labelKeyPressed()">
+                    <label class="mdl-textfield__label" for="sample1" id="labelSample1" >{{translation.companyName}}</label>
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="sample2">
-                    <label class="mdl-textfield__label" for="sample2">{{translation.companyOwnerName}}</label>
+                    <label class="mdl-textfield__label" for="sample2" id="labelSample2">{{translation.companyOwnerName}}</label>
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="number" id="sample3">
-                    <label class="mdl-textfield__label" for="sample2">{{translation.telephoneNumber}}</label>
+                    <label class="mdl-textfield__label" for="sample3" id="labelSample3">{{translation.telephoneNumber}}</label>
                 </div>
 
 

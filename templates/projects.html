@@ -55,10 +55,11 @@
 
                         <div class="mdl-cell--6-col">
                             <!--__________________________________-->
-                            <div ng-show="setFileState($index,translation.choose)"></div>
+                            <!-- <div ng-show="setFileState($index,translation.choose)"></div> -->
                             <span class="mdl-card__supporting-text">
                                 <!--{{myFileChecked}}-->
                                 {{fileState[$index]}}
+                                <!-- {{fileStateLocal}} -->
                                 <!--{{translation.choose}}-->
                             </span>
                         </div>
@@ -90,7 +91,8 @@
                                 <i class="material-icons">attach_file</i>
                                 <input
                                         onchange="angular.element(this).scope().fileNameChanged(this)"
-                                        ng-model="selectedFile"
+                                        ng-change__="fileNameChanged(this)"
+                                        ng-model__="selectedFile"
                                         type="file"
                                         id={{"uploadBtn"+$index}}
                                         indexOfMyFile="{{$index}}"
@@ -137,4 +139,3 @@
         <div class="square square--mini"></div>
     </div>
 </div>
-
