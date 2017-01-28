@@ -56,12 +56,17 @@
                         <div class="mdl-cell--6-col">
                             <!--__________________________________-->
                             <!-- <div ng-show="setFileState($index,translation.choose)"></div> -->
-                            <span class="mdl-card__supporting-text">
+                            <input
+                              type="text"
+                              class="mdl-card__supporting-text"
+                              value="{{fileState[$index]}}"
+                              placeholder="{{translation.choose}}"
+                              readonly="true"/>
                                 <!--{{myFileChecked}}-->
-                                {{fileState[$index]}}
+
                                 <!-- {{fileStateLocal}} -->
                                 <!--{{translation.choose}}-->
-                            </span>
+
                         </div>
                         <div class="mdl-cell--2-col">
                             <!--<span>{{hideLoader[$index]}}</span>-->
