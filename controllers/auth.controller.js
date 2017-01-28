@@ -7,6 +7,10 @@ angular.module('panelsApp')
         $rootScope.layout = "";
         $scope.loginProcess = false;
 
+        $rootScope.filterOpenedAlerts = function (alert) {
+          return alert.statusBool == false
+        }
+
         $scope.getLogin = function () {
             var url = $rootScope.url + "/common/login";
             var authorizationData = btoa($scope.login + ":" + $scope.pass);
@@ -29,24 +33,15 @@ angular.module('panelsApp')
                         $state.go('companies')
                     }
                     if (response.type == "MANAGER") {
-                        console.log(response);
+                        // console.log(response);
                         $rootScope.alerts = response.supervisoryAlerts;
                         $rootScope.alerts =  $rootScope.alerts.concat(response.responsibleAlerts);
-                        console.log(' = = = = item.closeDate = = = = = ');
-
-                        $rootScope.alerts.forEach(function (item, i, arr) {
-                            item.humanDate = (new Date(item.createDate)).toDateString();
-                            item.status = item.closeDate == undefined ? "Open" : "Closed";
-                            $rootScope.alerts[i].statusBool = item.closeDate != undefined;
-                            $rootScope.openAlertCount = item.closeDate?$rootScope.openAlertCount:$rootScope.openAlertCount+1;
-                            //If u want some custom props, please create them here to avoid making calculations in view
-                        });
-
-                        console.log(" - - - $rootScope.alerts - - - ");
-                        console.log($rootScope.alerts);
-
-
-
+                        // console.log(' = = = = item.closeDate = = = = = ');
+                        $rootScope.openAlerts = $rootScope.alerts.filter(function (alert) {return alert.closeDate == undefined});
+                        $rootScope.openAlertCount = $rootScope.openAlerts.length
+                        // console.log(" - - - $rootScope.alerts - - - ");
+                        // console.log($rootScope.alerts);
+                        //
                         $state.go('projects', {managerID: $scope.id})
                     }
 
