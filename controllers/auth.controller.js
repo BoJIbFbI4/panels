@@ -37,22 +37,11 @@ angular.module('panelsApp')
                         $rootScope.alerts = response.supervisoryAlerts;
                         $rootScope.alerts =  $rootScope.alerts.concat(response.responsibleAlerts);
                         // console.log(' = = = = item.closeDate = = = = = ');
-                        $rootScope.openAlerts = $rootScope.alerts.filter($rootScope.filterOpenedAlerts);
-
-
-                        $rootScope.alerts.forEach(function (item, i, arr) {
-                            item.humanDate = (new Date(item.createDate)).toDateString();
-                            item.status = item.closeDate == undefined ? "Open" : "Closed";
-                            $rootScope.alerts[i].statusBool = item.closeDate != undefined;
-                            $rootScope.openAlertCount = item.closeDate?$rootScope.openAlertCount:$rootScope.openAlertCount+1;
-                            //If u want some custom props, please create them here to avoid making calculations in view
-                        });
-
+                        $rootScope.openAlerts = $rootScope.alerts.filter(function (alert) {return alert.closeDate == undefined});
+                        $rootScope.openAlertCount = $rootScope.openAlerts.length
                         // console.log(" - - - $rootScope.alerts - - - ");
                         // console.log($rootScope.alerts);
                         //
-
-
                         $state.go('projects', {managerID: $scope.id})
                     }
 

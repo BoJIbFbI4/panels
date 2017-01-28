@@ -107,22 +107,18 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
 
     $rootScope.getAlerts = function () {
         if ($scope.isManager() == true) {
-            $rootScope.openAlertCount = 0;
-
-            $rootScope.alerts.forEach(function (item, i, arr) {
-                // item.humanDate = (new Date(item.createDate)).toDateString();
-                // item.status = item.closeDate == undefined ? "Open" : "Closed";
-                $rootScope.openAlertCount = item.closeDate ? $rootScope.openAlertCount : $rootScope.openAlertCount + 1;
-                $rootScope.alerts[i].statusBool = item.closeDate == undefined;
+            $rootScope.openAlerts.forEach(function (item, i, arr) {
+                item.humanDate = (new Date(item.createDate)).toDateString();
+                item.status = item.closeDate == undefined ? "Open" : "Closed";
+                // $rootScope.openAlertCount = item.closeDate ? $rootScope.openAlertCount : $rootScope.openAlertCount + 1;
+                $rootScope.openAlerts[i].statusBool = item.closeDate == undefined;
                 //If u want some custom props, please create them here to avoid making calculations in view
             })
         }
-        console.log("$rootScope.alerts");
-        console.log($rootScope.alerts);
-        $rootScope.openAlerts = $rootScope.alerts.filter(function (alert) {return alert.statusBool});
-
-        console.log("$rootScope.openAlerts");
-        console.log($rootScope.openAlerts);
+        // $rootScope.openAlerts = $rootScope.openAlerts.filter(function (alert) {return alert.closeDate == undefined});
+        // console.log("$rootScope.openAlerts");
+        // console.log($rootScope.openAlerts);
+        $rootScope.openAlertCount=$rootScope.openAlerts.length;
         return $rootScope.openAlerts;
     }
 

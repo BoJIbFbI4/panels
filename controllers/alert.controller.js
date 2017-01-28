@@ -51,13 +51,15 @@ angular.module('panelsApp')
 
         $scope.closeAlert = function () {
             var url = $rootScope.url + "/managers/closeAlert/" + $rootScope.curAlert.id;
+            console.log(url);
             var config = {
                 headers: {
                     "Authorization": "Basic " + $rootScope.authorizationData
                 }
             };
             $http.get(url, config).then(function (response) {
-                console.log(response);
+                // console.log(response);
+                // console.log($rootScope.curAlert.index);
                 $rootScope.openAlerts.splice($rootScope.curAlert.index,1);
                 $rootScope.openAlertCount--;
                 $scope.hide();
