@@ -10,6 +10,9 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
     // $rootScope.url = "http://192.168.1.101:8080";
     // $rootScope.url = "http://10.0.0.17:8080";
 
+    $rootScope.labelKeyPressed = function(){
+      console.log('trololo');
+    }
 
     $scope.home = function () {
 
@@ -32,28 +35,34 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
     };
 
 
+    $rootScope.fieldChanged = function (event) {
+        console.log('event');
+        console.log(event);
+    };
 
-        $rootScope.alertInfo = function (alert) {
-            $rootScope.curAlert = alert;
-            console.log($scope.curAlert);
-            console.log("Supervisory Id in alert = " + $rootScope.curAlert.supervisoryManager.id);
-            console.log("Login Id = " + $rootScope.id);
-            $mdDialog.show({
-                controller: AlertInfoController,
-                templateUrl: 'templates/alertInfoWindow.html',
-                parent: angular.element(document.body),
-                targetEvent: alert,
-                clickOutsideToClose: true,
-                fullscreen: false // Only for -xs, -sm breakpoints.
+    $rootScope.alertInfo = function (alert, index) {
+        $rootScope.curAlert = alert;
+        $rootScope.curAlert.index = index;
+        console.log($scope.curAlert);
+        console.log("Supervisory Id in alert = " + $rootScope.curAlert.supervisoryManager.id);
+        console.log("Login Id = " + $rootScope.id);
+        $mdDialog.show({
+            controller: AlertInfoController,
+            templateUrl: 'templates/alertInfoWindow.html',
+            parent: angular.element(document.body),
+            targetEvent: alert,
+            clickOutsideToClose: true,
+            fullscreen: false // Only for -xs, -sm breakpoints.
+        })
+            .then(function (alert) {
+                $scope.curAlert = alert
+            }, function () {
+                console.log('Login process is :' + $scope.loginProcess);
+                $scope.curAlert = alert;
+
             })
-                .then(function (alert) {
-                    $scope.curAlert = alert
-                }, function () {
-                    console.log('Login process is :' + $scope.loginProcess);
-                    $scope.curAlert = alert;
+    };
 
-                })
-        };
 
     function AlertInfoController($scope, $mdDialog) {
 
@@ -95,7 +104,8 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
     };
 
 
-    $scope.getAlerts = function () {
+
+    $rootScope.getAlerts = function () {
         if ($scope.isManager() == true) {
             $rootScope.openAlertCount = 0;
 
@@ -107,7 +117,13 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
                 //If u want some custom props, please create them here to avoid making calculations in view
             })
         }
-        return $rootScope.alerts;
+        console.log("$rootScope.alerts");
+        console.log($rootScope.alerts);
+        $rootScope.openAlerts = $rootScope.alerts.filter(function (alert) {return alert.statusBool});
+
+        console.log("$rootScope.openAlerts");
+        console.log($rootScope.openAlerts);
+        return $rootScope.openAlerts;
     }
 
 
@@ -169,8 +185,3 @@ app.directive('fileModel', ['$parse', function ($parse) {
         }
     };
 }]);
-
-
-
-
-

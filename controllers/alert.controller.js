@@ -1,8 +1,8 @@
 angular.module('panelsApp')
-    .controller('AlertCtrl', ['$scope','$rootScope','$http', '$mdDialog', function ($scope, $rootScope, $http, $mdDialog) {
+    .controller('AlertCtrl', ['$scope', '$rootScope', '$http', '$mdDialog', function ($scope, $rootScope, $http, $mdDialog) {
 
-        $scope.sortType     = 'humanDate';   // set the default sort type
-        $scope.sortReverse  = false;
+        $scope.sortType = 'humanDate';   // set the default sort type
+        $scope.sortReverse = false;
         $scope.id = $rootScope.id;
 
         $scope.isCurrentSuperviser = function () {
@@ -16,11 +16,11 @@ angular.module('panelsApp')
         $scope.sendCustomAlert = function () {
 
             var url = $rootScope.url + "/admin/sendTextToGeneralOfProject/" + $scope.company;
-            var data= $scope.textAlert;
+            var data = $scope.textAlert;
 
-            var config = { headers:
-                {"Authorization": "Basic " + $rootScope.authorizationData},
-                params: {"text" : data}
+            var config = {
+                headers: {"Authorization": "Basic " + $rootScope.authorizationData},
+                params: {"text": data}
             };
 
             console.log("this is value!! : " + $scope.company);
@@ -51,25 +51,28 @@ angular.module('panelsApp')
 
         $scope.closeAlert = function () {
             var url = $rootScope.url + "/managers/closeAlert/" + $rootScope.curAlert.id;
-
-            var config = { headers:
-                {"Authorization": "Basic " + $rootScope.authorizationData}
-
-                 };
+            var config = {
+                headers: {
+                    "Authorization": "Basic " + $rootScope.authorizationData
+                }
+            };
             $http.get(url, config).then(function (response) {
-
-                console.log(response)
-            })
-        }
+                console.log(response);
+                $rootScope.openAlerts.splice($rootScope.curAlert.index,1);
+                $rootScope.openAlertCount--;
+                $scope.hide();
+            });
+            $scope.hide()
+        };
 
         $scope.setText = function () {
             var url = $rootScope.url + "/managers/setTextInAlert/" + $rootScope.curAlert.id;
 
-            var data= $('#inputText').val();
+            var data = $('#inputText').val();
 
-            var config = { headers:
-                {"Authorization": "Basic " + $rootScope.authorizationData},
-                params: {"text" : data}
+            var config = {
+                headers: {"Authorization": "Basic " + $rootScope.authorizationData},
+                params: {"text": data}
             };
 
             console.log("this is data!!! : " + data);

@@ -12,8 +12,8 @@ angular.module('panelsApp')
             $scope.selectedProject = '';
 
             $rootScope.setFileState = function (index, data) {
-                console.log(' - - - - data - - - - ');
-                console.log(data);
+                // console.log(' - - - - data - - - - ');
+                // console.log(data);
                 $rootScope.fileState[index] = data;
               return null
             };
@@ -52,16 +52,16 @@ angular.module('panelsApp')
             });
 
             $scope.fileNameChanged = function(me) {
-                console.log(me.parentElement);
                 var file = me.value.replace('C:\\fakepath\\',"");
                 var index = me.getAttribute('indexOfMyFile');
-                $rootScope.fileState[index] = file;
 
+                $rootScope.fileState[index] = file;
+                console.log($rootScope.fileState[index]);
+                console.log(me.value);
+                $scope.fileStateLocal = file
                 // for (i in me){
                 //     console.log(i);
                 // }
-
-
             };
 
                 // function for upload excel file with new users. Placed here because it use this questionary ID
