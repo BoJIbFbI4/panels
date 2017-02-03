@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+    <script src="routing.js"></script>
+    <script src="app.js"></script>
+
+
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Panels</title>
 
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?">
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
-    <link rel="stylesheet" href="resources/c3/c3.min.css" type="text/css">
-    <link rel="stylesheet" href="resources/mdl/material.css">
-    <link rel="stylesheet" href="resources/mdl/mdl-date/mdl-date-textfield.min.css">
-    <link rel="stylesheet" href="assets/styles/paletteBlueGreyMD.css">
-    <link rel="stylesheet" href="assets/styles/auth.css">
+    <link rel="stylesheet" href="./resources/mdl/material.css">
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?">
     <link rel="stylesheet" href="assets/styles/style.css">
+    <link rel="stylesheet" href="assets/styles/paletteBlueGreyMD.css">
+    <link rel="stylesheet" href="resources/mdl/mdl-date/mdl-date-textfield.min.css">
+    <link rel="stylesheet" href="resources/c3/c3.min.css">
+    <link rel="stylesheet" href="assets/styles/auth.css">
     <link rel="stylesheet" href="assets/styles/bootloader.css">
     <link rel="stylesheet" href="assets/styles/loginLoaderProcessBar.css">
     <link rel="stylesheet" href="assets/styles/attachExcelAnimation.css">
@@ -21,34 +30,11 @@
 
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="resources/mdl/material.js"></script>
-    <script src="resources/mdl/mdl-date/mdl-date-textfield.min.js"></script>
-    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="resources/c3/c3.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.2/angular-resource.min.js"></script>
-
-
-    <script src="./imports/html2canvas.js"></script>
-    <script src="./imports/pdfmake.min.js"></script>
-    <script src="./imports/vfs_fonts.js"></script>
-    <script src="./imports/FileSaver.js"></script>
-    <script src="./imports/jspdf.js"></script>
-
-
-    <script src="app.js"></script>
-    <!--angular material need this-->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-
 
 
 </head>
 <body ng-app="panelsApp" ng-controller="MainController">
+
 <!-- Always shows a header, even in smaller screens. -->
 <div id="menu" class="mdl-layout mdl-js-layout mdl-layout--fixed-header" ng-class="layout">
     <header class="mdl-layout__header">
@@ -65,15 +51,18 @@
             <!-- Add spacer, to align navigation to the right -->
             <div class="mdl-layout-spacer"></div>
             <!-- Navigation. We hide it in small screens. -->
+
+
             <div id="alerts" class="alerts" ng-show="isManager()">   <!--ALERTS FOR MANAGERS-->
-                <div class="mdl-badge" data-badge={{getAlerts().length}}>{{translation.alerts}}</div>
+                <div class="mdl-badge" data-badge={{openAlertCount}}></div>
 
             </div>
 
-            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                for="alerts">
-                <li ng-click="alertInfo(x)" ng-repeat="x in getAlerts()" class="mdl-menu__item">{{x.message}}</li>
-            </ul>
+
+            <!--DropDown List Of Alerts            -->
+            <!-- <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="alerts">
+                <li ng-click="alertInfo(x)" ng-repeat_="x in getAlerts()" class="mdl-menu__item">{{x.message}}</li>
+            </ul> -->
 
 
             <nav class="mdl-navigation">
@@ -83,42 +72,67 @@
                     <option value="he">עברית</option>
                 </select>
             </nav>
+
+
         </div>
     </header>
 
     <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">{{translation[panelUser]}}
-            <img ng-src="{{userFace}}" alt="" width="45" height="45" style="border-radius: 50%"></span>
+        <span class="mdl-layout-title">
+            <img src="assets/img/logo.png" class="logo" alt="Panels logo">
+        </span>
         <!--Admin Menu START here-->
         <ul class="adminMenu">
-            <li ng-hide="chengeMenu"><span><button id="managementList" class="mdl-button mdl-js-button">
-           <i class="material-icons">card_travel</i>  {{translation.managementList}}
-        </button></span></li>
-            <li><span><button id="surveysList" class="mdl-button mdl-js-button">
-           <i class="material-icons">done</i>   {{translation.surveysList}}
-        </button></span></li>
-            <li><span><button id="reportsList" class="mdl-button mdl-js-button">
-            <i class="material-icons">backup</i>  {{translation.reportsList}}
-        </button></span></li>
-            <li><span><button ng-click="isManager() ? alertTable() : createAlert()" id="alertsBtn" class="mdl-button mdl-js-button">
-            <i class="material-icons">warning</i>  {{translation.alertsBtn}}
-        </button></span></li>
-            <li><span><button ng-click="logout()" id="quit"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-            <i class="material-icons md-light">exit_to_app</i>  {{translation.quit}}
-        </button></span></li>
+
+            <li ng-hide="chengeMenu">
+                <button id="managementList" class="mdl-button mdl-js-button">
+                    <i class="material-icons">card_travel</i> {{translation.managementList}}
+                </button>
+            </li>
+            <li ng-hide="chengeMenu">
+                <button id="surveysList" class="mdl-button mdl-js-button">
+                    <i class="material-icons">done</i> {{translation.surveysList}}
+                </button>
+            </li>
+            <li>
+                <button id="reportsList" class="mdl-button mdl-js-button">
+                    <i class="material-icons">backup</i> {{translation.reportsList}}
+                </button>
+            </li>
+
+
+
+            <li>
+                <button
+                        id="alertsBtn"
+                        ng-click="isManager() ? alertTable() : createAlert()"
+                        class="mdl-button mdl-js-button">
+
+                    <i class="material-icons">warning</i> {{translation.alertsBtn}}
+                </button>
+            </li>
+
+
+
+            <li>
+                <button ng-click="logout()" id="quit"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                    <i class="material-icons md-light">exit_to_app</i> {{translation.quit}}
+                </button>
+            </li>
         </ul>
 
         <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="managementList">
-            <li class="mdl-menu__item">{{translation.CreateOrganization}}</li>
+            <li ui-sref="createcompany" class="mdl-menu__item">{{translation.CreateOrganization}}</li>
             <li ui-sref="createproject" class="mdl-menu__item">{{translation.CreateProject}}</li>
-            <li class="mdl-menu__item">{{translation.EditOrganizationProject}}</li>
+            <li class="mdl-menu__item">{{translation.EditOrganization}}</li>
+            <li class="mdl-menu__item">{{translation.EditProject}}</li>
         </ul>
 
-        <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="surveysList">
-            <li ng-hide="chengeMenu" class="mdl-menu__item">{{translation.CreateSurvey}}</li>
-            <li ng-hide="chengeMenu" class="mdl-menu__item">{{translation.EditSurvey}}</li>
-            <li class="mdl-menu__item">{{translation.ViewSurvey}}</li>
+        <ul ng-hide="chengeMenu" class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="surveysList">
+            <li class="mdl-menu__item">{{translation.CreateSurvey}}</li>
+            <li class="mdl-menu__item">{{translation.EditSurvey}}</li>
+            <!--<li class="mdl-menu__item">{{translation.ViewSurvey}}</li>-->
         </ul>
 
         <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="reportsList">
@@ -136,7 +150,27 @@
 </div>
 <!-- test-->
 
-<script src="routing.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="./resources/mdl/material.js"></script>
+
+<script src="resources/mdl/mdl-date/mdl-date-textfield.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="resources/c3/c3.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.2/angular-resource.min.js"></script>
+<script src="./imports/html2canvas.js"></script>
+<script src="./imports/pdfmake.min.js"></script>
+<script src="./imports/vfs_fonts.js"></script>
+<script src="./imports/FileSaver.js"></script>
+<script src="./imports/jspdf.js"></script>
+
+<!--angular material need this-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+
+<!--<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>-->
 <script src="./controllers/charts.controller.js"></script>
 <script src="./controllers/companies.controller.js"></script>
 <script src="./controllers/project.controller.js"></script>

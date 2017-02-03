@@ -7,6 +7,10 @@ angular.module('panelsApp')
         $rootScope.layout = "";
         $scope.loginProcess = false;
 
+        $rootScope.filterOpenedAlerts = function (alert) {
+          return alert.statusBool == false
+        }
+
         $scope.getLogin = function () {
             var url = $rootScope.url + "/common/login";
             var authorizationData = btoa($scope.login + ":" + $scope.pass);
@@ -23,14 +27,21 @@ angular.module('panelsApp')
                     $rootScope.id = response.id;
                     $rootScope.type = response.type;
 
+                    $rootScope.openAlertCount = 0;
+
                     if (response.type == "ADMIN") {
                         $state.go('companies')
                     }
                     if (response.type == "MANAGER") {
-                        console.log(response)
+                        // console.log(response);
                         $rootScope.alerts = response.supervisoryAlerts;
                         $rootScope.alerts =  $rootScope.alerts.concat(response.responsibleAlerts);
-
+                        // console.log(' = = = = item.closeDate = = = = = ');
+                        $rootScope.openAlerts = $rootScope.alerts.filter(function (alert) {return alert.closeDate == undefined});
+                        $rootScope.openAlertCount = $rootScope.openAlerts.length
+                        // console.log(" - - - $rootScope.alerts - - - ");
+                        // console.log($rootScope.alerts);
+                        //
                         $state.go('projects', {managerID: $scope.id})
                     }
 

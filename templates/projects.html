@@ -1,7 +1,7 @@
 <div class="mainView" class="projects" ng-controller="ProjectCtrl">
 
     <div class="mdl-grid">
-        <div
+        <divb
                 class="mdl-cell mdl-cell--4-col mdl-cell mdl-cell--4-col-phone"
                 ng-repeat="project in projects"
         >
@@ -49,18 +49,24 @@
                         <b>{{translation.ShowSurveys}}</b>
                     </a>
                 </div>
-                <div
+                <div ng-hide="chengeMenu"
                         class="mdl-card__actions mdl-card--border">
-                    <div class="mdl-grid mdl-grid--no-spacing">
+                    <div  class="mdl-grid mdl-grid--no-spacing">
 
                         <div class="mdl-cell--6-col">
                             <!--__________________________________-->
-                            <div ng-show="setFileState($index,translation.choose)"></div>
-                            <span class="mdl-card__supporting-text">
+                            <!-- <div ng-show="setFileState($index,translation.choose)"></div> -->
+                            <input
+                              type="text"
+                              class="mdl-card__supporting-text"
+                              value="{{fileState[$index]}}"
+                              placeholder="{{translation.choose}}"
+                              readonly="true"/>
                                 <!--{{myFileChecked}}-->
-                                {{fileState[$index]}}
+
+                                <!-- {{fileStateLocal}} -->
                                 <!--{{translation.choose}}-->
-                            </span>
+
                         </div>
                         <div class="mdl-cell--2-col">
                             <!--<span>{{hideLoader[$index]}}</span>-->
@@ -90,7 +96,8 @@
                                 <i class="material-icons">attach_file</i>
                                 <input
                                         onchange="angular.element(this).scope().fileNameChanged(this)"
-                                        ng-model="selectedFile"
+                                        ng-change__="fileNameChanged(this)"
+                                        ng-model__="selectedFile"
                                         type="file"
                                         id={{"uploadBtn"+$index}}
                                         indexOfMyFile="{{$index}}"
@@ -137,4 +144,3 @@
         <div class="square square--mini"></div>
     </div>
 </div>
-

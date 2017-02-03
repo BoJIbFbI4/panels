@@ -1,58 +1,80 @@
 /**
  * Created by Gladkov Kirill on 12/12/2016.
  */
-angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$http', '$state', '$filter', 'fileUpload', '$stateParams', 'getChartData', '$mdDialog', 'serviceButtons',
-    function ($scope, $rootScope, $http, $state, $filter, fileUpload, $stateParams, getChartData, $mdDialog, serviceButtons) {
+angular.module('panelsApp').controller('ChartsCtrl',
+    ['$scope', '$rootScope', '$state', '$filter', 'fileUpload', '$stateParams', 'getChartData', '$mdDialog', 'serviceButtons', 'dialogChartService',
+        function ($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChartData, $mdDialog, serviceButtons, dialogChartService) {
 
-        $scope.chartsArray = [];
+            $scope.chartsArray = [];
 
-        $rootScope.headerTitle = "charts";
-        $rootScope.layout = $state.current.data.layout; //-> show left side menu
-        $rootScope.isUpload = false;
+            $rootScope.headerTitle = "charts";
+            $rootScope.layout = $state.current.data.layout; //-> show left side menu
+            $rootScope.isUpload = false;
+            $rootScope.employee = {};
 
-        var stats = {};
-        if ($stateParams.projectID) {
-            var projectId = $stateParams.projectID
-        }// <-- take this projectID from project template and use it into request below
+            var stats = {};
+            if ($stateParams.projectID) {
+                var projectId = $stateParams.projectID
+            }// <-- take this projectID from project template and use it into request below
 
-        if ($stateParams.projectName) {
-            $scope.$parent.$parent.projectName = $stateParams.projectName;
-        }// <-- if add this to root scope will be problems
+            if ($stateParams.projectName) {
+                $scope.$parent.$parent.projectName = $stateParams.projectName;
+            }// <-- if add this to root scope will be problems
 
-        $scope.$on("$destroy", function () {
-            $scope.$parent.$parent.projectName = "";
-            console.log("EXITING");
-        });
+            $scope.$on("$destroy", function () {
+                $scope.$parent.$parent.projectName = "";
+                console.log("EXITING");
+            });
 
 
-        $scope.$watchGroup(['dateStart', 'dateEnd'], function (newValues, oldValues) { //<-- watch input "to date". if it changed - send new req with a new date
-            getChartData.getQuestionary(projectId)
-                .then(function (response) {
-                    $scope.createDate = $filter("date")(newValues[0] || response.createDate, 'yyyy-MM-dd');
-                    $scope.userDate = $filter("date")(newValues[1] || Date.now(), 'yyyy-MM-dd');
-                    $scope.minFromDate = $filter("date")(response.createDate, 'yyyy-MM-dd');
-                    $scope.maxFromDate = $scope.userDate;
-                    $scope.minToDate = $scope.createDate;
-                    $scope.maxToDate = $filter("date")(response.endDate || Date.now(), 'yyyy-MM-dd');
-                    console.log('RESPONSE getQuestionary: ', response);
-                    $scope.exportToXLS = function () {
-                        return serviceButtons.exportToXLS($scope.createDate, $scope.userDate, response.id)
-                    };
-                    return response;
-                })
-                .then(function (response) {
-                    return getChartData.getAnalisys(response.id, $scope.createDate, $scope.userDate);
-                })
+            $scope.$watchGroup(['dateStart', 'dateEnd'], function (newValues, oldValues) { //<-- watch input "to date". if it changed - send new req with a new date
+                getChartData.getQuestionary(projectId)
+                    .then(function (response) {
 
-                .then(function (response) {
+                        $scope.createDate = $filter("date")(newValues[0] || response.createDate, 'yyyy-MM-dd');
+                        $scope.userDate = $filter("date")(newValues[1] || Date.now(), 'yyyy-MM-dd');
+                        $scope.minFromDate = $filter("date")(response.createDate, 'yyyy-MM-dd');
+                        $scope.maxFromDate = $scope.userDate;
+                        $scope.minToDate = $scope.createDate;
+                        $scope.maxToDate = $filter("date")(response.endDate || Date.now(), 'yyyy-MM-dd');
+                        console.log('RESPONSE getQuestionary: ', response);
+
+                        $scope.exportToXLS = function () {
+                            return serviceButtons.exportToXLS($scope.createDate, $scope.userDate, response.id)
+                        };
+
+                        $scope.showtimeLineChart = function () {
+                            serviceButtons.getScheduleIsFullyAnswered(response.id).then(function (response) {
+
+                                var names = dialogChartService.getModalChartData(response).namesArr;
+                                var val = dialogChartService.getModalChartData(response).valuesArr.map(function (item, i, arr){
+                                    return typeof item === "string" ? item : item / 100;
+                                });
+                                console.log("dates names: " ,names);
+                                console.log("dates values: ", val);
+
+                                testBarChartDraw(names, val, "4_1");
+
+
+                            });
+                            $scope.showChartDialogDates();
+                        };
+
+                        return response;
+                    })
+                    .then(function (response) {
+                        return getChartData.getAnalisys(response.id, $scope.createDate, $scope.userDate);
+
+                    }).then(function (response) {
                     $scope.totalIntroduced = response.questionary.statistics.usersRespondented;
                     stats = response.questionary.statistics;
+
                     var questions = response.questionary.questions;
                     var usersResponded = response.countUserByDate;
 
-                    console.log('get ANALISYS RESPONSE DATA: ', response);
-                    console.log('count users by Date: ', usersResponded);
+
                     for (var i = 0; i < questions.length; i++) {
+
                         if (questions[i].questionType == 1) {
                             var rating = [''];
                             var ratingTitles = ['x'];
@@ -73,12 +95,19 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             var satisfiedRaiting = [''];
                             var satisfiedRaitingTitile = ['x'];
                             var satisfiedGPA = 0;
+                            var pieColumns = [];
+                            var pieColumnsElement = [];
 
                             for (var x = 0; x < questions[i].answers.length; x++) {
                                 // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
                                 satisfiedGPA += questions[i].answers[x].usersRespondented * (x + 1);
                                 satisfiedRaiting.push(((questions[i].answers[x].usersRespondented * 100) / usersResponded) / 100);
                                 satisfiedRaitingTitile.push(questions[i].answers[x].title);
+
+                                pieColumnsElement.push(questions[i].answers[x].title);
+                                pieColumnsElement.push(((questions[i].answers[x].usersRespondented * 100) / usersResponded) / 100);
+                                pieColumns.push(pieColumnsElement);
+                                pieColumnsElement = [];
                             }
                             //used Math.round to round up to 2 decimal
                             satisfiedGPA = Math.round((gpa / usersResponded) * 100) / 100;
@@ -87,23 +116,15 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         if (questions[i].questionType == 3) {
                             var diSatisfiedRaiting = [''];
                             var diSatisfiedRaitingTitle = ['x'];
-                            var pieColumns = [];
-                            var pieColumnsElement = [];
 
                             for (var y = 0; y < questions[i].answers.length; y++) {
                                 // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
                                 diSatisfiedRaiting.push(((questions[i].answers[y].usersRespondented * 100) / usersResponded) / 100);
                                 diSatisfiedRaitingTitle.push(questions[i].answers[y].title);
-                                pieColumnsElement.push(questions[i].answers[y].title);
-                                pieColumnsElement.push(((questions[i].answers[y].usersRespondented * 100) / usersResponded) / 100);
-                                pieColumns.push(pieColumnsElement);
-                                pieColumnsElement = [];
                             }
                         }
                     }
 
-                    //charts page1 -> block1
-                    barChartDraw(ratingTitles, rating);
                     var donutChart = c3.generate({
                         bindto: '#chart_gauge',
                         title: {
@@ -115,38 +136,140 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             ],
                             type: 'gauge',
                             onclick: function (d, i) {
-                                // TODO: Modal Charts Window
-                                $scope.showDialog('templates/diagramsPage2.html');
+                                getChartData.getAnalisysDrillDown(questionID, $scope.createDate, $scope.userDate).then(function (response) {
 
-                                getChartData.getAnalisysByCities(questionID, $scope.createDate, $scope.userDate).then(function (response) {
-                                    // console.log('city analisys log: ',response);
-                                    var sitiesNames = ['x'];
-                                    var sitiesValues = [''];
-                                    for (var city in response) {
-                                        console.log('city analisys', city);
-                                        console.log('city values: ', response[city]);
-                                        sitiesNames.push(city);
-                                        sitiesValues.push(response[city])
-                                    }
-                                })
+                                    var citiesNames = dialogChartService.getModalChartData(response).namesArr;
+                                    var citiesValues = dialogChartService.getModalChartData(response).valuesArr;
+
+                                    c3.generate({
+                                        bindto: '#chart2_1',
+                                        title: {text: 'שביעות רצון ממוצעת - מוקדים'},
+                                        data: {
+                                            x: 'x',
+                                            columns: [citiesNames, citiesValues],
+                                            labels: {
+                                                format: function (v, id, i, j) {
+                                                    return (v).toFixed(2)
+                                                }
+                                            },
+                                            type: 'bar',
+                                            selection: {
+                                                enabled: true
+                                            },
+                                            onclick: function () {
+                                                var currCityID = arguments[0].x + 1;
+                                                getChartData.getAnalisysDrillDown(questionID, $scope.createDate, $scope.userDate, citiesNames[currCityID])
+                                                    .then(function (response) {
+                                                        var groupNames = dialogChartService.getModalChartData(response).namesArr;
+                                                        var groupValues = dialogChartService.getModalChartData(response).valuesArr;
+
+                                                        c3.generate({
+                                                            bindto: '#chart2_2',
+                                                            title: {
+                                                                text: 'שביעות רצון ממוצעת - צוותים'
+                                                            },
+                                                            data: {
+                                                                x: 'x',
+                                                                columns: [groupNames, groupValues],
+                                                                type: 'bar',
+                                                                selection: {enabled: true},
+                                                                labels: {
+                                                                    format: function (v, id, i, j) {
+                                                                        return (v).toFixed(2)
+                                                                    }
+                                                                },
+                                                                onclick: function () {
+                                                                    var currGroupID = arguments[0].x + 1;
+                                                                    getChartData.getAnalisysDrillDown(questionID, $scope.createDate, $scope.userDate, citiesNames[currCityID], groupNames[currGroupID])
+                                                                        .then(function (response) {
+
+                                                                            $rootScope.employee = response;
+
+                                                                            console.log(response);
+                                                                        });
+                                                                }
+                                                            },
+                                                            axis: {
+                                                                x: {
+                                                                    type: 'category'
+                                                                },
+                                                                y: {
+                                                                    max: 5,
+                                                                    min: 0,
+                                                                    padding: {
+                                                                        top: 0,
+                                                                        bottom: 0
+                                                                    }
+                                                                }
+                                                            },
+                                                            bar: {
+                                                                width: {
+                                                                    ratio: 0.3
+                                                                }
+                                                            },
+                                                            size: {
+                                                                width: 600,
+                                                                height: 300
+                                                            },
+                                                            // color: {
+                                                            //     pattern: ['#61A0D7']
+                                                            // },
+                                                            legend: {
+                                                                show: false
+                                                            }
+                                                        });
+
+                                                    })
+                                            }
+                                        },
+                                        axis: {
+                                            x: {
+                                                type: 'category'
+                                            },
+                                            y: {
+                                                max: 5,
+                                                min: 0,
+                                                padding: {
+                                                    top: 0,
+                                                    bottom: 0
+                                                }
+                                            }
+                                        },
+                                        bar: {
+                                            width: {
+                                                ratio: 0.3
+                                            }
+                                        },
+                                        size: {
+                                            height: 300,
+                                            width: 600
+                                        },
+                                        color: {
+                                            pattern: ['#61A0D7']
+                                        },
+                                        legend: {
+                                            show: false
+                                        }
+                                    });
+                                });
+                                $scope.showChartDialog();
                             }
                         },
                         gauge: {
                             label: {
                                 format: function (value, ratio) {
-                                    return value;
+                                    return value
                                 },
                                 show: true // to turn off the min/max labels.
                             },
-                            min: 1, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
-                            max: 5, // 100 is default
+                            min: 1,
+                            max: 5,
                             units: ''
-//    width: 39 // for adjusting arc thickness
                         },
                         color: {
-                            pattern: ['#FF0000', '#F97600', '#F6C600', '#4FF239'], // the three color levels for the percentage values.
+                            pattern: ['#FF0000', '#F97600', '#F6C600', '#4FF239'],
                             threshold: {
-                                max: 5, // 100 is default
+                                max: 5,
                                 values: [30, 60, 90, 100]
                             }
                         },
@@ -154,22 +277,28 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             height: 200
                         }
                     });
-                    //charts page1 -> block2
-                    barChartDraw(satisfiedRaitingTitile, satisfiedRaiting);
-                    //charts page1 -> block3
-                    barChartDraw(diSatisfiedRaitingTitle, diSatisfiedRaiting, 3);
+
+                    var timeLineChart = c3.generate({
+                        data: {
+                            bindto: "#chart3_1",
+                            columns: [
+                                ['data1', 300, 350, 300, 0, 0, 0],
+                                ['data2', 130, 100, 140, 200, 150, 50]
+                            ],
+                            types: {
+                                data1: 'area',
+                                data2: 'area-spline'
+                            }
+                        }
+                    });
                     var pieChart = c3.generate({
                         title: {
                             text: "אחוז סיום טיפול בפניות"
                         },
                         bindto: '#chart_gauge3',
                         data: {
-                            // iris data from R
                             columns: pieColumns,
                             type: 'pie'
-                            // onclick: function (d, i) { console.log("onclick", d, i); },
-                            // onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-                            // onmouseout: function (d, i) { console.log("onmouseout", d, i); }
                         },
                         color: {
                             pattern: ['#01B8AA', '#FD625E', '#6E33B8']
@@ -178,218 +307,232 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             height: 250
                         }
                     });
-                    //charts page2 -> block1
-                    var chart4 = c3.generate({
-                        bindto: '#chart2_1',
-                        title: {
-                            text: 'שביעות רצון ממוצעת - מוקדים'
-                        },
-                        data: {
-                            x: 'x',
-                            columns: [
-                                ['x', 'שלוחת ק.שמונה', 'שלוחת חיפה', 'שלוחת אילת', 'מוקד ת"ב'],
-                                ['שבע/ת רצון', 4.6, 2.9, 3.8, 4.2]
-                            ],
-                            type: 'bar',
-                            selection: {
-                                enabled: true
-                            },
-                            onclick: function () {
-                                console.log(arguments[0]);
 
-                                // $state.go('diagramsPage2.diagramsPage3')
-                            }
-                        },
-                        axis: {
-                            x: {
-                                type: 'category'
-                            },
-                            y: {
-                                tick: {
-                                    // format: d3.format('%')
-                                    // values:[0.25,0.5,0.75,0.1]
-                                },
-                                max: 5,
-                                min: 1,
-                                padding: {
-                                    top: 0,
-                                    bottom: 0
-                                }
-                            }
-                        },
-                        bar: {
-                            width: {
-                                ratio: 0.3
-                            }
-                        },
-                        size: {
-                            height: 300,
-                            width: 600
-                        },
-                        color: {
-                            pattern: ['#61A0D7']
-                        }
-                    });
-                    //charts page2 -> block2
-                    var chart5 = c3.generate({
-                        bindto: '#chart2_2',
+                    //charts page1 -> block1
+                    barChartDraw(ratingTitles, rating);
+                    //charts page1 -> block2
+                    barChartDraw(ratingTitles, rating);
+                    var donutChart2 = c3.generate({
+                        bindto: '#chart_gauge2',
                         title: {
-                            text: 'שביעות רצון ממוצעת - צוותים'
+                            text: 'ממוצע שביעות רצון'
                         },
                         data: {
-                            x: 'x',
                             columns: [
-                                ['x', 'צוות חיים', 'צוות יואל', 'צוות איריס', 'צוות אלי'],
-                                ['שבע/ת רצון', 2.6, 3.7, 4.5, 4.6]
+                                ['GPA', gpa]
                             ],
-                            type: 'bar',
-                            selection: {
-                                enabled: true
-                            },
-                            onclick: function (event) {
-                                // console.log(event.value);
-                                //$state.go('diagramsPage2.diagramsPage3')
-                            }
+                            type: 'gauge'
                         },
-                        axis: {
-                            x: {
-                                type: 'category'
-                            },
-                            y: {
-                                tick: {
-                                    // format: d3.format('%')
-                                    // values:[0.25,0.5,0.75,0.1]
+                        gauge: {
+                            label: {
+                                format: function (value, ratio) {
+                                    return value
                                 },
-                                max: 5,
-                                min: 1,
-                                padding: {
-                                    top: 10,
-                                    bottom: 0
-                                }
-                            }
+                                show: true // to turn off the min/max labels.
+                            },
+                            min: 1,
+                            max: 5,
+                            units: ''
                         },
-                        bar: {
-                            width: {
-                                ratio: 0.3
+                        color: {
+                            pattern: ['#FF0000', '#F97600', '#F6C600', '#4FF239'],
+                            threshold: {
+                                max: 5,
+                                values: [30, 60, 90, 100]
                             }
                         },
                         size: {
-                            height: 215
-                        },
-                        color: {
-                            pattern: ['#B887AD']
+                            height: 200
                         }
                     });
+                    //charts page1 -> block3
+                    barChartDraw(diSatisfiedRaitingTitle, diSatisfiedRaiting, 3);
+
+
                     $scope.chartsArray = [];
                 });
-        });
-        $scope.exportToPDF = function () {
-            serviceButtons.exportToPDF();
-        };
-        $scope.showStat = function () {
-            $("td:last-child").append("<span>%</span>");
-            $scope.showDialog('templates/diagramsPageStat.html');
-        };
-        $scope.showDialog = function (tamplateUrl) {
-            $mdDialog.show({
-                locals: {translation: $scope.translation},
-                controller: DialogController,
-                templateUrl: tamplateUrl,
-                parent: angular.element(document.body),
-                // targetEvent: d,
-                clickOutsideToClose: true,
-                fullscreen: false // Only for -xs, -sm breakpoints.
-
             });
-        };
 
-        //-----------draw charts function----------//
-        function barChartDraw(namesArr, dataArr, questionaryType) {
-            var obj = {};
-            obj.title = {};
-            obj.data = {};
-            obj.data.labels = {};
-            obj.axis = {};
-            obj.axis.x = {};
-            obj.axis.y = {};
-            obj.axis.y.tick = {};
-            obj.bindto = '#chart' + $scope.chartsArray.length;
-            obj.title.text = 'התפלגות שביעות רצון מהשירות';
-            obj.data.x = 'x';
-            obj.data.columns = [namesArr, dataArr];
-            obj.data.type = 'bar';
-            obj.data.labels.format = function (v, id, i, j) {
-                return (v * 100).toFixed(3) + '%'
+            $scope.exportToPDF = function () {
+                serviceButtons.exportToPDF();
             };
-            obj.axis.x.type = 'category';
-            obj.axis.y.tick.format = d3.format('%');
-            obj.axis.y.tick.values = [0.25, 0.5, 0.75, 1];
-            obj.axis.y.padding = {};
-            obj.axis.y.max = 1;
-            obj.axis.y.min = 0;
-            obj.axis.y.padding.top = 0;
-            obj.axis.y.padding.bottom = 0;
-            obj.bar = {};
-            obj.bar.width = {};
-            obj.bar.width.ratio = 0.6;
-            obj.size = {};
-            obj.legend = {};
-            obj.color = {};
-            obj.color.pattern = ['#3AAEF2'];
-            obj.size.height = 215;
-            obj.legend.show = false;
+            $scope.showStat = function () {
+                $scope.showDialog('templates/diagramsPageStat.html');
+            };
 
-            var chart = c3.generate(obj);
 
-            if (questionaryType == 3) {
-                setColumnBarColors(obj.bindto);
+            //-----------show dialogs functions----------//
+            $scope.showDialog = function (tamplateUrl) {
+                $mdDialog.show({
+                    locals: {translation: $scope.translation},
+                    controller: DialogController,
+                    templateUrl: tamplateUrl,
+                    parent: angular.element(document.body),
+                    // targetEvent: d,
+                    clickOutsideToClose: true,
+                    fullscreen: false // Only for -xs, -sm breakpoints.
+
+                });
+            };
+            $scope.showChartDialog = function () {
+                $mdDialog.show({
+                    controller: ChartsDialogController,
+                    templateUrl: 'templates/diagramsPage2.html',
+                    parent: angular.element(document.body),
+                    // targetEvent: d,
+                    clickOutsideToClose: true,
+                    fullscreen: false // Only for -xs, -sm breakpoints.
+
+                });
+            };
+            $scope.showChartDialogDates = function () {
+                $mdDialog.show({
+                    controller: ChartsDialogController,
+                    templateUrl: 'templates/diagramsTimeLinePage.html',
+                    parent: angular.element(document.body),
+                    // targetEvent: d,
+                    clickOutsideToClose: true,
+                    fullscreen: false // Only for -xs, -sm breakpoints.
+
+                });
+            };
+
+            //-----------draw charts function----------//
+            function barChartDraw(namesArr, dataArr, questionaryType) {
+                var colorScale = d3.scale.category10();
+
+                var obj = {};
+                obj.title = {};
+                obj.data = {};
+                obj.data.labels = {};
+                obj.data.color;
+                obj.axis = {};
+                obj.axis.x = {};
+                obj.axis.y = {};
+                obj.axis.y.tick = {};
+                obj.bindto = '#chart' + $scope.chartsArray.length;
+                obj.title.text = 'התפלגות שביעות רצון מהשירות';
+                obj.data.x = 'x';
+                obj.data.columns = [namesArr, dataArr];
+                obj.data.type = 'bar';
+                obj.data.labels.format = function (v, id, i, j) {
+                    return (v * 100).toFixed(0) + '%'
+                };
+                obj.axis.x.type = 'category';
+                obj.axis.y.tick.format = d3.format('%');
+                obj.axis.y.tick.values = [0.25, 0.5, 0.75, 1];
+                obj.axis.y.padding = {};
+                obj.axis.y.max = 1;
+                obj.axis.y.min = 0;
+                obj.axis.y.padding.top = 0;
+                obj.axis.y.padding.bottom = 0;
+                obj.bar = {};
+                obj.bar.width = {};
+                obj.bar.width.ratio = 0.6;
+                obj.size = {};
+                obj.legend = {};
+                obj.color = {};
+                obj.color.pattern = ['#3AAEF2'];
+                obj.size.height = 215;
+                obj.legend.show = false;
+
+                if (questionaryType == 3) {
+                    obj.data.color = function(inColor, data) {
+                        if(data.index !== undefined) {
+                            return colorScale(data.index);
+                        }
+
+                        return inColor;
+                    };
+                }
+                var chart = c3.generate(obj);
+                $scope.chartsArray.push(obj);
+                return chart;
             }
-            $scope.chartsArray.push(obj);
+            function testBarChartDraw(namesArr, dataArr, bindto ,chartType ,questionaryType) {
+                var obj = {};
+                obj.title = {};
+                obj.data = {};
+                obj.data.labels = {};
+                obj.axis = {};
+                obj.axis.x = {};
+                obj.axis.y = {};
+                obj.axis.y.tick = {};
+                obj.bindto = '#chart' + bindto;
+                obj.title.text = 'התפלגות שביעות רצון מהשירות';
+                obj.data.x = 'x';
+                obj.data.columns = [namesArr, dataArr];
+                obj.data.type = chartType;
+                obj.data.labels.format = function (v, id, i, j) {
+                    return (v * 100).toFixed(0) + '%'
+                };
+                obj.axis.x.type = 'category';
+                obj.axis.y.tick.format = d3.format('%');
+                obj.axis.y.tick.values = [0.25, 0.5, 0.75, 1];
+                obj.axis.y.padding = {};
+                obj.axis.y.max = 1;
+                obj.axis.y.min = 0;
+                obj.axis.y.padding.top = 20;
+                obj.axis.y.padding.bottom = 0;
+                obj.bar = {};
+                obj.bar.width = {};
+                obj.bar.width.ratio = 0.6;
+                obj.size = {};
+                obj.legend = {};
+                obj.color = {};
+                obj.color.pattern = ['#3AAEF2'];
+                obj.size.height = 215;
+                obj.legend.show = false;
 
+                var chart = c3.generate(obj);
+                if (questionaryType == 3) {
+                    setColumnBarColors(obj.bindto);
+                }
+                $scope.chartsArray.push(obj);
+                return chart;
+            }
 
-            return chart;
-        }
+            //-----------dialog window controllers----------//
+            function DialogController($scope, $mdDialog, translation) {
+                $scope.translation = translation;
+                $scope.stats = stats;
+                $scope.stats["responseRate"] = $scope.stats["responseRate"] + '%';
 
-        //setup colored chart
-        function setColumnBarColors(chartContainer) {
-            var colors = ['#9a4d6f', '#c76c47', '#f85115', '#d9b099', '#d4ba2f'];
-            $(chartContainer + ' .c3-chart-bars .c3-shape').each(function (index) {
-                this.style.cssText += 'fill: ' + colors[index] + ' !important; stroke: ' + colors[index] + '; !important';
-            });
+                $scope.hide = function () {
+                    $mdDialog.hide();
+                };
 
-            $(chartContainer + ' .c3-chart-texts .c3-text').each(function (index) {
-                this.style.cssText += 'fill: ' + colors[index] + ' !important;';
-            });
-        }
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
 
-        //-----------draw charts function----------//
-        function DialogController($scope, $mdDialog, translation) {
-            $scope.translation = translation;
-            $scope.stats = stats;
-            $scope.stats["responseRate"] = $scope.stats["responseRate"] + '%';
+                $scope.answer = function (answer) {
+                    $mdDialog.hide(answer);
+                };
+            }
+            function ChartsDialogController($scope, $mdDialog) {
 
+                $scope.hide = function () {
+                    $mdDialog.hide();
+                };
 
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
 
-            $scope.hide = function () {
-                $mdDialog.hide();
-            };
+                $scope.answer = function (answer) {
+                    $mdDialog.hide(answer);
+                };
+            }
 
-            $scope.cancel = function () {
-                $mdDialog.cancel();
-            };
-
-            $scope.answer = function (answer) {
-                $mdDialog.hide(answer);
-            };
-        }
-
-
-    }])
+        }])
     .service('getChartData', ['$http', '$rootScope', '$q', function ($http, $rootScope, $q) {
+
         var url = $rootScope.url;
         var authorizationData = $rootScope.authorizationData;
         var config = {headers: {"Authorization": "Basic " + authorizationData}};
         var analisysData = {};
+
         return {
             getQuestionary: function (projectID) {
                 return $http.get(url + '/common/getQuestionary/' + projectID, config).then(function (response) {
@@ -424,13 +567,15 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                 }
             },
-            getAnalisysByCities: function (questionID, startDate, endDate) {
+            getAnalisysDrillDown: function (questionID, startDate, endDate, city, group) {
                 return $.ajax({
                     url: url + '/common/getAnalysisDrillDown/' + questionID,
                     type: 'post',
                     data: {
                         startDate: startDate,
-                        endDate: endDate
+                        endDate: endDate,
+                        city: city,
+                        group: group
                     },
                     headers: {
                         'Content-Type': undefined,
@@ -444,11 +589,21 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                 });
             }
         };
+
     }])
     .service('serviceButtons', ['$rootScope', '$http', 'fileUpload', function ($rootScope, $http, fileUpload) {
+
         var url = $rootScope.url;
         var authorizationData = $rootScope.authorizationData;
+        var config = {headers: {"Authorization": "Basic " + authorizationData}};
+
+
         return {
+            getScheduleIsFullyAnswered: function (questionaryID) {
+                return $http.get(url + "/common/getScheduleIsFullyAnswered/" + questionaryID, config).then(function (response) {
+                    return response.data;
+                })
+            },
             exportToPDF: function () {
                 console.log("TRYING TO EXPORT");
                 // window.open('', document.getElementById('toExportToPDF').toDataURL());
@@ -544,6 +699,25 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                 var uploadUrl = $rootScope.url + "/admin/uploadUsers/" + projectID;
                 fileUpload.uploadFileToUrl(file, uploadUrl, index);
                 $rootScope.isUpload = true;
+            }
+        }
+
+    }])
+    .service('dialogChartService', [function () {
+        return {
+            getModalChartData: function (response) {
+                var namesArr = ['x'];
+                var valuesArr = [''];
+                for (var element in response) {
+                    // console.log('group analisys', element);
+                    // console.log('group values: ', response[element]);
+                    namesArr.push(element);
+                    valuesArr.push((response[element] * 100) / 100);
+                }
+                return {
+                    namesArr: namesArr,
+                    valuesArr: valuesArr
+                }
             }
         }
 

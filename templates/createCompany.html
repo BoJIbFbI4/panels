@@ -1,0 +1,42 @@
+<div class="mainView" ng-controller="CompaniesCtrl">
+
+    <div class="mdl-grid">
+        <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+            <h2>Create Company</h2>
+
+            <form action="">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input
+                            class="mdl-textfield__input"
+                            type="text"
+                            id="sample1"
+                            ng-keypress="labelKeyPressed()">
+                    <label class="mdl-textfield__label" for="sample1" id="labelSample1" >{{translation.companyName}}</label>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="sample2">
+                    <label class="mdl-textfield__label" for="sample2" id="labelSample2">{{translation.companyOwnerName}}</label>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="number" id="sample3">
+                    <label class="mdl-textfield__label" for="sample3" id="labelSample3">{{translation.telephoneNumber}}</label>
+                </div>
+
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--file">
+                    <input class="mdl-textfield__input" placeholder="{{translation.attachLogo}}" type="text" id="uploadFile"
+                           readonly/>
+                    <div class="mdl-button mdl-button--colored mdl-button--icon mdl-button--file">
+                        <i class="material-icons">attach_file</i><input type="file" id="uploadBtn">
+                    </div>
+                </div>
+                <br>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                    {{translation.addCompany}}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
