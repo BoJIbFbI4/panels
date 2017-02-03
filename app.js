@@ -8,8 +8,8 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
     // $rootScope.url = "http://192.168.1.101:8080";
     // $rootScope.url = "http://10.0.0.17:8080";
 
-    $rootScope.labelKeyPressed = function(){
-      console.log('trololo');
+    $rootScope.labelKeyPressed = function() {
+        console.log('trololo');
     }
     $rootScope.hideLoader = [];
     $rootScope.fileState = [];
@@ -28,7 +28,7 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
 
 
     // ALERT PAGE MANAGER
-    $scope.alertTable = function () {
+    $scope.alertTable = function() {
         $state.go('alerts')
     };
 
@@ -37,12 +37,12 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
     };
 
 
-    $rootScope.fieldChanged = function (event) {
+    $rootScope.fieldChanged = function(event) {
         console.log('event');
         console.log(event);
     };
 
-    $rootScope.alertInfo = function (alert, index) {
+    $rootScope.alertInfo = function(alert, index) {
         $rootScope.curAlert = alert;
         $rootScope.curAlert.index = index;
         console.log($scope.curAlert);
@@ -107,9 +107,9 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
 
 
 
-    $rootScope.getAlerts = function () {
+    $rootScope.getAlerts = function() {
         if ($scope.isManager() == true) {
-            $rootScope.openAlerts.forEach(function (item, i, arr) {
+            $rootScope.openAlerts.forEach(function(item, i, arr) {
                 item.humanDate = (new Date(item.createDate)).toDateString();
                 item.status = item.closeDate == undefined ? "Open" : "Closed";
                 // $rootScope.openAlertCount = item.closeDate ? $rootScope.openAlertCount : $rootScope.openAlertCount + 1;
@@ -120,9 +120,15 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
         // $rootScope.openAlerts = $rootScope.openAlerts.filter(function (alert) {return alert.closeDate == undefined});
         // console.log("$rootScope.openAlerts");
         // console.log($rootScope.openAlerts);
-        $rootScope.openAlertCount=$rootScope.openAlerts.length;
+        $rootScope.openAlertCount = $rootScope.openAlerts.length;
         return $rootScope.openAlerts;
     }
+
+    $(document).ready(function() {
+        $state.go('auth');
+
+        return false;
+    });
 
 
 }]);

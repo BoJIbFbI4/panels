@@ -8,8 +8,9 @@ angular.module('panelsApp')
         $scope.loginProcess = false;
 
         $rootScope.filterOpenedAlerts = function (alert) {
-          return alert.statusBool == false
-        }
+          return alert.statusBool == false;
+        };
+
 
         $scope.getLogin = function () {
             var url = $rootScope.url + "/common/login";
