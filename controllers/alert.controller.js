@@ -23,6 +23,20 @@ angular.module('panelsApp')
                 params: {"text": data}
             };
 
+
+                    if (authorizationData == undefined){
+                      console.log(authorizationData);
+                      console.log("Companies auth data lost");
+                      // $state.go("auth");
+                      $rootScope.logout();
+                    }
+                    if (authorizationData == ""){
+                      console.log(authorizationData);
+                      console.log("Companies auth data empty");
+                      // $state.go("auth");
+                      $rootScope.logout();
+                    }
+
             console.log("this is value!! : " + $scope.company);
 
             $http.post(url, data, config).then(function (response) {

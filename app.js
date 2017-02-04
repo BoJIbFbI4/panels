@@ -14,6 +14,14 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
     $rootScope.hideLoader = [];
     $rootScope.fileState = [];
 
+    $scope.$watchGroup(['authorizationData'],function(newData, oldData){
+      console.log(newData, oldData);
+
+      if (newData[0] == "" & !oldData[0]){
+        console.log("Auth Data Lost")
+      }
+    })
+
     $scope.home = function() {
 
         if ($rootScope.type == "MANAGER") {
@@ -149,6 +157,9 @@ app.service('fileUpload', ['$http', '$rootScope', function($http, $rootScope) {
     this.uploadFileToUrl = function(file, uploadUrl, index) {
         var fd = new FormData();
         fd.append('file', file);
+
+
+
         $http.post(uploadUrl, fd, {
                 transformRequest: angular.identity,
                 headers: {
@@ -165,6 +176,9 @@ app.service('fileUpload', ['$http', '$rootScope', function($http, $rootScope) {
             })
             .error(function(error) {
                 console.log(error);
+                for (e in error){
+                  console.log(e);
+                }
                 $rootScope.hideLoader[index] = false;
                 $rootScope.fileState[index] = 'Not loaded - Error'
 

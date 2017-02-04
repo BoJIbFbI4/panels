@@ -64,7 +64,10 @@ angular.module('panelsApp')
             $scope.isLogin = false;
             $rootScope.authorizationData = "";
             $state.go('auth');
+            // window.onbeforeunload = function() { return "You work will be lost."; };
+
             location.reload();
+            console.log(window.history);
         }
 
 

@@ -29,6 +29,19 @@ angular.module('panelsApp')
                 }
             };
 
+                    if (authorizationData == undefined){
+                      console.log(authorizationData);
+                      console.log("Companies auth data lost");
+                      // $state.go("auth");
+                      $rootScope.logout();
+                    }
+                    if (authorizationData == ""){
+                      console.log(authorizationData);
+                      console.log("Companies auth data empty");
+                      // $state.go("auth");
+                      $rootScope.logout();
+                    }
+
             $scope.goToSurvey = function (projectID, projectName) {
                 $state.go('diagrams', {projectID: projectID, projectName:projectName})
             };

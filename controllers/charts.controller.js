@@ -188,7 +188,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                                                                                 var data = [];
                                                                                 $("#table").html("");
-                                                                                
+
                                                                                 for (var key in response) {
                                                                                     data[0] = ["NAME"];
                                                                                     data.push([]);
@@ -568,6 +568,20 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             }
         };
         var analisysData = {};
+
+
+                if (authorizationData == undefined){
+                  console.log(authorizationData);
+                  console.log("Companies auth data lost");
+                  // $state.go("auth");
+                  $rootScope.logout();
+                }
+                if (authorizationData == ""){
+                  console.log(authorizationData);
+                  console.log("Companies auth data empty");
+                  // $state.go("auth");
+                  $rootScope.logout();
+                }
 
         return {
             getQuestionary: function(projectID) {
