@@ -1,5 +1,5 @@
 angular.module('Route', ['ui.router'])
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(['$stateProvider','$urlRouterProvider',function ($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/login');
 
@@ -17,7 +17,7 @@ angular.module('Route', ['ui.router'])
             .state('alerts', {
                 url: '/alerts',
                 templateUrl: 'templates/alerts.html',
-                controller: 'AlertCtrl',
+                controller: 'AlertCtrl'
             })
             .state('companies', {
                 url: '/companies',
@@ -51,7 +51,7 @@ angular.module('Route', ['ui.router'])
             })
             .state('diagramsPage2.diagramsPage3', {
                 url: '/diagrams3',
-                templateUrl: 'templates/diagramsPage3.html',
+                templateUrl: 'templates/diagramsTimeLinePage.html',
                 data: {
                     layout: "mdl-layout--fixed-drawer"
                 }
@@ -72,4 +72,4 @@ angular.module('Route', ['ui.router'])
                     layout: "mdl-layout--fixed-drawer"
                 }
             })
-    });
+    }]);

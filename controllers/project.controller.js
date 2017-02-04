@@ -15,7 +15,7 @@ angular.module('panelsApp')
                 // console.log(' - - - - data - - - - ');
                 // console.log(data);
                 $rootScope.fileState[index] = data;
-              return null
+              return data;
             };
 
 

@@ -1,9 +1,8 @@
 /**
  * Created by Gladkov Kirill on 12/12/2016.
  */
-angular.module('panelsApp').controller('ChartsCtrl',
-    ['$scope', '$rootScope', '$state', '$filter', 'fileUpload', '$stateParams', 'getChartData', '$mdDialog', 'serviceButtons', 'dialogChartService',
-        function ($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChartData, $mdDialog, serviceButtons, dialogChartService) {
+angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$state', '$filter', 'fileUpload', '$stateParams', 'getChartData', '$mdDialog', 'serviceButtons', 'dialogChartService',
+        function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChartData, $mdDialog, serviceButtons, dialogChartService) {
 
             $scope.chartsArray = [];
 
@@ -14,22 +13,23 @@ angular.module('panelsApp').controller('ChartsCtrl',
 
             var stats = {};
             if ($stateParams.projectID) {
-                var projectId = $stateParams.projectID
-            }// <-- take this projectID from project template and use it into request below
+                var projectId = $stateParams.projectID;
+            } // <-- take this projectID from project template and use it into request below
 
             if ($stateParams.projectName) {
                 $scope.$parent.$parent.projectName = $stateParams.projectName;
-            }// <-- if add this to root scope will be problems
+            } // <-- if add this to root scope will be problems
 
-            $scope.$on("$destroy", function () {
+            $scope.$on("$destroy", function() {
                 $scope.$parent.$parent.projectName = "";
                 console.log("EXITING");
             });
 
 
-            $scope.$watchGroup(['dateStart', 'dateEnd'], function (newValues, oldValues) { //<-- watch input "to date". if it changed - send new req with a new date
+            $scope.$watchGroup(['dateStart', 'dateEnd'], function(newValues, oldValues) { //<-- watch input "to date". if it changed - send new req with a new date
                 getChartData.getQuestionary(projectId)
-                    .then(function (response) {
+                    .then(function(response) {
+
                         $scope.createDate = $filter("date")(newValues[0] || response.createDate, 'yyyy-MM-dd');
                         $scope.userDate = $filter("date")(newValues[1] || Date.now(), 'yyyy-MM-dd');
                         $scope.minFromDate = $filter("date")(response.createDate, 'yyyy-MM-dd');
@@ -37,264 +37,363 @@ angular.module('panelsApp').controller('ChartsCtrl',
                         $scope.minToDate = $scope.createDate;
                         $scope.maxToDate = $filter("date")(response.endDate || Date.now(), 'yyyy-MM-dd');
                         console.log('RESPONSE getQuestionary: ', response);
-                        $scope.exportToXLS = function () {
+
+                        $scope.exportToXLS = function() {
                             return serviceButtons.exportToXLS($scope.createDate, $scope.userDate, response.id)
                         };
+
+                        $scope.showtimeLineChart = function() {
+                            serviceButtons.getScheduleIsFullyAnswered(response.id).then(function(response) {
+
+                                var names = dialogChartService.getModalChartData(response).namesArr;
+                                var val = dialogChartService.getModalChartData(response).valuesArr.map(function(item, i, arr) {
+                                    return typeof item === "string" ? item : item / 100;
+                                });
+                                console.log("dates names: ", names);
+                                console.log("dates values: ", val);
+
+                                testBarChartDraw(names, val, "4_1");
+
+
+                            });
+                            $scope.showChartDialogDates();
+                        };
+
                         return response;
                     })
-                    .then(function (response) {
+                    .then(function(response) {
                         return getChartData.getAnalisys(response.id, $scope.createDate, $scope.userDate);
 
-                    }).then(function (response) {
-                    $scope.totalIntroduced = response.questionary.statistics.usersRespondented;
-                    stats = response.questionary.statistics;
-                    var questions = response.questionary.questions;
-                    var usersResponded = response.countUserByDate;
+                    }).then(function(response) {
+                        $scope.totalIntroduced = response.questionary.statistics.usersRespondented;
+                        stats = response.questionary.statistics;
 
-                    console.log('get ANALISYS RESPONSE DATA: ', response);
-                    console.log('count users by Date: ', usersResponded);
+                        var questions = response.questionary.questions;
+                        var usersResponded = response.countUserByDate;
 
-                    for (var i = 0; i < questions.length; i++) {
 
-                        if (questions[i].questionType == 1) {
-                            var rating = [''];
-                            var ratingTitles = ['x'];
-                            var gpa = 0;
-                            var questionID = questions[i].id;
+                        for (var i = 0; i < questions.length; i++) {
 
-                            for (var j = 0; j < questions[i].answers.length; j++) {
-                                // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
-                                gpa += questions[i].answers[j].usersRespondented * (j + 1);
-                                rating.push(((questions[i].answers[j].usersRespondented * 100) / usersResponded) / 100);
-                                ratingTitles.push(questions[i].answers[j].title);
+                            if (questions[i].questionType == 1) {
+                                var rating = [''];
+                                var ratingTitles = ['x'];
+                                var gpa = 0;
+                                var questionID = questions[i].id;
+
+                                for (var j = 0; j < questions[i].answers.length; j++) {
+                                    // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
+                                    gpa += questions[i].answers[j].usersRespondented * (j + 1);
+                                    rating.push(((questions[i].answers[j].usersRespondented * 100) / usersResponded) / 100);
+                                    ratingTitles.push(questions[i].answers[j].title);
+                                }
+                                //used Math.round to round up to 2 decimal
+                                gpa = Math.round((gpa / usersResponded) * 100) / 100;
                             }
-                            //used Math.round to round up to 2 decimal
-                            gpa = Math.round((gpa / usersResponded) * 100) / 100;
+                            //------------------
+                            if (questions[i].questionType == 2) {
+                                var satisfiedRaiting = [''];
+                                var satisfiedRaitingTitile = ['x'];
+                                var satisfiedGPA = 0;
+                                var pieColumns = [];
+                                var pieColumnsElement = [];
+
+                                for (var x = 0; x < questions[i].answers.length; x++) {
+                                    // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
+                                    satisfiedGPA += questions[i].answers[x].usersRespondented * (x + 1);
+                                    satisfiedRaiting.push(((questions[i].answers[x].usersRespondented * 100) / usersResponded) / 100);
+                                    satisfiedRaitingTitile.push(questions[i].answers[x].title);
+
+                                    pieColumnsElement.push(questions[i].answers[x].title);
+                                    pieColumnsElement.push(((questions[i].answers[x].usersRespondented * 100) / usersResponded) / 100);
+                                    pieColumns.push(pieColumnsElement);
+                                    pieColumnsElement = [];
+                                }
+                                //used Math.round to round up to 2 decimal
+                                satisfiedGPA = Math.round((gpa / usersResponded) * 100) / 100;
+                            }
+                            //------------------
+                            if (questions[i].questionType == 3) {
+                                var diSatisfiedRaiting = [''];
+                                var diSatisfiedRaitingTitle = ['x'];
+
+                                for (var y = 0; y < questions[i].answers.length; y++) {
+                                    // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
+                                    diSatisfiedRaiting.push(((questions[i].answers[y].usersRespondented * 100) / usersResponded) / 100);
+                                    diSatisfiedRaitingTitle.push(questions[i].answers[y].title);
+                                }
+                            }
                         }
-                        //------------------
-                        if (questions[i].questionType == 2) {
-                            var satisfiedRaiting = [''];
-                            var satisfiedRaitingTitile = ['x'];
-                            var satisfiedGPA = 0;
 
-                            for (var x = 0; x < questions[i].answers.length; x++) {
-                                // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
-                                satisfiedGPA += questions[i].answers[x].usersRespondented * (x + 1);
-                                satisfiedRaiting.push(((questions[i].answers[x].usersRespondented * 100) / usersResponded) / 100);
-                                satisfiedRaitingTitile.push(questions[i].answers[x].title);
-                            }
-                            //used Math.round to round up to 2 decimal
-                            satisfiedGPA = Math.round((gpa / usersResponded) * 100) / 100;
-                        }
-                        //------------------
-                        if (questions[i].questionType == 3) {
-                            var diSatisfiedRaiting = [''];
-                            var diSatisfiedRaitingTitle = ['x'];
-                            var pieColumns = [];
-                            var pieColumnsElement = [];
-
-                            for (var y = 0; y < questions[i].answers.length; y++) {
-                                // console.log(questions[i].answers[j].title + ' ',questions[i].answers[j].usersRespondented)
-                                diSatisfiedRaiting.push(((questions[i].answers[y].usersRespondented * 100) / usersResponded) / 100);
-                                diSatisfiedRaitingTitle.push(questions[i].answers[y].title);
-                                pieColumnsElement.push(questions[i].answers[y].title);
-                                pieColumnsElement.push(((questions[i].answers[y].usersRespondented * 100) / usersResponded) / 100);
-                                pieColumns.push(pieColumnsElement);
-                                pieColumnsElement = [];
-                            }
-                        }
-                    }
-
-                    var donutChart = c3.generate({
-                        bindto: '#chart_gauge',
-                        title: {
-                            text: 'ממוצע שביעות רצון'
-                        },
-                        data: {
-                            columns: [
-                                ['GPA', gpa]
-                            ],
-                            type: 'gauge',
-                            onclick: function (d, i) {
-                                getChartData.getAnalisysDrillDown(questionID, $scope.createDate, $scope.userDate).then(function (response) {
-
-                                    var citiesNames = dialogChartService.getModalChartData(response).namesArr;
-                                    var citiesValues = dialogChartService.getModalChartData(response).valuesArr;
-
-                                    c3.generate({
-                                        bindto: '#chart2_1',
-                                        title: {text: 'שביעות רצון ממוצעת - מוקדים'},
-                                        data: {
-                                            x: 'x',
-                                            columns: [citiesNames, citiesValues],
-                                            labels: {
-                                                format: function (v, id, i, j) {
-                                                    return (v).toFixed(2)
-                                                }
-                                            },
-                                            type: 'bar',
-                                            selection: {
-                                                enabled: true
-                                            },
-                                            onclick: function () {
-                                                var currCityID = arguments[0].x + 1;
-                                                getChartData.getAnalisysDrillDown(questionID, $scope.createDate, $scope.userDate, citiesNames[currCityID])
-                                                    .then(function (response) {
-                                                        var groupNames = dialogChartService.getModalChartData(response).namesArr;
-                                                        var groupValues = dialogChartService.getModalChartData(response).valuesArr;
-
-                                                        c3.generate({
-                                                            bindto: '#chart2_2',
-                                                            title: {
-                                                                text: 'שביעות רצון ממוצעת - צוותים'
-                                                            },
-                                                            data: {
-                                                                x: 'x',
-                                                                columns: [groupNames, groupValues],
-                                                                type: 'bar',
-                                                                selection: {enabled: true},
-                                                                labels: {
-                                                                    format: function (v, id, i, j) {
-                                                                        return (v).toFixed(2)
-                                                                    }
-                                                                },
-                                                                onclick: function () {
-                                                                    var currGroupID = arguments[0].x + 1;
-                                                                    getChartData.getAnalisysDrillDown(questionID, $scope.createDate, $scope.userDate, citiesNames[currCityID], groupNames[currGroupID])
-                                                                        .then(function (response) {
-
-                                                                            $rootScope.employee = response;
-
-                                                                            console.log(response);
-                                                                        });
-                                                                }
-                                                            },
-                                                            axis: {
-                                                                x: {
-                                                                    type: 'category'
-                                                                },
-                                                                y: {
-                                                                    max: 5,
-                                                                    min: 0,
-                                                                    padding: {
-                                                                        top: 0,
-                                                                        bottom: 0
-                                                                    }
-                                                                }
-                                                            },
-                                                            bar: {
-                                                                width: {
-                                                                    ratio: 0.3
-                                                                }
-                                                            },
-                                                            size: {
-                                                                width: 600,
-                                                                height: 300
-                                                            },
-                                                            color: {
-                                                                pattern: ['#61A0D7']
-                                                            },
-                                                            legend: {
-                                                                show: false
-                                                            }
-                                                        });
-
-                                                    })
-                                            }
-                                        },
-                                        axis: {
-                                            x: {
-                                                type: 'category'
-                                            },
-                                            y: {
-                                                max: 5,
-                                                min: 0,
-                                                padding: {
-                                                    top: 0,
-                                                    bottom: 0
-                                                }
-                                            }
-                                        },
-                                        bar: {
-                                            width: {
-                                                ratio: 0.3
-                                            }
-                                        },
-                                        size: {
-                                            height: 300,
-                                            width: 600
-                                        },
-                                        color: {
-                                            pattern: ['#61A0D7']
-                                        },
-                                        legend: {
-                                            show: false
-                                        }
-                                    });
-                                });
-                                $scope.showChartDialog();
-                            }
-                        },
-                        gauge: {
-                            label: {
-                                format: function (value, ratio) {
-                                    return value
-                                },
-                                show: true // to turn off the min/max labels.
+                        var donutChart = c3.generate({
+                            bindto: '#chart_gauge',
+                            title: {
+                                text: 'ממוצע שביעות רצון'
                             },
-                            min: 1,
-                            max: 5,
-                            units: ''
-                        },
-                        color: {
-                            pattern: ['#FF0000', '#F97600', '#F6C600', '#4FF239'],
-                            threshold: {
+                            data: {
+                                columns: [
+                                    ['GPA', gpa]
+                                ],
+                                type: 'gauge',
+                                onclick: function(d, i) {
+                                    getChartData.getAnalisysDrillDown(questionID, $scope.createDate, $scope.userDate).then(function(response) {
+
+                                        var citiesNames = dialogChartService.getModalChartData(response).namesArr;
+                                        var citiesValues = dialogChartService.getModalChartData(response).valuesArr;
+
+                                        c3.generate({
+                                            bindto: '#chart2_1',
+                                            title: {
+                                                text: 'שביעות רצון ממוצעת - מוקדים'
+                                            },
+                                            data: {
+                                                x: 'x',
+                                                columns: [citiesNames, citiesValues],
+                                                labels: {
+                                                    format: function(v, id, i, j) {
+                                                        return (v).toFixed(2);
+                                                    }
+                                                },
+                                                type: 'bar',
+                                                selection: {
+                                                    enabled: true
+                                                },
+                                                onclick: function() {
+                                                    var currCityID = arguments[0].x + 1;
+                                                    getChartData.getAnalisysDrillDown(questionID, $scope.createDate, $scope.userDate, citiesNames[currCityID])
+                                                        .then(function(response) {
+                                                            var groupNames = dialogChartService.getModalChartData(response).namesArr;
+                                                            var groupValues = dialogChartService.getModalChartData(response).valuesArr;
+
+                                                            c3.generate({
+                                                                bindto: '#chart2_2',
+                                                                title: {
+                                                                    text: 'שביעות רצון ממוצעת - צוותים'
+                                                                },
+                                                                data: {
+                                                                    x: 'x',
+                                                                    columns: [groupNames, groupValues],
+                                                                    type: 'bar',
+                                                                    selection: {
+                                                                        enabled: true
+                                                                    },
+                                                                    labels: {
+                                                                        format: function(v, id, i, j) {
+                                                                            return (v).toFixed(2);
+                                                                        }
+                                                                    },
+                                                                    onclick: function() {
+                                                                        var currGroupID = arguments[0].x + 1;
+                                                                        getChartData.getAnalisysDrillDown(questionID, $scope.createDate, $scope.userDate, citiesNames[currCityID], groupNames[currGroupID])
+                                                                            .then(function(response) {
+
+                                                                                var data = [];
+                                                                                $("#table").html("");
+                                                                                
+                                                                                for (var key in response) {
+                                                                                    data[0] = ["NAME"];
+                                                                                    data.push([]);
+                                                                                    data[data.length-1].unshift(key);
+                                                                                    for (var innerKey in response[key]) {
+                                                                                            data[0].unshift(innerKey.toUpperCase());
+                                                                                            data[data.length-1].unshift(response[key][innerKey]);
+                                                                                    }
+                                                                                }
+
+                                                                                var cityTable = makeTable($("#table"), data);
+                                                                                console.log(response);
+                                                                            });
+                                                                    }
+                                                                },
+                                                                axis: {
+                                                                    x: {
+                                                                        type: 'category'
+                                                                    },
+                                                                    y: {
+                                                                        max: 5,
+                                                                        min: 0,
+                                                                        padding: {
+                                                                            top: 0,
+                                                                            bottom: 0
+                                                                        }
+                                                                    }
+                                                                },
+                                                                bar: {
+                                                                    width: {
+                                                                        ratio: 0.3
+                                                                    }
+                                                                },
+                                                                size: {
+                                                                    width: 600,
+                                                                    height: 300
+                                                                },
+                                                                // color: {
+                                                                //     pattern: ['#61A0D7']
+                                                                // },
+                                                                legend: {
+                                                                    show: false
+                                                                }
+                                                            });
+
+                                                        });
+                                                }
+                                            },
+                                            axis: {
+                                                x: {
+                                                    type: 'category'
+                                                },
+                                                y: {
+                                                    max: 5,
+                                                    min: 0,
+                                                    padding: {
+                                                        top: 0,
+                                                        bottom: 0
+                                                    }
+                                                }
+                                            },
+                                            bar: {
+                                                width: {
+                                                    ratio: 0.3
+                                                }
+                                            },
+                                            size: {
+                                                height: 300,
+                                                width: 600
+                                            },
+                                            color: {
+                                                pattern: ['#61A0D7']
+                                            },
+                                            legend: {
+                                                show: false
+                                            }
+                                        });
+                                    });
+                                    $scope.showChartDialog();
+                                }
+                            },
+                            gauge: {
+                                label: {
+                                    format: function(value, ratio) {
+                                        return value
+                                    },
+                                    show: true // to turn off the min/max labels.
+                                },
+                                min: 1,
                                 max: 5,
-                                values: [30, 60, 90, 100]
+                                units: ''
+                            },
+                            color: {
+                                pattern: ['#FF0000', '#F97600', '#F6C600', '#4FF239'],
+                                threshold: {
+                                    max: 5,
+                                    values: [30, 60, 90, 100]
+                                }
+                            },
+                            size: {
+                                height: 200
                             }
-                        },
-                        size: {
-                            height: 200
-                        }
+                        });
+
+                        var timeLineChart = c3.generate({
+                            data: {
+                                bindto: "#chart3_1",
+                                columns: [
+                                    ['data1', 300, 350, 300, 0, 0, 0],
+                                    ['data2', 130, 100, 140, 200, 150, 50]
+                                ],
+                                types: {
+                                    data1: 'area',
+                                    data2: 'area-spline'
+                                }
+                            }
+                        });
+                        var pieChart = c3.generate({
+                            title: {
+                                text: "אחוז סיום טיפול בפניות"
+                            },
+                            bindto: '#chart_gauge3',
+                            data: {
+                                columns: pieColumns,
+                                type: 'pie'
+                            },
+                            color: {
+                                pattern: ['#01B8AA', '#FD625E', '#6E33B8']
+                            },
+                            size: {
+                                height: 250
+                            }
+                        });
+
+                        //charts page1 -> block1
+                        barChartDraw(ratingTitles, rating);
+                        //charts page1 -> block2
+                        barChartDraw(ratingTitles, rating);
+                        var donutChart2 = c3.generate({
+                            bindto: '#chart_gauge2',
+                            title: {
+                                text: 'ממוצע שביעות רצון'
+                            },
+                            data: {
+                                columns: [
+                                    ['GPA', gpa]
+                                ],
+                                type: 'gauge'
+                            },
+                            gauge: {
+                                label: {
+                                    format: function(value, ratio) {
+                                        return value
+                                    },
+                                    show: true // to turn off the min/max labels.
+                                },
+                                min: 1,
+                                max: 5,
+                                units: ''
+                            },
+                            color: {
+                                pattern: ['#FF0000', '#F97600', '#F6C600', '#4FF239'],
+                                threshold: {
+                                    max: 5,
+                                    values: [30, 60, 90, 100]
+                                }
+                            },
+                            size: {
+                                height: 200
+                            }
+                        });
+                        //charts page1 -> block3
+                        barChartDraw(diSatisfiedRaitingTitle, diSatisfiedRaiting, 3);
+
+
+                        $scope.chartsArray = [];
                     });
-
-                    //charts page1 -> block1
-                    barChartDraw(ratingTitles, rating);
-                    //charts page1 -> block2
-                    barChartDraw(satisfiedRaitingTitile, satisfiedRaiting);
-                    //charts page1 -> block3
-                    barChartDraw(diSatisfiedRaitingTitle, diSatisfiedRaiting, 3);
-
-                    var pieChart = c3.generate({
-                        title: {
-                            text: "אחוז סיום טיפול בפניות"
-                        },
-                        bindto: '#chart_gauge3',
-                        data: {
-                            columns: pieColumns,
-                            type: 'pie'
-                        },
-                        color: {
-                            pattern: ['#01B8AA', '#FD625E', '#6E33B8']
-                        },
-                        size: {
-                            height: 250
-                        }
-                    });
-
-                    $scope.chartsArray = [];
-                });
             });
 
-            $scope.exportToPDF = function () {
+            function makeTable(container, data) {
+                var table = $("<table/>").addClass('mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp');
+                $.each(data, function(rowIndex, r) {
+                    var row = $("<tr/>").addClass("tableTextCenter");
+                    $.each(r, function(colIndex, c) {
+                        row.append($("<t" + (rowIndex == 0 ? "h" : "d") + "/>").text(c));
+                    });
+                    table.append(row);
+                });
+                return container.append(table);
+            }
+
+            $scope.exportToPDF = function() {
                 serviceButtons.exportToPDF();
             };
-            $scope.showStat = function () {
+            $scope.showStat = function() {
                 $scope.showDialog('templates/diagramsPageStat.html');
             };
-            $scope.showDialog = function (tamplateUrl) {
+
+
+            //-----------show dialogs functions----------//
+            $scope.showDialog = function(tamplateUrl) {
                 $mdDialog.show({
-                    locals: {translation: $scope.translation},
+                    locals: {
+                        translation: $scope.translation
+                    },
                     controller: DialogController,
                     templateUrl: tamplateUrl,
                     parent: angular.element(document.body),
@@ -304,7 +403,7 @@ angular.module('panelsApp').controller('ChartsCtrl',
 
                 });
             };
-            $scope.showChartDialog = function () {
+            $scope.showChartDialog = function() {
                 $mdDialog.show({
                     controller: ChartsDialogController,
                     templateUrl: 'templates/diagramsPage2.html',
@@ -315,13 +414,27 @@ angular.module('panelsApp').controller('ChartsCtrl',
 
                 });
             };
+            $scope.showChartDialogDates = function() {
+                $mdDialog.show({
+                    controller: ChartsDialogController,
+                    templateUrl: 'templates/diagramsTimeLinePage.html',
+                    parent: angular.element(document.body),
+                    // targetEvent: d,
+                    clickOutsideToClose: true,
+                    fullscreen: false // Only for -xs, -sm breakpoints.
+
+                });
+            };
 
             //-----------draw charts function----------//
             function barChartDraw(namesArr, dataArr, questionaryType) {
+                var colorScale = d3.scale.category10();
+
                 var obj = {};
                 obj.title = {};
                 obj.data = {};
                 obj.data.labels = {};
+                obj.data.color;
                 obj.axis = {};
                 obj.axis.x = {};
                 obj.axis.y = {};
@@ -331,7 +444,7 @@ angular.module('panelsApp').controller('ChartsCtrl',
                 obj.data.x = 'x';
                 obj.data.columns = [namesArr, dataArr];
                 obj.data.type = 'bar';
-                obj.data.labels.format = function (v, id, i, j) {
+                obj.data.labels.format = function(v, id, i, j) {
                     return (v * 100).toFixed(0) + '%'
                 };
                 obj.axis.x.type = 'category';
@@ -352,6 +465,55 @@ angular.module('panelsApp').controller('ChartsCtrl',
                 obj.size.height = 215;
                 obj.legend.show = false;
 
+                if (questionaryType == 3) {
+                    obj.data.color = function(inColor, data) {
+                        if (data.index !== undefined) {
+                            return colorScale(data.index);
+                        }
+
+                        return inColor;
+                    };
+                }
+                var chart = c3.generate(obj);
+                $scope.chartsArray.push(obj);
+                return chart;
+            }
+
+            function testBarChartDraw(namesArr, dataArr, bindto, chartType, questionaryType) {
+                var obj = {};
+                obj.title = {};
+                obj.data = {};
+                obj.data.labels = {};
+                obj.axis = {};
+                obj.axis.x = {};
+                obj.axis.y = {};
+                obj.axis.y.tick = {};
+                obj.bindto = '#chart' + bindto;
+                obj.title.text = 'התפלגות שביעות רצון מהשירות';
+                obj.data.x = 'x';
+                obj.data.columns = [namesArr, dataArr];
+                obj.data.type = chartType;
+                obj.data.labels.format = function(v, id, i, j) {
+                    return (v * 100).toFixed(0) + '%'
+                };
+                obj.axis.x.type = 'category';
+                obj.axis.y.tick.format = d3.format('%');
+                obj.axis.y.tick.values = [0.25, 0.5, 0.75, 1];
+                obj.axis.y.padding = {};
+                obj.axis.y.max = 1;
+                obj.axis.y.min = 0;
+                obj.axis.y.padding.top = 20;
+                obj.axis.y.padding.bottom = 0;
+                obj.bar = {};
+                obj.bar.width = {};
+                obj.bar.width.ratio = 0.6;
+                obj.size = {};
+                obj.legend = {};
+                obj.color = {};
+                obj.color.pattern = ['#3AAEF2'];
+                obj.size.height = 215;
+                obj.legend.show = false;
+
                 var chart = c3.generate(obj);
                 if (questionaryType == 3) {
                     setColumnBarColors(obj.bindto);
@@ -360,70 +522,63 @@ angular.module('panelsApp').controller('ChartsCtrl',
                 return chart;
             }
 
-            //setup colored chart
-            function setColumnBarColors(chartContainer) {
-                var colors = ['#9a4d6f', '#c76c47', '#f85115', '#d9b099', '#d4ba2f'];
-                $(chartContainer + ' .c3-chart-bars .c3-shape').each(function (index) {
-                    this.style.cssText += 'fill: ' + colors[index] + ' !important; stroke: ' + colors[index] + '; !important';
-                });
-
-                $(chartContainer + ' .c3-chart-texts .c3-text').each(function (index) {
-                    this.style.cssText += 'fill: ' + colors[index] + ' !important;';
-                });
-            }
-
-            //-----------draw charts function----------//
+            //-----------dialog window controllers----------//
             function DialogController($scope, $mdDialog, translation) {
                 $scope.translation = translation;
                 $scope.stats = stats;
                 $scope.stats["responseRate"] = $scope.stats["responseRate"] + '%';
 
-                $scope.hide = function () {
+                $scope.hide = function() {
                     $mdDialog.hide();
                 };
 
-                $scope.cancel = function () {
+                $scope.cancel = function() {
                     $mdDialog.cancel();
                 };
 
-                $scope.answer = function (answer) {
+                $scope.answer = function(answer) {
                     $mdDialog.hide(answer);
                 };
             }
 
             function ChartsDialogController($scope, $mdDialog) {
 
-                $scope.hide = function () {
+                $scope.hide = function() {
                     $mdDialog.hide();
                 };
 
-                $scope.cancel = function () {
+                $scope.cancel = function() {
                     $mdDialog.cancel();
                 };
 
-                $scope.answer = function (answer) {
+                $scope.answer = function(answer) {
                     $mdDialog.hide(answer);
                 };
             }
 
-        }])
-    .service('getChartData', ['$http', '$rootScope', '$q', function ($http, $rootScope, $q) {
+        }
+    ])
+    .service('getChartData', ['$http', '$rootScope', '$q', function($http, $rootScope, $q) {
 
         var url = $rootScope.url;
         var authorizationData = $rootScope.authorizationData;
-        var config = {headers: {"Authorization": "Basic " + authorizationData}};
+        var config = {
+            headers: {
+                "Authorization": "Basic " + authorizationData
+            }
+        };
         var analisysData = {};
 
         return {
-            getQuestionary: function (projectID) {
-                return $http.get(url + '/common/getQuestionary/' + projectID, config).then(function (response) {
+            getQuestionary: function(projectID) {
+                return $http.get(url + '/common/getQuestionary/' + projectID, config).then(function(response) {
                     return response.data;
                 })
             },
-            getAnalisys: function (questionaryID, startDate, endDate) {
+            getAnalisys: function(questionaryID, startDate, endDate) {
 
                 if (analisysData[questionaryID]) {
-                    return $q(function (resolve) {
+                    return $q(function(resolve) {
                         resolve(analisysData[questionaryID]);
                     });
                 } else {
@@ -440,7 +595,7 @@ angular.module('panelsApp').controller('ChartsCtrl',
                             'Authorization': 'Basic ' + authorizationData
                         },
                         dataType: 'json',
-                        success: function (response) {
+                        success: function(response) {
                             analisysData[questionaryID] = response.data;
                             return response.data;
                         }
@@ -448,7 +603,7 @@ angular.module('panelsApp').controller('ChartsCtrl',
 
                 }
             },
-            getAnalisysDrillDown: function (questionID, startDate, endDate, city, group) {
+            getAnalisysDrillDown: function(questionID, startDate, endDate, city, group) {
                 return $.ajax({
                     url: url + '/common/getAnalysisDrillDown/' + questionID,
                     type: 'post',
@@ -463,7 +618,7 @@ angular.module('panelsApp').controller('ChartsCtrl',
                         'Authorization': 'Basic ' + authorizationData
                     },
                     dataType: 'json',
-                    success: function (response) {
+                    success: function(response) {
                         // analisysData[questionaryID] = response.data;
                         return response;
                     }
@@ -472,13 +627,24 @@ angular.module('panelsApp').controller('ChartsCtrl',
         };
 
     }])
-    .service('serviceButtons', ['$rootScope', '$http', 'fileUpload', function ($rootScope, $http, fileUpload) {
+    .service('serviceButtons', ['$rootScope', '$http', 'fileUpload', function($rootScope, $http, fileUpload) {
 
         var url = $rootScope.url;
         var authorizationData = $rootScope.authorizationData;
+        var config = {
+            headers: {
+                "Authorization": "Basic " + authorizationData
+            }
+        };
+
 
         return {
-            exportToPDF: function () {
+            getScheduleIsFullyAnswered: function(questionaryID) {
+                return $http.get(url + "/common/getScheduleIsFullyAnswered/" + questionaryID, config).then(function(response) {
+                    return response.data;
+                })
+            },
+            exportToPDF: function() {
                 console.log("TRYING TO EXPORT");
                 // window.open('', document.getElementById('toExportToPDF').toDataURL());
 
@@ -496,7 +662,8 @@ angular.module('panelsApp').controller('ChartsCtrl',
                 // console.log(mdlGrids);
 
 
-                var i, j, max = 0, cnt;
+                var i, j, max = 0,
+                    cnt;
                 var mdlGridsSubDiv;
 
                 for (i = 0; i < mdlGrids.length; i++) {
@@ -545,30 +712,35 @@ angular.module('panelsApp').controller('ChartsCtrl',
 
 
             },
-            exportToXLS: function (startDate, endDate, questionaryID) {
+            exportToXLS: function(startDate, endDate, questionaryID) {
 
-                var dates = $.param({startDate: startDate, endDate: endDate});
+                var dates = $.param({
+                    startDate: startDate,
+                    endDate: endDate
+                });
 
                 $http({
-                    url: url + '/common/getReport3/' + questionaryID + '/xls',
-                    method: "POST",
-                    data: dates, //this is your json data string
-                    headers: {
-                        "Authorization": "Basic " + authorizationData,
-                        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8;"
-                    },
-                    responseType: 'arraybuffer'
-                })
-                    .then(function (resolve) {
+                        url: url + '/common/getReport3/' + questionaryID + '/xls',
+                        method: "POST",
+                        data: dates, //this is your json data string
+                        headers: {
+                            "Authorization": "Basic " + authorizationData,
+                            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8;"
+                        },
+                        responseType: 'arraybuffer'
+                    })
+                    .then(function(resolve) {
                         console.log('excel DATA: -->:', resolve.data);
-                        var blob = new Blob([resolve.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+                        var blob = new Blob([resolve.data], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                        });
                         saveAs(blob, "Report.xls");
                         window.close();
-                    }, function (reject) {
+                    }, function(reject) {
                         console.log('excel error DATA: -->:', reject)
                     })
             },
-            uploadFile: function (myFile, projectID, index) {
+            uploadFile: function(myFile, projectID, index) {
                 var file = myFile;
                 var uploadUrl = $rootScope.url + "/admin/uploadUsers/" + projectID;
                 fileUpload.uploadFileToUrl(file, uploadUrl, index);
@@ -577,9 +749,9 @@ angular.module('panelsApp').controller('ChartsCtrl',
         }
 
     }])
-    .service('dialogChartService', [function () {
+    .service('dialogChartService', [function() {
         return {
-            getModalChartData: function (response) {
+            getModalChartData: function(response) {
                 var namesArr = ['x'];
                 var valuesArr = [''];
                 for (var element in response) {
