@@ -53,7 +53,7 @@
                         class="mdl-card__actions mdl-card--border">
                     <div  class="mdl-grid mdl-grid--no-spacing">
 
-                        <div class="mdl-cell--6-col">
+                        <div class="mdl-cell--6-col mdl-cell--5-col-tablet mdl-cell--1-col-phone">
                             <!--__________________________________-->
                             <!-- <div ng-show="setFileState($index,translation.choose)"></div> -->
                             <input
@@ -68,7 +68,7 @@
                                 <!--{{translation.choose}}-->
 
                         </div>
-                        <div class="mdl-cell--2-col">
+                        <div class="mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone">
                             <!--<span>{{hideLoader[$index]}}</span>-->
                             <svg
                                     id="{{'svgSpinner'+$index}}"
@@ -91,7 +91,7 @@
                             </svg>
 
                         </div>
-                        <div class="mdl-cell--2-col">
+                        <div class="mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone">
                             <div class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
                                 <i class="material-icons">attach_file</i>
                                 <input
@@ -104,7 +104,7 @@
                                         file-model="myFile">
                             </div>
                         </div>
-                        <div class="mdl-cell--2-col">
+                        <div class="mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone">
                             <button
                                     ng-click="uploadFile(project.id,myFile,$index)"
                                     class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
