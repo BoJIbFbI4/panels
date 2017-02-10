@@ -1,0 +1,122 @@
+[
+   {
+      "size":8,
+      "titleSize":12,
+      "contentSize":12,
+      "type":"bar",
+      "title":"באיזו מידה אתה מרוצה מהשירות שקיבלת?",
+      "answerTitles":[
+         "x",
+         "כלל לא שבע/ת רצון",
+         "שבע/ת רצון במידה מעטה",
+         "שבע/ת רצון במידה בינונית",
+         "שבע/ת רצון במידה רבה",
+         "שבע/ת רצון במידה רבה מאוד"
+      ],
+      "answerValues":[
+         "",
+         0.184,
+         0.156,
+         0.214,
+         0.196,
+         0.198
+      ],
+      "minValue":0,
+      "maxValue":100,
+      "units":"%",
+      "questionID":2
+   },
+   {
+      "size":4,
+      "titleSize":12,
+      "contentSize":12,
+      "value":"2.91",
+      "type":"gauge",
+      "minValue":1,
+      "maxValue":5,
+      "units":"",
+      "questionID":2
+   },
+   {
+      "size":8,
+      "titleSize":12,
+      "contentSize":12,
+      "type":"bar",
+      "title":"באיזו מידה אתה מרוצה מזמן ההמתנה (מרגע החיוג עד לקבלת מענה אנושי)?",
+      "answerTitles":[
+         "x",
+         "כלל לא שבע/ת רצון",
+         "שבע/ת רצון במידה מעטה",
+         "שבע/ת רצון במידה בינונית",
+         "שבע/ת רצון במידה רבה",
+         "שבע/ת רצון במידה רבה מאוד"
+      ],
+      "answerValues":[
+         "",
+         0.21,
+         0.168,
+         0.17,
+         0.188,
+         0.2
+      ],
+      "minValue":0,
+      "maxValue":100,
+      "units":"%",
+      "questionID":3
+   },
+   {
+      "size":4,
+      "titleSize":12,
+      "contentSize":12,
+      "value":"2.81",
+      "type":"gauge",
+      "minValue":1,
+      "maxValue":5,
+      "units":"",
+      "questionID":3
+   },
+   {
+      "size":8,
+      "titleSize":12,
+      "contentSize":12,
+      "type":"bar",
+      "title":"ממה לא היית מרוצה?",
+      "answerTitles":[
+         "x",
+         "מאדיבות הנציג",
+         "ממקצועיות הנציג",
+         "מהתשובות שקיבלתי",
+         "מסיבה אחרת, פרט"
+      ],
+      "answerValues":[
+         "",
+         0.238,
+         0.24,
+         0.216,
+         0.218
+      ],
+      "colored":true,
+      "minValue":0,
+      "maxValue":100,
+      "units":"%",
+      "questionID":4
+   },
+   {
+      "size":4,
+      "titleSize":12,
+      "contentSize":12,
+      "type":"pie",
+      "title":"האם קיבלת מענה מלא לפנייתך?",
+      "answerValues":[
+         [
+            "כן",
+            0.46
+         ],
+         [
+            "לא",
+            0.41
+         ]
+      ],
+      "questionID":6
+   }
+]

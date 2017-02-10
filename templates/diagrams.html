@@ -10,7 +10,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
                 <!--вспомогательная плашка - потом нужно убрать-->
                 <!--<div><span>{{minToDate}}</span> - <span>{{maxToDate}}</span></div>-->
@@ -44,11 +43,7 @@
                 </div>
             </div>
         </div>
-
-
         <div class="mdl-grid">
-
-
             <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
                 <span>
                     <button class="mdl-button mdl-js-button mdl-button--primary" ng-click="exportToXLS()">
@@ -57,7 +52,6 @@
                 </span>
 
             </div>
-
             <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
                 <button
                         class="mdl-button mdl-js-button mdl-button--primary"
@@ -67,74 +61,25 @@
                     <b>{{translation.ExportToPDF}}</b>
                 </button>
             </div>
-
             <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
                 <button class="mdl-button mdl-js-button mdl-button--primary" ng-click="showStat()">
                     <b>{{translation.Statistics}}</b>
                 </button>
             </div>
-
             <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
                 <button class="mdl-button mdl-js-button mdl-button--primary mdl-js-ripple-effect" ng-click="showtimeLineChart()">
                     <b>Time line charts</b>
                 </button>
             </div>
         </div>
-
-
     </div>
 </div>
 
+<!-- Начало всех графиков -->
 <div id="toExportToPDF">
-    <!-- charts block 1 -->
+    <!-- new block with new company -->
 
-    <div class="mdl-grid">
-        <div class="mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-            <h5 style="{{translation.FloatStyle}}">{{translation.WhatExtent}}</h5>
-        </div>
-    </div>
-
-    <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
-            <div id="chart0"></div>
-        </div>
-
-        <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
-            <div id="chart_gauge"></div>
-        </div>
-    </div>
-    <!-- END charts block 1 -->
-
-    <!-- charts block 2 -->
-    <div class="mdl-grid">
-        <div class="mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-            <div>
-                <h5 style="{{translation.FloatStyle}}">{{translation.WaitTime}}</h5>
-            </div>
-        </div>
-    </div>
-    <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
-            <div id="chart1"></div>
-        </div>
-        <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
-            <div id="chart_gauge2"></div>
-        </div>
-    </div>
-    <!--END charts block 2 -->
-
-    <!-- charts block 3 -->
-    <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet">
-            <div id="chart2"></div> <!-- HERE WAS ID CHART3 -->
-        </div>
+    <div class="mdl-grid" id="gridedCharts"></div>
 
 
-        <div class="mdl-cell mdl-cell--1-offset-desktop mdl-cell--1-offset-tablet mdl-cell--4-col mdl-cell--4-col-tablet">
-            <div id="chart_gauge3"></div>
-        </div>
-    </div>
-    <!-- END charts block 3 -->
 </div><!--</div>-->
-
-

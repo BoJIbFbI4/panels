@@ -1,8 +1,16 @@
 var app = angular.module('panelsApp', ['Route', 'ngResource', 'ngMaterial']);
-app.controller('MainController', ['$rootScope', '$scope', 'translationService', '$mdDialog', '$state', function($rootScope, $scope, translationService, $mdDialog, $state) {
+app.controller(
+  'MainController',
+  [
+    '$rootScope',
+    '$scope',
+    'translationService',
+    '$mdDialog',
+    '$state',
+    function($rootScope, $scope, translationService, $mdDialog, $state) {
 
-    // $rootScope.url = "https://panel-repatriation.rhcloud.com";
-    $rootScope.url = "https://panel1-repatriation.rhcloud.com";
+    $rootScope.url = "https://panel-repatriation.rhcloud.com";
+    // $rootScope.url = "https://panel1-repatriation.rhcloud.com";
     // $rootScope.url = "http://192.168.1.101:8080";
     // $rootScope.url = "http://172.20.10.4:8080";
     // $rootScope.url = "http://192.168.1.101:8080";
@@ -15,10 +23,10 @@ app.controller('MainController', ['$rootScope', '$scope', 'translationService', 
     $rootScope.fileState = [];
 
     $scope.$watchGroup(['authorizationData'],function(newData, oldData){
-      console.log(newData, oldData);
+      // console.log(newData, oldData);
 
       if (newData[0] == "" & !oldData[0]){
-        console.log("Auth Data Lost")
+        // console.log("Auth Data Lost")
       }
     })
 

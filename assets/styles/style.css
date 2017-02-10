@@ -3,6 +3,13 @@
     background-color: #607D8B;
 }
 
+.diklaHeader{
+  font-size: 48;
+  font-weight: bold;
+  color: #f97600;
+  /*line-height: 20px;*/
+}
+
 .tadiran-card-square > .mdl-card__title {
     color: #fff;
     /*background: url('../img/Tadiran.png') bottom right no-repeat #CFD8DC;*/
@@ -170,6 +177,3 @@
         background-color: #607D8B !important;
     }
 }
-
-
-
