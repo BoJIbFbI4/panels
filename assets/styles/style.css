@@ -1,179 +1,239 @@
 .projects-card-square > .mdl-card__title {
-    color: #fff;
-    background-color: #607D8B;
+  color: #fff;
+  background-color: #333333;
+}
+
+.cardStyle{
+
 }
 
 .diklaHeader{
   font-size: 48;
   font-weight: bold;
   color: #f97600;
-  /*line-height: 20px;*/
+  line-height: 20px;
 }
 
+.chartsBack{
+  background: white;
+  padding: 10px;
+  margin: 5px;
+}
+.header-border-bottom{
+  --box-shadow-color: #eaeaea;
+  box-shadow: 0px  1px 0px var(--box-shadow-color);
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+
+
+
 .tadiran-card-square > .mdl-card__title {
-    color: #fff;
-    /*background: url('../img/Tadiran.png') bottom right no-repeat #CFD8DC;*/
-    background-size: 25%;
+  color: #fff;
+  /*background: url('../img/Tadiran.png') bottom right no-repeat #CFD8DC;*/
+  background-size: 25%;
 }
 
 .clalit-card-square > .mdl-card__title {
-    color: #fff;
-    background: url('../img/Clalit.png') bottom right no-repeat #CFD8DC;
-    background-size: 25%;
+  color: #fff;
+  background: url('../img/Clalit.png') bottom right no-repeat #CFD8DC;
+  background-size: 25%;
 }
 
 .tableTextCenter th{
-    text-align: center;
+  text-align: center;
 }
 
 
 .mdl-card {
-    width: 100%;
-    height: 312px;
+  width: 100%;
+  height: 312px;
 }
 
 .mdl-cell .btn {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .logo{
-    width: 90%;
-    height: 70px;
-    margin: 0 auto;
+  width: 90%;
+  height: 70px;
+  margin: 0 auto;
 }
 
 .adminMenu {
-    list-style: none;
-    margin-right: 0 !important;
+  list-style: none;
+  margin-right: 0 !important;
+  flex:1;
 }
 
 .adminMenu li {
-    margin-bottom: 35px;
+  margin-bottom: 35px;
 }
 
-.projects-table-info {
-    width: 100%;
-    border-collapse: collapse;
+.adminMenu li:last-child {
+  margin-bottom: 0px;
+  flex: 0 0 auto;
 
 }
-
-.projects-table-info tr {
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    cursor: pointer;
+.mdl-button__ripple-container{
+  /*background: yellow;*/
+  color: black;
 }
-
-.projects-table-info td {
-    text-align: center;
-    font-size: 13px;
-    padding: 7px;
+.mdl-button--colored{
+  color: black;
 }
 
 .adminMenu .mdl-button{
-    width: 162px;
-    text-align: left;
+  color: white;
+}
+
+#quit{
+  color: black !important;
+
+
+}
+
+.projects-table-info {
+  width: 100%;
+  border-collapse: collapse;
+
+}
+
+.mdl-button-logout{
+  flex: 1;
+  color: black;
+  position: absolute;
+  top :93%;
+}
+
+.mdl-layout__drawer{
+  flex:1;
+}
+
+
+
+.projects-table-info tr {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+}
+
+.projects-table-info td {
+  text-align: center;
+  font-size: 13px;
+  padding: 7px;
+}
+
+.adminMenu .mdl-button{
+  width: 162px;
+  text-align: left;
 }
 
 .mdl-layout__drawer-button{
-    visibility: hidden;
-    background-color: #607D8B;
+  visibility: hidden;
+  background-color: #607D8B;
 }
 
 /*add project form*/
 .mdl-button--file input {
-    cursor: pointer;
-    height: 100%;
-    right: 0;
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    width: 300px;
-    z-index: 4;
+  cursor: pointer;
+  height: 100%;
+  right: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 300px;
+  z-index: 4;
 }
 
 .mdl-textfield--file.mdl-textfield__input {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .mdl-button--file {
-    right: 0;
+  right: 0;
 }
 
 /*end add project form*/
 
 .mdl-card {
-    min-height: 110px;
+  min-height: 110px;
 }
 
 .calendar-icon {
-    float: right;
-    text-align: right;
+  float: right;
+  text-align: right;
 }
 
 .material-icons.light-blue {
-    color: #0780cc;
+  color: #0780cc;
 }
 
 .answers-card.mdl-card {
-    width: 300px;
-    height: 50px;
-    background: url("../../assets/img/like.svg") top left no-repeat #90A4AE;
-    background-size: 150px 150px;
+  width: 300px;
+  height: 50px;
+  background: url("../../assets/img/like.svg") top left no-repeat #333333;
+  background-size: 150px 150px;
 
 }
 
 .answers-card > .mdl-card__actions {
-    height: 100%;
-    padding: 10px;
-    /*background: rgba(0, 0, 0, 0.2);*/
-    text-align: right;
-    font-size: 28px;
+  height: 100%;
+  padding: 10px;
+  /*background: rgba(0, 0, 0, 0.2);*/
+  text-align: right;
+  font-size: 28px;
+}
+
+.buttonLogin{
+  background: #333333;
 }
 
 .answers-card {
-    color: #fff;
-    font-size: 14px;
-    font-weight: 500;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+
 }
 
 .mdl-date-textfield {
-    float: right;
+  float: right;
 }
 
 /*@media screen and (min-width: 1025px) {*/
 
-    /*.mainView {*/
-        /*margin-left: 30px;*/
-    /*}*/
+/*.mainView {*/
+/*margin-left: 30px;*/
+/*}*/
 /*}*/
 
 .mdl-menu{
-    height: auto;
-    overflow-y: scroll;
+  height: auto;
+  overflow-y: scroll;
 }
 
 /** Mobile **/
 @media only screen and (max-width: 767px), only screen and (max-device-width: 767px) {
-    .mdl-layout__drawer-button{
-        visibility: visible;
-        z-index: 1;
-        background-color: #607D8B !important;
-    }
+  .mdl-layout__drawer-button{
+    visibility: visible;
+    z-index: 1;
+    background-color: #607D8B !important;
+  }
 }
 
 /** Tablet **/
 @media only screen and (min-width : 768px) and (max-width : 1024px) {
-    .mdl-layout__drawer-button{
-        visibility: visible;
-        z-index: 1;
-        background-color: #607D8B !important;
-    }
+  .mdl-layout__drawer-button{
+    visibility: visible;
+    z-index: 1;
+    background-color: #607D8B !important;
+  }
 }
 
 /** Tablet (landscape) **/
 @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
-    .mdl-layout__drawer-button{
-        visibility: visible;
-        z-index: 1;
-        background-color: #607D8B !important;
-    }
+  .mdl-layout__drawer-button{
+    visibility: visible;
+    z-index: 1;
+    background-color: #607D8B !important;
+  }
 }

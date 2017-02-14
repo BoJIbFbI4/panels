@@ -2,7 +2,7 @@
     <div class="mainView" ng-controller="ChartsCtrl">
         <div class="mdl-grid">
             <div class="mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
-                <div class="answers-card mdl-card mdl-shadow--2dp">
+                <div class="answers-card mdl-card mdl-shadow--2dp mdl-color--gray mdl-color-text--white">
                     <div class="mdl-card__title mdl-card--expand"></div>
                     <div class="mdl-card__actions">
                         <span class="demo-card-image__filename">ענו לסקר</span><br>
@@ -44,9 +44,9 @@
             </div>
         </div>
         <div class="mdl-grid">
-            <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
+            <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone ">
                 <span>
-                    <button class="mdl-button mdl-js-button mdl-button--primary" ng-click="exportToXLS()">
+                    <button class="mdl-button mdl-js-button mdl-button--primary  mdl-color-text--black" ng-click="exportToXLS()">
                         <b>{{translation.ExportToExcel}}</b>
                     </button>
                 </span>
@@ -54,7 +54,7 @@
             </div>
             <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
                 <button
-                        class="mdl-button mdl-js-button mdl-button--primary"
+                        class="mdl-button mdl-js-button mdl-button--primary  mdl-color-text--black"
                         id="buttonExportToPDF"
                         ng-model="buttonExportToPDF"
                         ng-click="exportToPDF()">
@@ -62,12 +62,12 @@
                 </button>
             </div>
             <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
-                <button class="mdl-button mdl-js-button mdl-button--primary" ng-click="showStat()">
+                <button class="mdl-button mdl-js-button mdl-button--primary  mdl-color-text--black" ng-click="showStat()">
                     <b>{{translation.Statistics}}</b>
                 </button>
             </div>
             <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
-                <button class="mdl-button mdl-js-button mdl-button--primary mdl-js-ripple-effect" ng-click="showtimeLineChart()">
+                <button class="mdl-button mdl-js-button mdl-button--primary mdl-js-ripple-effect  mdl-color-text--black" ng-click="showtimeLineChart()">
                     <b>Time line charts</b>
                 </button>
             </div>

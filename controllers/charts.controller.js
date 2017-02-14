@@ -15,12 +15,20 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
       {
         var newDiv = angular.element('<div></div>');
         newDiv.addClass('mdl-cell--'+ qResultsFormatted[key].size +'-col');
+        // newDiv.addClass('mdl-card');
+        newDiv.addClass('chartsCard');
         newDiv.addClass('mdl-grid');
+        newDiv.addClass('mdl-shadow--2dp');
+        newDiv.addClass('chartsBack');
+
+
         // newDiv.addClass('mdl-button');
         var newHead = angular.element('<div></div>');
         newHead.text(qResultsFormatted[key].title);
         newHead.addClass('mdl-cell--'+ qResultsFormatted[key].titleSize +'-col');
         newHead.addClass('mdl-layout-title');
+        newHead.addClass('header-border-bottom');
+
         // newHead.addClass('diklaHeader');
         var newId = 'chartNum_' + key
         var newChart = angular.element('<div id = "'+newId+'" ></div>');
@@ -28,6 +36,7 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
         newChart.addClass('mdl-cell--'+ qResultsFormatted[key].contentSize +'-col');
         newChart.addClass('mdl-layout-title');
         newChart.addClass('diklaHeader');
+
 
         var newDivider = angular.element('<div></div>');
         if (qResultsFormatted[key].titleSize > qResultsFormatted[key].contentSize){
@@ -40,237 +49,7 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
 
       }
       chartsGridContainerAngulared.append(newDiv);
-
-/*
-      if (qResultsFormatted[key].type=='gauge'){
-        var gaugeQuastionId = qResultsFormatted[key].questionID;
-        console.log(qResultsFormatted[key].questionID, gaugeQuastionId);
-
-        var chart = c3.generate({
-          bindto: '#'+newId,
-          data: {
-            columns: [
-              ['data', qResultsFormatted[key].value]
-            ],
-            type: 'gauge',
-            onclick: function(d, i) {
-              console.log(key, gaugeQuastionId);
-
-              getChartData.getAnalisysDrillDown(gaugeQuastionId, $scope.createDate, $scope.userDate)
-              .then(function(response){
-
-                var citiesNames = dialogChartService.getModalChartData(response).namesArr;
-                var citiesValues = dialogChartService.getModalChartData(response).valuesArr;
-                c3.generate({
-                  bindto: '#chart2_1',
-                  title: {
-                    text: 'שביעות רצון ממוצעת - מוקדים'
-                  },
-                  data: {
-                    x: 'x',
-                    columns: [citiesNames, citiesValues],
-                    labels: {
-                      format: function(v, id, i, j) {
-                        return (v).toFixed(2);
-                      }
-                    },
-                    type: 'bar',
-                    selection: {
-                      enabled: true
-                    },
-                    onclick: function() {
-                      var currCityID = arguments[0].x + 1;
-                      getChartData.getAnalisysDrillDown(questionID, $scope.createDate, $scope.userDate, citiesNames[currCityID])
-                      .then(function(response) {
-                        var groupNames = dialogChartService.getModalChartData(response).namesArr;
-                        var groupValues = dialogChartService.getModalChartData(response).valuesArr;
-                        c3.generate({
-                          bindto: '#chart2_2',
-                          title: {
-                            text: 'שביעות רצון ממוצעת - צוותים'
-                          },
-                          data: {
-                            x: 'x',
-                            columns: [groupNames, groupValues],
-                            type: 'bar',
-                            selection: {
-                              enabled: true
-                            },
-                            labels: {
-                              format: function(v, id, i, j) {
-                                return (v).toFixed(2);
-                              }
-                            },
-                            onclick: function() {
-                              var currGroupID = arguments[0].x + 1;
-                              getChartData.getAnalisysDrillDown(questionID, $scope.createDate, $scope.userDate, citiesNames[currCityID], groupNames[currGroupID])
-                              .then(function(response) {
-
-                                var data = [];
-                                $("#table").html("");
-
-                                for (var key in response) {
-                                  data[0] = ["NAME"];
-                                  data.push([]);
-                                  data[data.length-1].unshift(key);
-                                  for (var innerKey in response[key]) {
-                                    data[0].unshift(innerKey.toUpperCase());
-                                    data[data.length-1].unshift(response[key][innerKey]);
-                                  }
-                                }
-
-                                var cityTable = makeTable($("#table"), data);
-                                console.log(response);
-                              });
-                            }
-                          },
-                          axis: {
-                            x: {
-                              type: 'category'
-                            },
-                            y: {
-                              max: 5,
-                              min: 0,
-                              padding: {
-                                top: 0,
-                                bottom: 0
-                              }
-                            }
-                          },
-                          bar: {
-                            width: {
-                              ratio: 0.3
-                            }
-                          },
-                          size: {
-                            width: 600,
-                            height: 300
-                          },
-                          // color: {
-                          //     pattern: ['#61A0D7']
-                          // },
-                          legend: {
-                            show: false
-                          }
-                        });
-                      });
-                    }
-                  },
-                  axis: {
-                    x: {
-                      type: 'category'
-                    },
-                    y: {
-                      max: 5,
-                      min: 0,
-                      padding: {
-                        top: 0,
-                        bottom: 0
-                      }
-                    }
-                  },
-                  bar: {
-                    width: {
-                      ratio: 0.3
-                    }
-                  },
-                  size: {
-                    height: 300,
-                    width: 600
-                  },
-                  color: {
-                    pattern: ['#61A0D7']
-                  },
-                  legend: {
-                    show: false
-                  }
-                });
-              })
-              $scope.showChartDialog();
-            },
-          },
-          gauge: {
-            //        label: {
-            //            format: function(value, ratio) {
-            //                return value;
-            //            },
-            //            show: false // to turn off the min/max labels.
-            //        },
-            min: qResultsFormatted[key].minValue, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
-            max: qResultsFormatted[key].maxValue, // 100 is default
-            units: qResultsFormatted[key].units
-            //    width: 39 // for adjusting arc thickness
-          },
-          color: {
-            pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044'], // the three color levels for the percentage values.
-            threshold: {
-              //            unit: 'value', // percentage is default
-              //            max: 200, // 100 is default
-              values: [30, 60, 90, 100]
-            }
-          },
-          size: {
-            height: 180
-          }
-        });
-      }
-      if (qResultsFormatted[key].type=='bar'){
-        var chart = c3.generate({
-          bindto: '#'+newId,
-          axis:{
-            x:{
-              type : 'category'
-            },
-            y:{
-              tick:{
-                format:d3.format('%'),
-                values:[0.25, 0.5, 0.75, 1]
-              },
-              padding : {
-                top : 20,
-                bottom : 0
-              },
-              min:0,
-              max:1
-            }
-          },
-          color:{
-            pattern:['#3AAEF2']
-          },
-          data: {
-            x:"x",
-            columns: [
-              qResultsFormatted[key].answerTitles,
-              qResultsFormatted[key].answerValues
-            ],
-            type: 'bar'
-          },
-          bar: {
-            width: {ratio: 0.8 }            //width: 100 // this makes bar width 100px
-          },
-          size: {
-            height: 180
-          }
-        });
-      }
-      if (qResultsFormatted[key].type=='pie'){
-        var chart = c3.generate({
-          bindto: '#'+newId,
-          data: {
-            // iris data from R
-            columns: qResultsFormatted[key].answerValues,
-            type : 'pie'
-          },
-          size: {
-            height: 180
-          }
-        });
-      }
-*/
-
       generateSingleChart(qResultsFormatted[key], newId);
-
-
     }
   }
   generateSingleChart = function(qChart, newId){
@@ -435,7 +214,11 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
           //    width: 39 // for adjusting arc thickness
         },
         color: {
-          pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044'], // the three color levels for the percentage values.
+          pattern: [
+            '#FF0000',
+            '#F97600',
+            '#F6C600',
+            '#60B044'], // the three color levels for the percentage values.
           threshold: {
             //            unit: 'value', // percentage is default
             max: qChart.maxValue, // 100 is default
@@ -472,7 +255,7 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
           }
         },
         color:{
-          pattern:['#3AAEF2']
+          pattern:['#00C0AD']
         },
         data: {
           x:"x",
@@ -506,7 +289,10 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
         size: {
           height: 250
         },
-        color:{pattern:["#01B8AA", '#FD625E', "#6E33B8"]}
+        color:{pattern:[
+          "#01B8AA",
+          '#FD625E',
+          "#6E33B8"]}
       });
     }
   }
@@ -575,9 +361,9 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
       if (questions.length != 0){
         for(key in questions){
           if(questions[key].questionType == 1 || (
-              questions[key].questionType == 2 &&
-              questions[key].answers.length > 2
-            )){
+            questions[key].questionType == 2 &&
+            questions[key].answers.length > 2
+          )){
             var resultType = "";
             var answerTitles =["x"];
             var answerValues =[""];
@@ -1428,25 +1214,25 @@ function ChartsDialogController($scope, $mdDialog) {
       $rootScope.isUpload = true;
     }
   }}])
-.service('dialogChartService', [function() {
-  return {
-    getModalChartData: function(response) {
-      var namesArr = ['x'];
-      var valuesArr = [''];
-      for (var element in response) {
-        // console.log('group analisys', element);
-        // console.log('group values: ', response[element]);
-        namesArr.push(element);
-        valuesArr.push((response[element] * 100) / 100);
+  .service('dialogChartService', [function() {
+    return {
+      getModalChartData: function(response) {
+        var namesArr = ['x'];
+        var valuesArr = [''];
+        for (var element in response) {
+          // console.log('group analisys', element);
+          // console.log('group values: ', response[element]);
+          namesArr.push(element);
+          valuesArr.push((response[element] * 100) / 100);
+        }
+        return {
+          namesArr: namesArr,
+          valuesArr: valuesArr
+        }
       }
-      return {
-        namesArr: namesArr,
-        valuesArr: valuesArr
-      }
+
+
+
     }
 
-
-
-  }
-
-}]);
+  }]);

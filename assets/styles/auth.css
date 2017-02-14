@@ -145,7 +145,7 @@ input:focus ~ .highlight {
     letter-spacing: 1px;
     background: transparent;
     border: 0;
-    border-bottom: 2px solid #607D8B;
+    /*border-bottom: 2px solid #607D8B;*/
     cursor: pointer;
     transition: all 0.15s ease;
 }
