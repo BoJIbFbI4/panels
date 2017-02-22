@@ -490,8 +490,8 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
           "value": response.questionaryResult[key],
 
           "minValue" : 0.0,
-          "maxValue" : 100.0,
-          "units"    : ' %'
+          "maxValue" : 10.0,
+          "units"    : ''
 
         }
         chartsCount++
