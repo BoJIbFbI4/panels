@@ -150,7 +150,6 @@ app.controller(
 }]);
 
 app.service('translationService', function($resource) {
-
     this.getTranslation = function($scope, language) {
         var languageFilePath = 'multiLanguage/lang_' + language + '.json';
         console.log(language);
@@ -166,8 +165,6 @@ app.service('fileUpload', ['$http', '$rootScope', function($http, $rootScope) {
         var fd = new FormData();
         fd.append('file', file);
 
-
-
         $http.post(uploadUrl, fd, {
                 transformRequest: angular.identity,
                 headers: {
@@ -179,8 +176,6 @@ app.service('fileUpload', ['$http', '$rootScope', function($http, $rootScope) {
                 console.log(resp);
                 $rootScope.hideLoader[index] = false;
                 $rootScope.fileState[index] = 'File Uploaded: ' + resp
-
-
             })
             .error(function(error) {
                 console.log(error);
@@ -189,8 +184,6 @@ app.service('fileUpload', ['$http', '$rootScope', function($http, $rootScope) {
                 }
                 $rootScope.hideLoader[index] = false;
                 $rootScope.fileState[index] = 'Not loaded - Error'
-
-
             });
     };
 }]);
