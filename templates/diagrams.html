@@ -52,7 +52,7 @@
                 </span>
 
             </div>
-            <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
+            <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone" id="divExportToPdf">
                 <button
                         class="mdl-button mdl-js-button mdl-button--primary  mdl-color-text--black"
                         id="buttonExportToPDF"
@@ -60,6 +60,8 @@
                         ng-click="exportToPDF()">
                     <b>{{translation.ExportToPDF}}</b>
                 </button>
+                <a id="pdfMe">123</a>
+
             </div>
             <div class="mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--3-col-phone">
                 <button class="mdl-button mdl-js-button mdl-button--primary  mdl-color-text--black" ng-click="showStat()">
