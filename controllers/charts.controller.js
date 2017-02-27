@@ -861,17 +861,35 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
           console.log(myClass);
 
           newTable = newTable + "<td"
-          if (myClass.includes("8")){
+          if (myClass.includes("mdl-cell--8")){
             counter+=8
             newTable=newTable + " colspan=8>"
           }
-          if (myClass.includes("4")){
+          if (myClass.includes("mdl-cell--4")){
             counter+=4
-            newTable=newTable + " colspan=8>"
+            newTable=newTable + " colspan=4>"
+          }
+          if (myClass.includes("mdl-cell--6")){
+            counter+=6
+            newTable=newTable + " colspan=6>"
           }
 
+          if (myClass.includes("mdl-cell--3")){
+            counter+=3
+            newTable=newTable + " colspan=3>"
+          }
 
+          if (myClass.includes("mdl-cell--12")){
+            counter+=12
+            newTable=newTable + " colspan=12>'"
+          }
+          newTable = newTable + "<div chartsCard mdl-grid mdl-shadow--2dp chartsBack>"
           newTable = newTable + divs[i].innerHTML
+          if (myClass.includes("12")){
+            counter+=12
+            newTable=newTable + "</div>'"
+          }
+
           newTable = newTable + "</td>"
           if (counter >= 12 ){
             newTable=newTable+"</tr><tr>"
@@ -880,7 +898,7 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
 
 
         }
-        newTable = newTable + "</tr></td>"
+        newTable = newTable + "</tr></table>"
         console.log(newTable);
 
         {
@@ -899,7 +917,7 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
           mywindow.document.write('</div>');
           // ==============================
 
-          mywindow.document.write('<script> function printMe() {window.print()} </script>');
+          mywindow.document.write('<script> function printMe() {window.print(); } </script>');
           mywindow.document.write('</body></html>');
 
           mywindow.document.close(); // necessary for IE >= 10
