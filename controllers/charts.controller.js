@@ -822,7 +822,17 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
       exportToPDF: function() {
         console.log("TRYING TO EXPORT");
 
-        cnt = document.getElementById("toExportToPDF").innerHTML
+        // cnt = document.getElementById("toExportToPDF").innerHTML
+
+
+
+        var allDivs = $('.chartsBack')
+        var divsContainer = $('#toExportToPDF').find(allDivs)
+        // var divsContainer = angular.element( document.querySelector( '#toExportToPDF' ) );
+        var divs = divsContainer
+
+
+        console.log("___");
         // var pdf = new jsPDF('p', 'pt', 'letter');
         //
         // pdf.canvas.height = 72 * 11;
@@ -838,32 +848,64 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
         // });
         //
 
+        var newTable = "<table><tr>"
+        // for (i = 0; i < divs.length; length++) {
+        //   console.log(i);
+        // }
 
 
-        // console.log(cnt);
+        console.log(divs.length);
+        var counter = 0;
+        for (var i=0 ; i<divs.length ; i++){
+          var myClass = divs[i].getAttribute('class');
+          console.log(myClass);
+
+          newTable = newTable + "<td"
+          if (myClass.includes("8")){
+            counter+=8
+            newTable=newTable + " colspan=8>"
+          }
+          if (myClass.includes("4")){
+            counter+=4
+            newTable=newTable + " colspan=8>"
+          }
+
+
+          newTable = newTable + divs[i].innerHTML
+          newTable = newTable + "</td>"
+          if (counter >= 12 ){
+            newTable=newTable+"</tr><tr>"
+            counter=0
+          }
+
+
+        }
+        newTable = newTable + "</tr></td>"
+        console.log(newTable);
+
         {
           var mywindow = window.open('','','left=50,top=50,width=800,height=640,toolbar=0,scrollbars=1,status=0');
           mywindow.id = "printMeToPDF";
-          mywindow.document.write('<html><head><title>' + document.title + '</title>');
+          mywindow.document.write('<html>');
+          // mywindow.document.write('<html><head><title>' + document.title + '</title>');
           mywindow.document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">        <link rel="stylesheet" href="./resources/mdl/material.css">        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?">        <link rel="stylesheet" href="assets/styles/style.css">        <link rel="stylesheet" href="assets/styles/paletteBlueGreyMD.css">    <link rel="stylesheet" href="resources/mdl/mdl-date/mdl-date-textfield.min.css">        <link rel="stylesheet" href="resources/c3/c3.min.css">        <link rel="stylesheet" href="assets/styles/auth.css">        <link rel="stylesheet" href="assets/styles/bootloader.css">        <link rel="stylesheet" href="assets/styles/loginLoaderProcessBar.css">        <link rel="stylesheet" href="assets/styles/attachExcelAnimation.css">        <link rel="stylesheet" href="assets/styles/statsTableStyle.css">        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">');
-          mywindow.document.write('</head><body >');
+          // mywindow.document.write('</head><body >');
+          mywindow.document.write('<body onload=printMe()>');
           // mywindow.document.write('<h1>' + document.title + '</h1>');
 
           // this thing need to be exported
           mywindow.document.write('<div id="pdfMe">');
-          mywindow.document.write(cnt);
+          mywindow.document.write(newTable);
           mywindow.document.write('</div>');
           // ==============================
 
+          mywindow.document.write('<script> function printMe() {window.print()} </script>');
           mywindow.document.write('</body></html>');
 
           mywindow.document.close(); // necessary for IE >= 10
           mywindow.focus(); // necessary for IE >= 10*/
 
-
-          sleep(1000);
-
-          mywindow.print();
+          // mywindow.print();
           // mywindow.close();
         }
         return true;
