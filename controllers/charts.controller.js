@@ -833,25 +833,7 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
 
 
         console.log("___");
-        // var pdf = new jsPDF('p', 'pt', 'letter');
-        //
-        // pdf.canvas.height = 72 * 11;
-        // pdf.canvas.width = 72 * 8.5;
-        // html2pdf(cnt, pdf, function(pdf){
-        //   // var iframe = document.createElement('iframe');
-        //   // iframe.setAttribute('style','position:absolute;right:0; top:0; bottom:0; height:100%; width:500px');
-        //   // document.body.appendChild(iframe);
-        //   // iframe.src = pdf.output('datauristring');
-        //   var cntPdf = pdf.output('datauristring');
-        //   var lnk2pdf = document.getElementById('pdfMe');
-        //   lnk2pdf.setAttribute("href",cntPdf)
-        // });
-        //
-
         var newTable = "<table><tr>"
-        // for (i = 0; i < divs.length; length++) {
-        //   console.log(i);
-        // }
 
 
         console.log(divs.length);
@@ -884,7 +866,37 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
             newTable=newTable + " colspan=12>'"
           }
           newTable = newTable + "<div chartsCard mdl-grid mdl-shadow--2dp chartsBack>"
-          newTable = newTable + divs[i].innerHTML
+
+
+
+
+
+
+          // console.log($(document).find(divs[i] , 'div').children.length);
+          var subDivs = $(document).find(divs[i] , 'div').children()
+          console.log(subDivs);
+
+          var subTable = "<table><tr><td>"
+          subTable = subTable + subDivs[0].innerHTML
+          subTable = subTable + "</td>"
+          // console.log(subDivs[0]);
+          // console.log(subDivs[0].className);
+          if (subDivs[0].className.includes("mdl-cell--12")){
+            subTable = subTable + "</tr><tr>"
+          }
+          subTable = subTable + "<td>"
+          subTable = subTable + subDivs[1].innerHTML
+
+          subTable = subTable + "</td></tr></table>"
+
+          // console.log("/_______________________\\");
+          // console.log(subTable);
+          // console.log("\\_______________________/");
+
+          // newTable = newTable + divs[i].innerHTML
+          newTable = newTable + subTable
+
+
           if (myClass.includes("12")){
             counter+=12
             newTable=newTable + "</div>'"
@@ -892,14 +904,14 @@ function($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChart
 
           newTable = newTable + "</td>"
           if (counter >= 12 ){
-            newTable=newTable+"</tr><tr>"
+            newTable=newTable+"<td>_</td></tr><tr>"
             counter=0
           }
 
 
         }
         newTable = newTable + "</tr></table>"
-        console.log(newTable);
+        // console.log(newTable);
 
         {
           var mywindow = window.open('','','left=50,top=50,width=800,height=640,toolbar=0,scrollbars=1,status=0');
