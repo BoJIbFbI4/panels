@@ -169,9 +169,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                                                 width: 600,
                                                                 height: 300
                                                             },
-                                                            // color: {
-                                                            //     pattern: ['#61A0D7']
-                                                            // },
+                                                            color: {
+                                                                pattern: ['#00C0AD']
+                                                            },
                                                             legend: {
                                                                 show: false
                                                             }
@@ -202,7 +202,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                             width: 600
                                         },
                                         color: {
-                                            pattern: ['#61A0D7']
+                                            pattern: ['#00C0AD']
                                         },
                                         legend: {
                                             show: false
@@ -261,7 +261,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                             padding: {
                                 top: 10,
-                                bottom: 10
+                                bottom: 0
                             },
                             min: 0,
                             max: 1
@@ -278,7 +278,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         ],
                         labels: {
                             format: function (v, id, i, j) {
-                                return (v * 100).toFixed(0) + " %"
+                                return (v * 100).toFixed(0) + "%"
                             },
                             font: '20px'
                         },
@@ -356,9 +356,6 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             var val = dialogChartService.getModalChartData(response).valuesArr.map(function (item, i, arr) {
                                 return typeof item === "string" ? item : item / 100;
                             });
-                            // console.log("dates names: ", names);
-                            // console.log("dates values: ", val);
-                            //
                             testBarChartDraw(names, val, "4_1");
                         });
                         $scope.showChartDialogDates();
