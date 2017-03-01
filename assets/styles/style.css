@@ -11,6 +11,10 @@
     color: #d35400;
 }
 
+.mdl-layout__drawer > .mdl-layout__title, .mdl-layout__drawer > .mdl-layout-title {
+    padding-left: 0 !important;
+}
+
 .projects-card-square > .mdl-card__title {
     color: #fff;
     background-color: #333333;
@@ -240,7 +244,7 @@
     .mdl-layout__drawer-button {
         visibility: visible;
         z-index: 1;
-        background-color: #607D8B !important;
+        background-color: #FFEB3B !important;
     }
 }
 
@@ -249,7 +253,7 @@
     .mdl-layout__drawer-button {
         visibility: visible;
         z-index: 1;
-        background-color: #607D8B !important;
+        background-color: #FFEB3B !important;
     }
 }
 
@@ -258,6 +262,6 @@
     .mdl-layout__drawer-button {
         visibility: visible;
         z-index: 1;
-        background-color: #607D8B !important;
+        background-color: #FFEB3B !important;
     }
 }

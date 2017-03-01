@@ -86,7 +86,7 @@ input:focus ~ label, input.used ~ label {
     width: 0;
     bottom: 1px;
     position: absolute;
-    background: #607D8B;
+    background: black;
     transition: all 0.2s ease;
 }
 
