@@ -1,3 +1,28 @@
+.fullWidth{
+    width: 100%;
+}
+
+
+.c3-target-כן text {
+    /*text-anchor: middle;*/
+    /*text-align: center !important;*/
+    font-size: 15px !important;
+    text-anchor: end !important;
+
+
+}
+
+.c3-target-לא text{
+    text-anchor: start !important;
+
+    /*text-anchor: middle;*/
+    /*text-align: center !important;*/
+    font-size: 15px !important;
+
+}
+
+
+
 .textColor1 {
     color: #9b59b6;
 }
@@ -10,6 +35,20 @@
 .textColor4 {
     color: #d35400;
 }
+
+.backColor1{
+    background-color: #F5F5DC !important;
+}
+.backColor2{
+    background-color: #F5F5F5 !important;
+}
+.backColor3{
+    background-color: #EEEEEE !important;
+}
+.backColor4{
+    background-color: #FFCCBC !important;
+}
+
 
 .mdl-layout__drawer > .mdl-layout__title, .mdl-layout__drawer > .mdl-layout-title {
     padding-left: 0 !important;
@@ -39,16 +78,44 @@
 }
 
 .diklaHeader {
-    font-size: 32px;
+    direction: rtl !important;
+
+    font-size: 48px;
     font-weight: bold;
     color: #f97600;
     line-height: 24px;
+    /*height: 40px !important;*/
+    padding: 10px;
+
 }
+
+.diklaHeaderLabel{
+    direction: rtl !important;
+
+    font-size: 42px;
+    font-weight: bold;
+    color: #607D8B;
+    line-height: 24px;
+    /*height: 40px !important;*/
+
+}
+.diklaHeaderLabel1{
+    direction: rtl !important;
+
+    height: 32px;
+    vertical-align: middle;
+}
+
 
 .chartsBack {
     background: white;
-    padding: 10px;
-    margin: 5px;
+    padding-left: -1px;
+    padding-right: -1px;
+
+    margin: 1px;
+
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
 
 .header-border-bottom {

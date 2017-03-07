@@ -31,6 +31,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     newDiv.addClass('mdl-grid');
                     newDiv.addClass('mdl-shadow--2dp');
                     newDiv.addClass('chartsBack');
+                    newDiv.addClass(qResultsFormatted[key].backColor);
+
 
 
                     // newDiv.addClass('mdl-button');
@@ -48,14 +50,19 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     newChart.addClass('mdl-layout-title');
                     newChart.addClass('diklaHeader');
                     newHead.addClass(qResultsFormatted[key].textColor);
+                    newHead.addClass(qResultsFormatted[key].backColor);
+                    newChart.addClass(qResultsFormatted[key].backColor);
 
 
                     var newDivider = angular.element('<div></div>');
                     if (qResultsFormatted[key].titleSize > qResultsFormatted[key].contentSize) {
                         newDiv.append(newChart);
+                        newHead.addClass("diklaHeaderLabel")
                         newDiv.append(newHead);
                     } else {
                         newDiv.append(newHead);
+                        newHead.addClass("diklaHeaderLabel1")
+
                         newDiv.append(newChart);
                     }
 
@@ -521,10 +528,20 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     qResultsFormatted[0].type = 'simpleNumber'
                     qResultsFormatted[0].textColor = 'textColor1'
 
+                    // qResultsFormatted[0].backColor = 'backColor1'
+                    // qResultsFormatted[1].backColor = 'backColor1'
 
 
                     qResultsFormatted[1].size = 6
                     qResultsFormatted[1].textColor = 'textColor1'
+
+
+
+                    qResultsFormatted[2].backColor = 'backColor2'
+                    qResultsFormatted[3].backColor = 'backColor2'
+                    qResultsFormatted[4].backColor = 'backColor2'
+                    qResultsFormatted[5].backColor = 'backColor2'
+
 
                     qResultsFormatted[4].textColor = 'textColor2'
                     qResultsFormatted[8].textColor = 'textColor3'
@@ -540,6 +557,13 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     qResultsFormatted[2].value = qResultsFormatted[2].value.toFixed(2)
 
 
+
+                    qResultsFormatted[6].backColor = 'backColor3'
+                    qResultsFormatted[7].backColor = 'backColor3'
+                    qResultsFormatted[8].backColor = 'backColor3'
+                    qResultsFormatted[9].backColor = 'backColor3'
+
+
                     qResultsFormatted[6].size = 12
                     qResultsFormatted[6].titleSize = 8
                     qResultsFormatted[6].contentSize = 4
@@ -553,6 +577,13 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     qResultsFormatted[11].size = 6
 
                     qResultsFormatted[12].size = 6
+
+
+                    qResultsFormatted[10].backColor = 'backColor2'
+                    qResultsFormatted[11].backColor = 'backColor2'
+                    qResultsFormatted[12].backColor = 'backColor2'
+
+
 
                     chartsCount = 0
                     generateChartFromObject(qResultsFormatted)
@@ -717,7 +748,15 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         function DialogController($scope, $mdDialog, translation) {
             $scope.translation = translation;
             $scope.stats = stats;
-            $scope.stats["responseRate"] = $scope.stats["responseRate"] + '%';
+
+            var rRate = $scope.stats["responseRate"] + '';
+
+            if (rRate.includes('%')){
+                $scope.stats["responseRate"] = $scope.stats["responseRate"] + '';
+            }
+            else{
+                $scope.stats["responseRate"] = $scope.stats["responseRate"] + '%';
+            }
             $scope.hide = function () {
                 $mdDialog.hide();
             };
@@ -865,7 +904,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     var myClass = divs[i].getAttribute('class');
                     console.log(myClass);
 
-                    newTable = newTable + "<td"
+                    newTable = newTable + "<td class='" + "" +"'"
                     if (myClass.includes("mdl-cell--8")) {
                         counter += 8
                         newTable = newTable + " colspan=8>"
@@ -893,9 +932,13 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                     // console.log($(document).find(divs[i] , 'div').children.length);
                     var subDivs = $(document).find(divs[i], 'div').children()
-                    console.log(subDivs);
+                    // console.log(subDivs);
 
-                    var subTable = "<table><tr><td>"
+                    var subTable = "<table class='fullWidth'><tr><td class = '"+ subDivs[0].getAttribute('class')
+                            .replace("mdl-","")
+                            .replace("mdl-","") +"'>"
+                    console.log(subDivs[0].getAttribute('class'))
+
                     subTable = subTable + subDivs[0].innerHTML
                     subTable = subTable + "</td>"
                     // console.log(subDivs[0]);
@@ -903,8 +946,12 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     if (subDivs[0].className.includes("mdl-cell--12")) {
                         subTable = subTable + "</tr><tr>"
                     }
-                    subTable = subTable + "<td>"
+                    subTable = subTable + "<td class = '"+subDivs[1].getAttribute('class')
+                            .replace("mdl-","")
+                            .replace("mdl-","")+"'>"
                     subTable = subTable + subDivs[1].innerHTML
+                    console.log(subDivs[1].getAttribute('class'))
+
 
                     subTable = subTable + "</td></tr></table>"
 
