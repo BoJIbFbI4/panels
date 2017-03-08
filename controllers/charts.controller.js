@@ -51,26 +51,179 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     newChart.addClass('diklaHeader');
                     newHead.addClass(qResultsFormatted[key].textColor);
                     newHead.addClass(qResultsFormatted[key].backColor);
+
                     newChart.addClass(qResultsFormatted[key].backColor);
+
+
+                    var qChart = qResultsFormatted[key];
+                    var gaugeQuastionId = qChart.questionID;
+
+
 
 
                     var newDivider = angular.element('<div></div>');
                     if (qResultsFormatted[key].titleSize > qResultsFormatted[key].contentSize) {
                         newDiv.append(newChart);
-                        newHead.addClass("diklaHeaderLabel")
+                        newHead.addClass("diklaHeaderLabel");
                         newDiv.append(newHead);
                     } else {
                         newDiv.append(newHead);
-                        newHead.addClass("diklaHeaderLabel1")
+                        newHead.addClass("diklaHeaderLabel1");
 
                         newDiv.append(newChart);
+
+
                     }
 
+                    if ((qChart.typeDrill == 'Dikla' && qChart.type == 'simpleNumber')||qChart.type == 'pie') {
+                        newChart.on("click", function () {
+                            console.log(key, gaugeQuastionId);
+                            gaugeQuastionId = qChart.typeDrill == 'Dikla' ? qChart.title : gaugeQuastionId;
+                            var funcDrill = qChart.typeDrill == 'Dikla' ? getChartData.getAnalisysDrillDownDickla : getChartData.getAnalisysDrillDown;
+                            console.log("-qChart.answerID-");
+                            console.log(qChart.answerID);
+                            funcDrill(gaugeQuastionId, $scope.createDate, $scope.userDate, "","", qChart.answerID)
+                                .then(function (response) {
+                                    var citiesNames = dialogChartService.getModalChartData(response).namesArr;
+                                    var citiesValues = dialogChartService.getModalChartData(response).valuesArr;
+                                    c3.generate({
+                                        bindto: '#chart2_1',
+                                        title: {
+                                            text: 'שביעות רצון ממוצעת - מוקדים'
+                                        },
+                                        data: {
+                                            x: 'x',
+                                            columns: [citiesNames, citiesValues],
+                                            labels: {
+                                                format: function (v, id, i, j) {
+                                                    return (v).toFixed(2);
+                                                }
+                                            },
+                                            type: 'bar',
+                                            selection: {
+                                                enabled: true
+                                            },
+                                            onclick: function () {
+                                                var currCityID = arguments[0].x + 1;
+                                                getChartData.getAnalisysDrillDown(gaugeQuastionId, $scope.createDate, $scope.userDate, citiesNames[currCityID])
+                                                    .then(function (response) {
+                                                        var groupNames = dialogChartService.getModalChartData(response).namesArr;
+                                                        var groupValues = dialogChartService.getModalChartData(response).valuesArr;
+                                                        c3.generate({
+                                                            bindto: '#chart2_2',
+                                                            title: {
+                                                                text: 'שביעות רצון ממוצעת - צוותים'
+                                                            },
+                                                            data: {
+                                                                x: 'x',
+                                                                columns: [groupNames, groupValues],
+                                                                type: 'bar',
+                                                                selection: {
+                                                                    enabled: true
+                                                                },
+                                                                labels: {
+                                                                    format: function (v, id, i, j) {
+                                                                        return (v).toFixed(2);
+                                                                    }
+                                                                },
+                                                                onclick: function () {
+                                                                    var currGroupID = arguments[0].x + 1;
+                                                                    getChartData.getAnalisysDrillDown(gaugeQuastionId, $scope.createDate, $scope.userDate, citiesNames[currCityID], groupNames[currGroupID])
+                                                                        .then(function (response) {
+
+                                                                            var data = [];
+                                                                            $("#table").html("");
+
+                                                                            for (var key in response) {
+                                                                                data[0] = ["NAME"];
+                                                                                data.push([]);
+                                                                                data[data.length - 1].unshift(key);
+                                                                                for (var innerKey in response[key]) {
+                                                                                    data[0].unshift(innerKey.toUpperCase());
+                                                                                    data[data.length - 1].unshift(response[key][innerKey]);
+                                                                                }
+                                                                            }
+
+                                                                            var cityTable = makeTable($("#table"), data);
+                                                                            console.log(response);
+                                                                        });
+                                                                }
+                                                            },
+                                                            axis: {
+                                                                x: {
+                                                                    type: 'category'
+                                                                },
+                                                                y: {
+                                                                    max: 10,
+                                                                    min: 0,
+                                                                    padding: {
+                                                                        top: 0,
+                                                                        bottom: 0
+                                                                    }
+                                                                }
+                                                            },
+                                                            bar: {
+                                                                width: {
+                                                                    ratio: 0.3
+                                                                }
+                                                            },
+                                                            size: {
+                                                                width: 600,
+                                                                height: 300
+                                                            },
+                                                            color: {
+                                                                pattern: ['#00C0AD']
+                                                            },
+                                                            legend: {
+                                                                show: false
+                                                            }
+                                                        });
+                                                    });
+                                            }
+                                        },
+                                        axis: {
+                                            x: {
+                                                type: 'category'
+                                            },
+                                            y: {
+                                                max: qChart.typeDrill == 'Dikla' ? 10 : 5,
+                                                min: 0,
+                                                padding: {
+                                                    top: 0,
+                                                    bottom: 0
+                                                }
+                                            }
+                                        },
+                                        bar: {
+                                            width: {
+                                                ratio: 0.3
+                                            }
+                                        },
+                                        size: {
+                                            height: 300,
+                                            width: 600
+                                        },
+                                        color: {
+                                            pattern: ['#00C0AD']
+                                        },
+                                        legend: {
+                                            show: false
+                                        }
+                                    });
+                                });
+                            $scope.showChartDialog();
+                        });
+                    }
+
+
                 }
+
+
                 chartsGridContainerAngulared.append(newDiv);
                 generateSingleChart(qResultsFormatted[key], newId);
+
             }
-        }
+        };
         generateSingleChart = function (qChart, newId) {
             if (qChart.type == 'gauge') {
                 var gaugeQuastionId = qChart.questionID;
@@ -85,8 +238,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         type: 'gauge',
                         onclick: function (d, i) {
                             console.log(key, gaugeQuastionId);
-
-                            getChartData.getAnalisysDrillDown(gaugeQuastionId, $scope.createDate, $scope.userDate)
+                            gaugeQuastionId = qChart.typeDrill == 'Dikla' ? qChart.title : gaugeQuastionId;
+                            var funcDrill = qChart.typeDrill == 'Dikla' ? getChartData.getAnalisysDrillDownDickla : getChartData.getAnalisysDrillDown;
+                            funcDrill(gaugeQuastionId, $scope.createDate, $scope.userDate)
                                 .then(function (response) {
 
                                     var citiesNames = dialogChartService.getModalChartData(response).namesArr;
@@ -159,7 +313,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                                                     type: 'category'
                                                                 },
                                                                 y: {
-                                                                    max: 5,
+                                                                    max: 10,
                                                                     min: 0,
                                                                     padding: {
                                                                         top: 0,
@@ -191,7 +345,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                                 type: 'category'
                                             },
                                             y: {
-                                                max: 5,
+                                                max: qChart.typeDrill == 'Dikla'? 10 : 5 ,
                                                 min: 0,
                                                 padding: {
                                                     top: 0,
@@ -215,9 +369,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                             show: false
                                         }
                                     });
-                                })
+                                });
                             $scope.showChartDialog();
-                        },
+                        }
                     },
 
                     gauge: {
@@ -308,7 +462,11 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     data: {
                         // iris data from R
                         columns: qChart.answerValues,
-                        type: 'pie'
+                        type: 'pie',
+                        onclick: function (d, i) {
+                            console.log("onclick", d, i);
+
+                        }
 
                     },
                     size: {
@@ -322,7 +480,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     }
                 });
             }
-        }
+
+            return chart
+        };
 
         $scope.chartsArray = [];
         $rootScope.headerTitle = "charts";
@@ -383,6 +543,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                 // console.log("gettingAnalisysData",response);
                 var questions = response.questionary.questions;
+                console.log("  - - - - - - - response - - - - - - -  ");
+                console.log(response);
+                console.log("  - - - - - - - response - - - - - - -  ");
                 if (questions) {
                     if (questions.length != 0) {
                         for (key in questions) {
@@ -424,8 +587,11 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                     "minValue": 0.0,
                                     "maxValue": 100.0,
                                     "units": '%',
-                                    "questionID": question.id
+                                    "questionID": question.id,
+                                    "answerID" : question.answers[0].id
                                 };
+                                console.log("--- qResultsFormattedNew ---");
+                                console.log(qResultsFormattedNew);
                                 if (question.questionType == 2) {
                                     var colorScale = d3.scale.category10();
                                     qResultsFormattedNew.color = function (inColor, data) {
@@ -438,7 +604,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                 qResultsFormatted.push(qResultsFormattedNew);
 
                                 if (question.questionType != 2) {
-                                    var qResultsFormattedNewGauge = {}
+                                    var qResultsFormattedNewGauge = {};
                                     {
                                         qResultsFormattedNewGauge.size = 4;
                                         qResultsFormattedNewGauge.titleSize = 12;
@@ -488,7 +654,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                     "type": "pie",
                                     "title": question.title,
                                     "answerValues": answerValues,
-                                    "questionID": question.id
+                                    "questionID": question.id,
+                                    "answerID" : question.answers[0].id
                                 };
 
                                 qResultsFormatted.push(qResultsFormattedNew);
@@ -503,6 +670,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                 }
                 if (response.questionaryResult != null) {
                     var chartsCount = 0
+                    console.log('response to dickla');
+                    console.log(response);
+                    var diklaID = response.questionary.id;
                     for (key in response.questionaryResult) {
                         qResultsFormatted[chartsCount] = {
                             // size following to grid
@@ -517,9 +687,11 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                             "minValue": 0.0,
                             "maxValue": 10.0,
-                            "units": ''
+                            "units": '',
+                            "typeDrill": 'Dikla',
+                            "id":diklaID
 
-                        }
+                        };
                         chartsCount++
                     }
                     // console.log(JSON.stringify(qResultsFormatted));
@@ -585,7 +757,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
 
 
-                    chartsCount = 0
+                    chartsCount = 0;
+                    console.log("qResultsFormatted.length");
+                    console.log(qResultsFormatted.length);
                     generateChartFromObject(qResultsFormatted)
                 }
             });
@@ -794,7 +968,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             console.log(authorizationData);
             console.log("Companies auth data lost");
             // $state.go("auth");
-            $rootScope.logout();
+                $rootScope.logout();
         }
         if (authorizationData == "") {
             // console.log(authorizationData);
@@ -837,12 +1011,15 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
 
                 }
             },
-            getAnalisysDrillDown: function (questionID, startDate, endDate, city, group) {
+            getAnalisysDrillDown: function (questionID, startDate, endDate, city, group, answerID) {
                 console.log(url + '/common/getAnalysisDrillDown/' + questionID);
                 return $.ajax({
-                    url: url + '/common/getAnalysisDrillDown/' + questionID,
+                    // url: url + '/common/getAnalysisDrillDown/' + questionID,
+                    url: url + '/common/getAnalysisDrillDown/',
                     type: 'post',
                     data: {
+                        idQuestion: questionID,
+                        idAnswer: answerID,
                         startDate: startDate,
                         endDate: endDate,
                         city: city,
@@ -853,7 +1030,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         'Authorization': 'Basic ' + authorizationData
                     },
                     dataType: 'json',
-                    success: function (response) {
+                    success: function (response, req) {
+                        console.log(req);
                         // analisysData[questionaryID] = response.data;
                         console.log(response);
                         return response;
@@ -863,6 +1041,173 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     }
 
                 });
+            },
+            getAnalisysDrillDownDickla : function (questionID, startDate, endDate, city, group) {
+                console.log(url + '/common/getAnalysisDrillDownDikla/');
+                return $.ajax({
+                    url: url + '/common/getAnalysisDrillDownDikla/',
+                    type: 'post',
+                    data: {
+                        startDate: startDate,
+                        endDate: endDate,
+                        city: city,
+                        group: group,
+                        title: questionID
+                    },
+                    headers: {
+                        'Content-Type': undefined,
+                        'Authorization': 'Basic ' + authorizationData
+                    },
+                    dataType: 'json',
+                    success: function (response, req) {
+                        console.log(req);
+                        // analisysData[questionaryID] = response.data;
+                        console.log('dikla response');
+                        console.log(response);
+                        return response;
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+
+                });
+
+            },
+            universalDrillDown : function (d, i) {
+                console.log(key, gaugeQuastionId);
+                gaugeQuastionId = qChart.typeDrill == 'Dikla' ? qChart.title : gaugeQuastionId;
+                var funcDrill = qChart.typeDrill == 'Dikla' ? getChartData.getAnalisysDrillDownDickla : getChartData.getAnalisysDrillDown;
+                funcDrill(gaugeQuastionId, $scope.createDate, $scope.userDate, "", "", qChart.answerID)
+                    .then(function (response) {
+
+                        var citiesNames = dialogChartService.getModalChartData(response).namesArr;
+                        var citiesValues = dialogChartService.getModalChartData(response).valuesArr;
+                        c3.generate({
+                            bindto: '#chart2_1',
+                            title: {
+                                text: 'שביעות רצון ממוצעת - מוקדים'
+                            },
+                            data: {
+                                x: 'x',
+                                columns: [citiesNames, citiesValues],
+                                labels: {
+                                    format: function (v, id, i, j) {
+                                        return (v).toFixed(2);
+                                    }
+                                },
+                                type: 'bar',
+                                selection: {
+                                    enabled: true
+                                },
+                                onclick: function () {
+                                    var currCityID = arguments[0].x + 1;
+                                    getChartData.getAnalisysDrillDown(gaugeQuastionId, $scope.createDate, $scope.userDate, citiesNames[currCityID])
+                                        .then(function (response) {
+                                            var groupNames = dialogChartService.getModalChartData(response).namesArr;
+                                            var groupValues = dialogChartService.getModalChartData(response).valuesArr;
+                                            c3.generate({
+                                                bindto: '#chart2_2',
+                                                title: {
+                                                    text: 'שביעות רצון ממוצעת - צוותים'
+                                                },
+                                                data: {
+                                                    x: 'x',
+                                                    columns: [groupNames, groupValues],
+                                                    type: 'bar',
+                                                    selection: {
+                                                        enabled: true
+                                                    },
+                                                    labels: {
+                                                        format: function (v, id, i, j) {
+                                                            return (v).toFixed(2);
+                                                        }
+                                                    },
+                                                    onclick: function () {
+                                                        var currGroupID = arguments[0].x + 1;
+                                                        getChartData.getAnalisysDrillDown(gaugeQuastionId, $scope.createDate, $scope.userDate, citiesNames[currCityID], groupNames[currGroupID])
+                                                            .then(function (response) {
+
+                                                                var data = [];
+                                                                $("#table").html("");
+
+                                                                for (var key in response) {
+                                                                    data[0] = ["NAME"];
+                                                                    data.push([]);
+                                                                    data[data.length - 1].unshift(key);
+                                                                    for (var innerKey in response[key]) {
+                                                                        data[0].unshift(innerKey.toUpperCase());
+                                                                        data[data.length - 1].unshift(response[key][innerKey]);
+                                                                    }
+                                                                }
+
+                                                                var cityTable = makeTable($("#table"), data);
+                                                                console.log(response);
+                                                            });
+                                                    }
+                                                },
+                                                axis: {
+                                                    x: {
+                                                        type: 'category'
+                                                    },
+                                                    y: {
+                                                        max: 10,
+                                                        min: 0,
+                                                        padding: {
+                                                            top: 0,
+                                                            bottom: 0
+                                                        }
+                                                    }
+                                                },
+                                                bar: {
+                                                    width: {
+                                                        ratio: 0.3
+                                                    }
+                                                },
+                                                size: {
+                                                    width: 600,
+                                                    height: 300
+                                                },
+                                                color: {
+                                                    pattern: ['#00C0AD']
+                                                },
+                                                legend: {
+                                                    show: false
+                                                }
+                                            });
+                                        });
+                                }
+                            },
+                            axis: {
+                                x: {
+                                    type: 'category'
+                                },
+                                y: {
+                                    max: qChart.typeDrill == 'Dikla'? 10 : 5 ,
+                                    min: 0,
+                                    padding: {
+                                        top: 0,
+                                        bottom: 0
+                                    }
+                                }
+                            },
+                            bar: {
+                                width: {
+                                    ratio: 0.3
+                                }
+                            },
+                            size: {
+                                height: 300,
+                                width: 600
+                            },
+                            color: {
+                                pattern: ['#00C0AD']
+                            },
+                            legend: {
+                                show: false
+                            }
+                        });
+                    });
+                $scope.showChartDialog();
             }
         };
 
