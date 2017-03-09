@@ -12,6 +12,23 @@ function sleep(milliseconds) {
 }
 
 
+function reverseString(str) {
+    // Step 1. Use the split() method to return a new array
+    var splitString = str.split(""); // var splitString = "hello".split("");
+    // ["h", "e", "l", "l", "o"]
+
+    // Step 2. Use the reverse() method to reverse the new created array
+    var reverseArray = splitString.reverse(); // var reverseArray = ["h", "e", "l", "l", "o"].reverse();
+    // ["o", "l", "l", "e", "h"]
+
+    // Step 3. Use the join() method to join all elements of the array into a string
+    var joinArray = reverseArray.join(""); // var joinArray = ["o", "l", "l", "e", "h"].join("");
+    // "olleh"
+
+    //Step 4. Return the reversed string
+    return joinArray; // "olleh"
+}
+
 angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$state', '$filter', 'fileUpload', '$stateParams', 'getChartData', '$mdDialog', 'serviceButtons', 'dialogChartService',
     function ($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChartData, $mdDialog, serviceButtons, dialogChartService) {
 
@@ -66,7 +83,8 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                         newDiv.append(newChart);
                         newHead.addClass("diklaHeaderLabel");
                         newDiv.append(newHead);
-                    } else {
+                    }
+                    else {
                         newDiv.append(newHead);
                         newHead.addClass("diklaHeaderLabel1");
 
@@ -82,7 +100,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                             var funcDrill = qChart.typeDrill == 'Dikla' ? getChartData.getAnalisysDrillDownDickla : getChartData.getAnalisysDrillDown;
                             console.log("-qChart.answerID-");
                             console.log(qChart.answerID);
-                            funcDrill(gaugeQuastionId, $scope.createDate, $scope.userDate, "","", qChart.answerID)
+                            funcDrill(gaugeQuastionId, $scope.createDate, $scope.userDate, undefined,undefined, qChart.answerID)
                                 .then(function (response) {
                                     var citiesNames = dialogChartService.getModalChartData(response).namesArr;
                                     var citiesValues = dialogChartService.getModalChartData(response).valuesArr;
@@ -563,7 +581,11 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                                 for (answer in question.answers) {
                                     // console.log("APPLY CHART for ", key, answer, question.answers[answer].usersRespondented);
 
-                                    answerTitles[answer] = question.answers[answer].title;// + " \n(" + question.answers[answer].usersRespondented + ")";
+                                    answerTitles[answer] = reverseString( question.answers[answer].title);// + " \n(" + question.answers[answer].usersRespondented + ")";
+                                    // console.log('question.answers[answer].title');
+                                    // console.log(reverseString( question.answers[answer].title));
+
+
                                     answerValues[answer] = question.answers[answer].usersRespondented / response.countUserByDate;
                                     answersCount++;
                                     answersSum += question.answers[answer].usersRespondented * answersCount;
@@ -674,6 +696,10 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     console.log(response);
                     var diklaID = response.questionary.id;
                     for (key in response.questionaryResult) {
+                        console.log('key');
+                        console.log(key);
+                        console.log(reverseString(key));
+
                         qResultsFormatted[chartsCount] = {
                             // size following to grid
                             "size": 4,
@@ -1397,6 +1423,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                 for (var element in response) {
                     // console.log('group analisys', element);
                     // console.log('group values: ', response[element]);
+
                     namesArr.push(element);
                     valuesArr.push((response[element] * 100) / 100);
                 }
