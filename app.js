@@ -62,13 +62,12 @@ app.controller(
         $rootScope.curAlert = alert;
         $rootScope.curAlert.index = index;
         console.log($scope.curAlert);
-        console.log("Supervisory Id in alert = " + $rootScope.curAlert.supervisoryManager.id);
-        console.log("Login Id = " + $rootScope.id);
+
         $mdDialog.show({
                 controller: AlertInfoController,
                 templateUrl: 'templates/alertInfoWindow.html',
                 parent: angular.element(document.body),
-                targetEvent: alert,
+                targetEvent: null,
                 clickOutsideToClose: true,
                 fullscreen: false // Only for -xs, -sm breakpoints.
             })

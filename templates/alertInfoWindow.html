@@ -28,9 +28,9 @@
     </div>
 
     <div ng-if="!isCurrentSuperviser()" class="mdl-card__actions mdl-card--border">
-        <input value="{{getCurAlert().text}}"  id="inputText" type="text">
+        <input ng-model="getCurAlert().text"  id="inputText" type="text">
         <a ng-click="setText()" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-            setText
+            set text
         </a>
     </div>
 

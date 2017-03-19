@@ -6,7 +6,7 @@ angular.module('panelsApp')
         $scope.id = $rootScope.id;
 
         $scope.isCurrentSuperviser = function () {
-            return $rootScope.curAlert.supervisoryManager.id == $rootScope.id
+            return $rootScope.curAlert.supervisoryManager ? $rootScope.curAlert.supervisoryManager.id == $rootScope.id : false;
         }
 
         $scope.getCompanies = function () {
@@ -84,20 +84,18 @@ angular.module('panelsApp')
         $scope.setText = function () {
             var url = $rootScope.url + "/managers/setTextInAlert/" + $rootScope.curAlert.id;
 
-            var data = $('#inputText').val();
+            var data = $rootScope.curAlert.text;
 
             var config = {
                 headers: {"Authorization": "Basic " + $rootScope.authorizationData},
-                params: {"text": data}
+                params: { "text": data }
             };
-
-            console.log("this is data!!! : " + data);
 
             $http.post(url, data, config).then(function (response) {
                 console.log(response)
             });
 
-            $scope.hide()
+           $scope.hide()
 
         }
 

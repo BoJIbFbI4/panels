@@ -1,8 +1,12 @@
-.fullWidth{
+/** {
+    border: 1px red dotted !important;
+}*/
+
+.fullWidth {
     width: 100%;
 }
 
-._selected_{
+._selected_ {
     /*opacity: 1.1;*/
     color: red;
     stroke: red !important;
@@ -11,67 +15,93 @@
     stroke-dasharray: 0 !important;
 }
 
-.tick tspan{
+.tick tspan {
     direction: rtl !important;
-    text-align: right;
-
-
-}
-.tick text{
-    direction: rtl !important;
-    text-align: right;
-
-
+    text-align: right !important;
 }
 
-
-
-.c3-target-כן text {
-    /*text-anchor: middle;*/
-    /*text-align: center !important;*/
-    font-size: 15px !important;
-    text-anchor: end !important;
-
-
-}
-
-.c3-target-לא text{
+.tick text {
+    /* direction: rtl !important;*/
+    text-align: right !important;
     text-anchor: start !important;
-
-    /*text-anchor: middle;*/
-    /*text-align: center !important;*/
-    font-size: 15px !important;
-
 }
 
+/*Bar percent for axis Y - chrome/FF*/
+.c3-axis-y text {
+    text-anchor: start !important;
+}
 
+/*
+!*text-align inside axis-x*!
+.c3-axis-x text {
+   !* text-anchor: start !important;*!
+   !* -ms-text-align-last: center !important;
+    -webkit-align-self: auto !important;*!
+}*/
+
+/*Bar percent for axis Y -IE*/
+.c3-axis-y-label {
+    text-anchor: start ;
+}
+
+#chartNum_0 {
+    position: relative !important;
+}
+
+#chartNum_2 {
+    position: relative !important;
+}
+
+#chartNum_3 {
+    position: relative !important;
+}
+
+.c3-legend-item-tile { /*text(Ken&Lo)*/
+    transform: translate(-10px, 0px) !important;
+    direction: rtl !important;
+    /*position: static !important;*/
+}
+
+.c3-legend-item-event text {
+    transform: translate(5, 0) !important;
+    direction: rtl !important;
+}
+
+.c3-legend-item { /*box(Ken&Lo)*/
+    transform: translate(15px, -10px) !important;
+}
 
 .textColor1 {
     color: #9b59b6;
 }
+
 .textColor2 {
     color: #f1c40f;
 }
+
 .textColor3 {
     color: #16a085;
 }
+
 .textColor4 {
     color: #d35400;
 }
 
-.backColor1{
+.backColor1 {
     background-color: #F5F5DC !important;
 }
-.backColor2{
+
+.backColor2 {
     background-color: #F5F5F5 !important;
 }
-.backColor3{
+
+.backColor3 {
     background-color: #EEEEEE !important;
 }
-.backColor4{
+
+.backColor4 {
     background-color: #FFCCBC !important;
 }
-
 
 .mdl-layout__drawer > .mdl-layout__title, .mdl-layout__drawer > .mdl-layout-title {
     padding-left: 0 !important;
@@ -83,12 +113,12 @@
 }
 
 .c3-text {
-    font-size: 17px !important;
-    text-align: center !important;
+    font-size: 25px !important; /*size of percent text*/
+    text-align: inherit !important;
 }
 
 #chart4_1 .c3-line {
-    stroke-width: 3px !important;
+    stroke-width: 2px !important;
 }
 
 .c3-circle {
@@ -103,42 +133,42 @@
 .diklaHeader {
     direction: rtl !important;
 
-    font-size: 48px;
+    /*font-size: 48px;*/ /*without better*/
     font-weight: bold;
     color: #f97600;
     line-height: 24px;
-    /*height: 40px !important;*/
-    padding: 10px;
+
+    /* padding: 10px;*/
 
 }
 
-.diklaHeaderLabel{
+.diklaHeaderLabel {
     direction: rtl !important;
 
     font-size: 42px;
     font-weight: bold;
     color: #607D8B;
     line-height: 24px;
-    /*height: 40px !important;*/
 
 }
-.diklaHeaderLabel1{
+
+.diklaHeaderLabel1 {
     direction: rtl !important;
 
     height: 32px;
     vertical-align: middle;
 }
 
-
 .chartsBack {
     background: white;
-    padding-left: -1px;
-    padding-right: -1px;
+    padding-left: 1px;
+    padding-right: 1px;
 
-    margin: 1px;
+    margin: 5px;
 
-    padding-bottom: 10px;
-    padding-top: 10px;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    position: relative !important;
 }
 
 .header-border-bottom {
