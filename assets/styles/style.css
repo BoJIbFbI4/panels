@@ -41,7 +41,7 @@
 
 /*Bar percent for axis Y -IE*/
 .c3-axis-y-label {
-    text-anchor: start ;
+    text-anchor: start;
 }
 
 #chartNum_0 {
@@ -123,38 +123,34 @@
 
 .c3-circle {
     stroke-width: 5px !important;
-
 }
 
 .cardStyle {
-
 }
 
 .diklaHeader {
     direction: rtl !important;
-
     /*font-size: 48px;*/ /*without better*/
     font-weight: bold;
     color: #f97600;
     line-height: 24px;
-
     /* padding: 10px;*/
+}
 
+#chartNum_0 {
+    direction: ltr !important;
 }
 
 .diklaHeaderLabel {
     direction: rtl !important;
-
     font-size: 42px;
     font-weight: bold;
     color: #607D8B;
     line-height: 24px;
-
 }
 
 .diklaHeaderLabel1 {
     direction: rtl !important;
-
     height: 32px;
     vertical-align: middle;
 }
@@ -163,9 +159,7 @@
     background: white;
     padding-left: 1px;
     padding-right: 1px;
-
-    margin: 5px;
-
+    margin: 5px auto;
     padding-bottom: 7px;
     padding-top: 7px;
     position: relative !important;
@@ -215,15 +209,14 @@
     flex: 1;
 }
 
-.adminMenu li {
-    margin-bottom: 35px;
-}
+    .adminMenu li {
+        margin-bottom: 35px;
+    }
 
-.adminMenu li:last-child {
-    margin-bottom: 0px;
-    flex: 0 0 auto;
-
-}
+        .adminMenu li:last-child {
+            margin-bottom: 0px;
+            flex: 0 0 auto;
+        }
 
 .mdl-button__ripple-container {
     /*background: yellow;*/
@@ -240,13 +233,11 @@
 
 #quit {
     color: black !important;
-
 }
 
 .projects-table-info {
     width: 100%;
     border-collapse: collapse;
-
 }
 
 .mdl-button-logout {
@@ -321,7 +312,6 @@
     height: 50px;
     background: url("../../assets/img/like.svg") top left no-repeat #333333;
     background-size: 150px 150px;
-
 }
 
 .answers-card > .mdl-card__actions {
@@ -340,7 +330,6 @@
     color: #ffffff;
     font-size: 14px;
     font-weight: 500;
-
 }
 
 .mdl-date-textfield {

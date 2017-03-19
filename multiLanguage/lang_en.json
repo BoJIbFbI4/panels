@@ -57,12 +57,12 @@
   "statistics":"Statistics",
 
 
-  "usersIntroduced":"users Introduced",
-  "usersReceivedSms":"users Received Sms",
-  "usersRespondented":"users Respondented",
-  "usersDidnotAnswerAll":"users Did not Answer All",
-  "alertsStarted":"alerts Started",
-  "responseRate":"response Rate",
+  "usersIntroduced":"No. of uploaded records",
+  "usersReceivedSms":"No. of SMS sent",
+  "usersRespondented":"Surveys completed",
+  "usersDidnotAnswerAll":"Users Did not Answer All",
+  "alertsStarted":"Alerts opened",
+  "responseRate":"Response tare",
 
   "FloatStyle":"float:left",
 

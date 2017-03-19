@@ -51,15 +51,15 @@
   "alertsBtn": "התראה",
 
 
-  "statistics":"סטָטִיסטִיקָה",
+  "statistics":"ריכוז נתונים",
 
 
-  "usersIntroduced":"משתמשים הציגו",
-  "usersReceivedSms":"משתמשים קבלו SMS",
-  "usersRespondented":"משתמשים Respondented",
+  "usersIntroduced":"מספר רשומות שנקלטו",
+  "usersReceivedSms":"מספר זימונים שנשלחו",
+  "usersRespondented":"מספר סקרים שנענו",
   "usersDidnotAnswerAll":"משתמשים לא ענו על כל",
-  "alertsStarted":"התראות עבודה",
-  "responseRate":"שיעור תגובה",
+  "alertsStarted":"סה''כ התראות שנפתחו",
+  "responseRate":"שיעור מענה",
 
   "nameValue":"ערך",
   "nameParameter":"פָּרָמֶטֶר",
