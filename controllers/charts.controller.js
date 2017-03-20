@@ -28,8 +28,30 @@ function reverseString(str) {
     return joinArray; // "olleh"
 }
 
-angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$state', '$filter', 'fileUpload', '$stateParams', 'getChartData', '$mdDialog', 'serviceButtons', 'dialogChartService',
-    function ($scope, $rootScope, $state, $filter, fileUpload, $stateParams, getChartData, $mdDialog, serviceButtons, dialogChartService) {
+angular.module('panelsApp')
+    .controller('ChartsCtrl',
+    ['$scope',
+     '$rootScope',
+     '$state',
+     '$filter',
+     'fileUpload',
+     '$stateParams',
+     'getChartData',
+     '$mdDialog',
+     'serviceButtons',
+     'dialogChartService',
+     'modalService',
+    function ($scope,
+            $rootScope,
+            $state,
+            $filter,
+            fileUpload,
+            $stateParams,
+            getChartData,
+            $mdDialog,
+            serviceButtons,
+            dialogChartService,
+            modalService) {
 
 
         generateChartFromObject = function (qResultsFormatted) {
@@ -567,17 +589,18 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                     $scope.exportToXLS = function () {
                         return serviceButtons.exportToXLS($scope.createDate, $scope.userDate, response.id)
                     };
+                    $rootScope.exportToXLS = $scope.exportToXLS;
                     $scope.showtimeLineChart = function () {
                         serviceButtons.getScheduleIsFullyAnswered(response.id).then(function (response) {
-
                             var names = dialogChartService.getModalChartData(response).namesArr;
                             var val = dialogChartService.getModalChartData(response).valuesArr.map(function (item, i, arr) {
                                 return typeof item === "string" ? item : item / 100;
                             });
                             testBarChartDraw(names, val, "4_1");
                         });
-                        $scope.showChartDialogDates();
+                        modalService.showChartDialogDatesModal();
                     };
+                    $rootScope.showtimeLineChart = $scope.showtimeLineChart;
                     return response;
                 })
                 .then(function (response) {
@@ -585,7 +608,7 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
                 }).then(function (response) {
                 $scope.totalIntroduced = response.questionary.statistics.usersRespondented;
                 stats = response.questionary.statistics;
-
+                $rootScope.stats = response.questionary.statistics;
                 // this is a big plug
                 // TODO : Need to reformat output from server to structured JSON
                 // DOING NOW IS MOCKUP !!!
@@ -840,25 +863,12 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             serviceButtons.exportToPDF();
         };
         $scope.showStat = function () {
-            $scope.showDialog('templates/diagramsPageStat.html');
-        };
+            modalService.showModal($scope.translation, stats);
+         };
 
 
         //-----------show dialogs functions----------//
-        $scope.showDialog = function (tamplateUrl) {
-            $mdDialog.show({
-                locals: {
-                    translation: $scope.translation
-                },
-                controller: DialogController,
-                templateUrl: tamplateUrl,
-                parent: angular.element(document.body),
-                // targetEvent: d,
-                clickOutsideToClose: true,
-                fullscreen: false // Only for -xs, -sm breakpoints.
 
-            });
-        };
         $scope.showChartDialog = function () {
             $mdDialog.show({
                 controller: ChartsDialogController,
@@ -978,28 +988,6 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
         }
 
         //-----------dialog window controllers----------//
-        function DialogController($scope, $mdDialog, translation) {
-            $scope.translation = translation;
-            $scope.stats = stats;
-
-            var rRate = $scope.stats["responseRate"] + '';
-
-            if (rRate.includes('%')){
-                $scope.stats["responseRate"] = $scope.stats["responseRate"] + '';
-            }
-            else{
-                $scope.stats["responseRate"] = $scope.stats["responseRate"] + '%';
-            }
-            $scope.hide = function () {
-                $mdDialog.hide();
-            };
-            $scope.cancel = function () {
-                $mdDialog.cancel();
-            };
-            $scope.answer = function (answer) {
-                $mdDialog.hide(answer);
-            };
-        }
 
         function ChartsDialogController($scope, $mdDialog) {
             $scope.hide = function () {
@@ -1013,131 +1001,9 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             };
         }
     }])
-    .service('getChartData', ['$http', '$rootScope', '$q', function ($http, $rootScope, $q) {
-
-        var url = $rootScope.url;
-        var authorizationData = $rootScope.authorizationData;
-        var config = {
-            headers: {
-                "Authorization": "Basic " + authorizationData
-            }
-        };
-        var analisysData = {};
-        if (authorizationData == undefined) {
-            console.log(authorizationData);
-            console.log("Companies auth data lost");
-            // $state.go("auth");
-                $rootScope.logout();
-        }
-        if (authorizationData == "") {
-            // console.log(authorizationData);
-            // console.log("Companies auth data empty");
-            // $state.go("auth");
-            $rootScope.logout();
-        }
-
-        return {
-            getQuestionary: function (projectID) {
-                return $http.get(url + '/common/getQuestionary/' + projectID, config).then(function (response) {
-                    return response.data;
-                })
-            },
-            getAnalisys: function (questionaryID, startDate, endDate) {
-
-                if (analisysData[questionaryID]) {
-                    return $q(function (resolve) {
-                        resolve(analisysData[questionaryID]);
-                    });
-                } else {
-                    // here useud ajax request because the angular $http.post do not work (takes null) with server
-                    return $.ajax({
-                        url: url + '/common/getAnalysis/' + questionaryID,
-                        type: 'post',
-                        data: {
-                            startDate: startDate,
-                            endDate: endDate
-                        },
-                        headers: {
-                            'Content-Type': undefined,
-                            'Authorization': 'Basic ' + authorizationData
-                        },
-                        dataType: 'json',
-                        success: function (response) {
-                            analisysData[questionaryID] = response.data;
-                            return response.data;
-                        }
-                    });
-
-                }
-            },
-            getAnalisysDrillDown: function (questionID, startDate, endDate, city, group, answerID) {
-                // console.log(url + '/common/getAnalysisDrillDown/' + questionID);
-                return $.ajax({
-                    // url: url + '/common/getAnalysisDrillDown/' + questionID,
-                    url: url + '/common/getAnalysisDrillDown/',
-                    type: 'post',
-                    data: {
-                        idQuestion: questionID,
-                        idAnswer: answerID,
-                        startDate: startDate,
-                        endDate: endDate,
-                        city: city,
-                        group: group
-                    },
-                    headers: {
-                        'Content-Type': undefined,
-                        'Authorization': 'Basic ' + authorizationData
-                    },
-                    dataType: 'json',
-                    success: function (response, req) {
-                        // console.log(req);
-                        // analisysData[questionaryID] = response.data;
-                        // console.log(response);
-                        return response;
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    }
-
-                });
-            },
-            getAnalisysDrillDownDickla : function (questionID, startDate, endDate, city, group) {
-                console.log(url + '/common/getAnalysisDrillDownDikla/');
-                return $.ajax({
-                    url: url + '/common/getAnalysisDrillDownDikla/',
-                    type: 'post',
-                    data: {
-                        startDate: startDate,
-                        endDate: endDate,
-                        city: city,
-                        group: group,
-                        title: questionID
-                    },
-                    headers: {
-                        'Content-Type': undefined,
-                        'Authorization': 'Basic ' + authorizationData
-                    },
-                    dataType: 'json',
-                    success: function (response, req) {
-                        console.log(req);
-                        // analisysData[questionaryID] = response.data;
-                        console.log('dikla response');
-                        console.log(response);
-                        return response;
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    }
-
-                });
-
-            },
-        };
-
-    }])
     .service('serviceButtons', ['$rootScope', '$http', 'fileUpload', function ($rootScope, $http, fileUpload) {
 
-        var url = $rootScope.url;
+        var url;
         var authorizationData = $rootScope.authorizationData;
         var config = {
             headers: {
@@ -1145,6 +1011,14 @@ angular.module('panelsApp').controller('ChartsCtrl', ['$scope', '$rootScope', '$
             }
         };
         return {
+            setUrl: function (data) {
+                url = data;
+            },
+            setAuthorizationData: function (data) {
+                authorizationData = data;
+                config = { headers: { "Authorization": "Basic " + authorizationData } };
+            },
+
             getScheduleIsFullyAnswered: function (questionaryID) {
                 return $http.get(url + "/common/getScheduleIsFullyAnswered/" + questionaryID, config).then(function (response) {
                     return response.data;

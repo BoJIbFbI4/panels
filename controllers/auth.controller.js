@@ -1,5 +1,5 @@
 angular.module('panelsApp')
-    .controller('AuthCtrl', ['$rootScope', '$scope', '$http', '$state', '$timeout', function ($rootScope, $scope, $http, $state, $timeout) {
+    .controller('AuthCtrl', ['$rootScope', '$scope', '$http', '$state', '$timeout', 'serviceButtons', function ($rootScope, $scope, $http, $state, $timeout, serviceButtons) {
 
         $scope.isLogin = false;
         $rootScope.headerTitle = "panels";
@@ -18,6 +18,7 @@ angular.module('panelsApp')
             //var authorizationData = btoa("ManagerClalitProject0City1Group1" + ":" + "ManagerClalitProject0City1Group1"); // mock manger
             //var authorizationData = btoa("Admin" + ":" + "12345"); // mock admin
             $rootScope.authorizationData = authorizationData;
+            serviceButtons.setAuthorizationData(authorizationData);
             var config = {headers: {"Authorization": "Basic " + authorizationData}};
 
             $scope.loginProcess = true;

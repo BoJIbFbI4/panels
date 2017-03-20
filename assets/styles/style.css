@@ -139,7 +139,7 @@
 
 #chartNum_0 {
     direction: ltr !important;
-     font-size: 42px;
+    font-size: 42px;
 }
 
 .diklaHeaderLabel {
@@ -211,13 +211,13 @@
 }
 
     .adminMenu li {
-        margin-bottom: 35px;
+        margin-bottom: 33px;
     }
 
-        .adminMenu li:last-child {
-            margin-bottom: 0px;
-            flex: 0 0 auto;
-        }
+.adminMenu li:last-child {
+    margin-bottom: 0px;
+    flex: 0 0 auto;
+}
 
 .mdl-button__ripple-container {
     /*background: yellow;*/
@@ -264,7 +264,7 @@
 }
 
 .adminMenu .mdl-button {
-    width: 162px;
+    width: 164px;
     text-align: left;
 }
 
