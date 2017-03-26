@@ -192,6 +192,7 @@ app.service('translationService', function ($resource) {
 
 app.service('fileUpload', ['$http', '$rootScope', function ($http, $rootScope) {
     var authorizationData = $rootScope.authorizationData;
+    authorizationData = "YWRtaW46MTIzNDU=";
     this.uploadFileToUrl = function (file, uploadUrl, index) {
         var fd = new FormData();
         fd.append('file', file);
