@@ -137,7 +137,7 @@ app.controller(
         };
         // Инициализация
         if (!$scope.selectedLanguage) {
-            $scope.selectedLanguage = 'en';
+            $scope.selectedLanguage = 'he';
             $scope.translate();
         }
 
